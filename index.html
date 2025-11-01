@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nine Card Knock Out</title>
+    <title>Nine Card - Casino Card Game</title>
     <style>
         * {
             margin: 0;
@@ -12,47 +12,448 @@
         }
         
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #0f1b3d, #1e3a8a);
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f1b3d 0%, #1e3a8a 50%, #2d4a8a 100%);
             color: #fff;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
         }
         
         .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        header {
             text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 1s ease;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         h1 {
-            font-size: 3em;
+            font-size: 4em;
             margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .version-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 60px;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .version-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .version-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .version-card:hover::before {
+            left: 100%;
+        }
+        
+        .version-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .version-card.new {
+            border-color: #28a745;
+            background: rgba(40, 167, 69, 0.15);
+        }
+        
+        .version-card.new:hover {
+            border-color: #28a745;
+            background: rgba(40, 167, 69, 0.25);
+            box-shadow: 0 20px 40px rgba(40, 167, 69, 0.3);
+        }
+        
+        .version-title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .version-badge {
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.4em;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .version-description {
+            font-size: 1.2em;
+            margin-top: 20px;
+            opacity: 0.95;
+            line-height: 1.8;
+            text-align: center;
+        }
+        
+        .version-features {
+            margin-top: 30px;
+            text-align: left;
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        
+        .version-features li {
+            margin: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+        
+        .version-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .version-features li.new-feature {
+            color: #FFD700;
+        }
+        
+        .version-features li.new-feature:before {
+            color: #FFD700;
+            content: "⭐";
         }
         
         .play-button {
             display: inline-block;
-            padding: 20px 40px;
-            background: #28a745;
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #28a745, #20c997);
             color: white;
             text-decoration: none;
-            border-radius: 10px;
-            font-size: 1.5em;
-            margin-top: 30px;
-            transition: transform 0.3s;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
         }
         
         .play-button:hover {
             transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5);
+        }
+        
+        .play-button.classic {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .play-button.classic:hover {
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+        }
+        
+        .features-section {
+            margin-top: 80px;
+            text-align: center;
+            animation: fadeIn 1s ease 0.6s both;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        
+        .feature-description {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px 20px;
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .version-cards {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .version-title {
+                font-size: 2em;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="stars" id="stars"></div>
+    
     <div class="container">
-        <h1>🎯 Nine Card Knock Out</h1>
-        <p style="font-size: 1.2em; margin-top: 20px;">Välkommen till spelet!</p>
-        <a href="knock-out/index.html" class="play-button">▶ Spela Nu</a>
+        <header>
+            <h1>🎯 Nine Card</h1>
+            <p class="subtitle">Casino Card Game</p>
+            <p style="font-size: 1.1em; margin-top: 10px; opacity: 0.8;">
+                Ett strategiskt kortspel för 9 spelare där tur och taktik möts
+            </p>
+        </header>
+        
+        <div class="version-cards">
+            <a href="knock-out/index.html" class="version-card new">
+                <div class="version-title">
+                    🥊 Knock Out
+                    <span class="version-badge">NY</span>
+                </div>
+                <p class="version-description">
+                    Den senaste versionen med elimineringssystem och förbättrad insurance-mekanik
+                </p>
+                <ul class="version-features">
+                    <li class="new-feature">Sista 3 spelarna vinner!</li>
+                    <li class="new-feature">1:a plats vinner båda jackpotten</li>
+                    <li class="new-feature">Automatisk omstart vid elimination</li>
+                    <li>Förbättrat insurance-system</li>
+                    <li>Bank suit-visning innan dragning</li>
+                    <li>Justerbar startbalance ($300-$2000)</li>
+                    <li>Förbättrad state-hantering</li>
+                    <li>Smidigare animationer</li>
+                </ul>
+                <div style="text-align: center;">
+                    <a href="knock-out/index.html" class="play-button">▶ Spela Nu</a>
+                </div>
+            </a>
+            
+            <a href="https://mccaslin80-lab.github.io/nine-card-game_9598_Sally/" class="version-card" target="_blank">
+                <div class="version-title">
+                    🎰 Classic
+                </div>
+                <p class="version-description">
+                    Den ursprungliga casino-versionen med klassisk gameplay
+                </p>
+                <ul class="version-features">
+                    <li>Klassisk casino-gameplay</li>
+                    <li>Traditionella regler</li>
+                    <li>Ursprungliga features</li>
+                    <li>Standard betting-system</li>
+                    <li>Klassisk jackpot-mekanik</li>
+                    <li>Beprövad gameplay</li>
+                </ul>
+                <div style="text-align: center;">
+                    <a href="https://mccaslin80-lab.github.io/nine-card-game_9598_Sally/" class="play-button classic" target="_blank">▶ Spela Classic</a>
+                </div>
+            </a>
+        </div>
+        
+        <section class="features-section">
+            <h2 style="font-size: 2.5em; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">
+                ⭐ Spelets Features
+            </h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <div class="feature-title">9 Spelare</div>
+                    <div class="feature-description">
+                        Spela mot 8 botar eller samla vänner för ett spännande parti
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <div class="feature-title">Smart Betting</div>
+                    <div class="feature-description">
+                        Välj kort från Ess (A) till 9, varje kort har sitt värde och risk
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <div class="feature-title">Jackpottar</div>
+                    <div class="feature-description">
+                        Hearts Jackpot och Insurance Jackpot - dubbla chanser att vinna!
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-title">Insurance System</div>
+                    <div class="feature-description">
+                        Köp försäkring för att skydda dig mot förluster (endast Knock Out)
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <div class="feature-title">Smart Bots</div>
+                    <div class="feature-description">
+                        Bots med olika strategier - Random, Lowest, Highest, Manual
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Admin Panel</div>
+                    <div class="feature-description">
+                        Kontrollera spelet, ändra bot-strategier och övervaka statistiken
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>© 2025 Nine Card Game | Spela gratis online</p>
+            <p style="margin-top: 10px;">Hosted on GitHub Pages</p>
+        </footer>
     </div>
+    
+    <script>
+        // Create animated stars background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numStars = 100;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        createStars();
+    </script>
 </body>
 </html>
