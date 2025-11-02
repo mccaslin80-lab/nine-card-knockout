@@ -876,6 +876,118 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
+        /* Quick Rules Promotion Box */
+        .quick-rules-promo {
+            position: fixed;
+            left: 50px;
+            top: 50%; /* Moved down to avoid header overlap */
+            transform: translateY(-50%);
+            background: rgba(52, 152, 219, 0.15);
+            color: #3498db;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 2px solid rgba(52, 152, 219, 0.4);
+            width: 350px;
+            max-width: 350px;
+            max-height: 70vh;
+            overflow-y: auto;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .quick-rules-promo.minimized {
+            width: 200px;
+            max-height: 50px;
+            overflow: hidden;
+            cursor: pointer;
+            top: 22.5%; /* Adjusted for minimized state */
+        }
+
+        .quick-rules-promo.minimized .quick-rules-list,
+        .quick-rules-promo.minimized h3 {
+            display: none;
+        }
+
+        .quick-rules-promo.minimized::before {
+            content: "📋 Quick Rules";
+            display: block;
+            text-align: center;
+            padding: 10px 0;
+            font-weight: bold;
+            font-size: 12px;
+            color: #3498db;
+        }
+
+        .quick-rules-promo .toggle-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(52, 152, 219, 0.3);
+            border: none;
+            color: #3498db;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 1502; /* Higher than header z-index (1500) */
+        }
+
+        .quick-rules-promo .toggle-btn:hover {
+            background: rgba(52, 152, 219, 0.5);
+            transform: scale(1.1);
+        }
+
+        .quick-rules-promo.minimized .toggle-btn::after {
+            content: "▼";
+        }
+
+        .quick-rules-promo:not(.minimized) .toggle-btn::after {
+            content: "▲";
+        }
+
+        .quick-rules-promo h3 {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            color: #3498db;
+            text-align: center;
+            border-bottom: 1px solid rgba(52, 152, 219, 0.3);
+            padding-bottom: 8px;
+            padding-right: 30px;
+        }
+
+        .quick-rules-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .quick-rules-list li {
+            margin-bottom: 10px;
+            font-size: 12px;
+            line-height: 1.4;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .quick-rules-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .quick-rules-list li strong {
+            color: #2980b9;
+            font-weight: 600;
+        }
+
         /* Header Layout - Override style.css for tighter spacing */
         .game-header {
             gap: 4px !important; /* Reduced spacing */
@@ -993,6 +1105,24 @@
         <div class="jackpot-promo">
             <button class="toggle-btn" onclick="this.parentElement.classList.toggle('minimized')" title="Minimize/Expand"></button>
             <span class="promo-text">💎 JACKPOT: 90% payout when<br>player & bank draw same number with ♥️ Hearts!</span>
+        </div>
+
+        <!-- Quick Rules Promotion Box -->
+        <div class="quick-rules-promo">
+            <button class="toggle-btn" onclick="this.parentElement.classList.toggle('minimized')" title="Minimize/Expand"></button>
+            <h3>📋 Quick Rules - Cash Version</h3>
+            <ul class="quick-rules-list">
+                <li><strong>Select a card at your turn:</strong> Click on an available card to place your bet</li>
+                <li><strong>Bank draws a card:</strong> After all players choose, bank draws Ace through 10</li>
+                <li><strong>Lower card wins:</strong> Beat the bank's card and share the pot</li>
+                <li><strong>Same card loses:</strong> You lose your bet</li>
+                <li><strong>Higher card refund:</strong> Get bet back minus jackpot fee</li>
+                <li><strong>Bank draws 10:</strong> Only card 9 wins (739)</li>
+                <li><strong>Bank draws Ace:</strong> No winners, Ace bet goes to jackpot</li>
+                <li><strong>♥️ Hearts Jackpot:</strong> Match rank & suit with ♥️ Hearts - Win big!</li>
+                <li><strong>🛡️ Insurance:</strong> Buy insurance to protect yourself if your card matches the bank's number</li>
+                <li><strong>💰 Win every round:</strong> Classic casino gameplay - accumulate chips and win big!</li>
+            </ul>
         </div>
 
         <!-- Game Controls -->
