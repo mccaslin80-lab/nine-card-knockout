@@ -93,10 +93,22 @@
         
         .version-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
             margin-top: 60px;
             animation: fadeInUp 1s ease 0.3s both;
+        }
+        
+        @media (max-width: 1200px) {
+            .version-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .version-cards {
+                grid-template-columns: 1fr;
+            }
         }
         
         @keyframes fadeInUp {
@@ -117,8 +129,6 @@
             border-radius: 20px;
             padding: 40px;
             transition: all 0.4s ease;
-            cursor: pointer;
-            text-decoration: none;
             color: white;
             display: block;
             position: relative;
@@ -134,6 +144,7 @@
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
             transition: left 0.5s;
+            pointer-events: none;
         }
         
         .version-card:hover::before {
@@ -243,17 +254,26 @@
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
         }
-        
+
         .play-button:hover {
             transform: scale(1.1);
             box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5);
         }
-        
+
+        .play-button.fast-speed {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .play-button.fast-speed:hover {
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.5);
+        }
+
         .play-button.cash {
             background: linear-gradient(45deg, #FFD700, #FFA500);
             box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
         }
-        
+
         .play-button.cash:hover {
             box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
         }
@@ -456,7 +476,7 @@
     <div class="container">
         <header>
             <div style="position: absolute; top: 20px; right: 20px;">
-                <a href="knock-out-standard/index.html#help" style="display: inline-block; padding: 10px 20px; background: linear-gradient(145deg, #e67e22, #d35400); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3); transition: all 0.3s;">❓ Help</a>
+                <button onclick="window.open('knock-out-standard/index.html#help', '_blank')" style="display: inline-block; padding: 10px 20px; background: linear-gradient(145deg, #e67e22, #d35400); color: white; text-decoration: none; border: none; border-radius: 25px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3); transition: all 0.3s; cursor: pointer;">❓ Help</button>
             </div>
             <h1>🎯 Nine Card</h1>
             <p class="subtitle">The Ultimate Casino Card Game</p>
@@ -464,7 +484,7 @@
         </header>
         
         <div class="version-cards">
-            <a href="knock-out-standard/index.html" class="version-card knockout">
+            <div class="version-card knockout">
                 <div class="version-title">
                     🥊 Knock Out
                     <span class="version-badge">Standard Speed</span>
@@ -483,11 +503,11 @@
                     <li>Huge win potential</li>
                 </ul>
                 <div style="text-align: center;">
-                    <a href="knock-out-standard/index.html" class="play-button">▶ Play Demo Now</a>
+                    <a href="knock-out-standard/index.html" class="play-button">▶ Play Standard Speed</a>
                 </div>
-            </a>
+            </div>
             
-            <a href="knock-out-fast/index.html" class="version-card knockout">
+            <div class="version-card knockout">
                 <div class="version-title">
                     🥊 Knock Out
                     <span class="version-badge">Fast Speed</span>
@@ -506,11 +526,11 @@
                     <li>Bigger jackpots, faster action</li>
                 </ul>
                 <div style="text-align: center;">
-                    <a href="knock-out-fast/index.html" class="play-button">▶ Play Demo Now</a>
+                    <a href="knock-out-fast/index.html" class="play-button fast-speed">▶ Play Fast Speed</a>
                 </div>
-            </a>
+            </div>
             
-            <a href="https://mccaslin80-lab.github.io/nine-card-game_9598_Sally/" class="version-card cash" target="_blank">
+            <div class="version-card cash">
                 <div class="version-title">
                     💰 Cash
                 </div>
@@ -530,7 +550,7 @@
                 <div style="text-align: center;">
                     <a href="https://mccaslin80-lab.github.io/nine-card-game_9598_Sally/" class="play-button cash" target="_blank">▶ Play Demo Now</a>
                 </div>
-            </a>
+            </div>
         </div>
         
         <section class="strategy-section">
