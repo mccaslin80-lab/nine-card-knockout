@@ -104,6 +104,142 @@
         .rules-modal.hidden {
             display: none;
         }
+
+        /* Help/Tutorial Modal */
+        .help-modal {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border: 3px solid #e67e22;
+            border-radius: 15px;
+            z-index: 2000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            cursor: default;
+            user-select: text;
+        }
+
+        .help-modal.hidden {
+            display: none;
+        }
+
+        .help-header {
+            background: linear-gradient(145deg, #e67e22, #d35400);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+        }
+
+        .help-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .close-help-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .close-help-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .help-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            color: #ecf0f1;
+        }
+
+        .help-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .help-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        .help-content::-webkit-scrollbar-thumb {
+            background: #e67e22;
+            border-radius: 5px;
+        }
+
+        .help-content::-webkit-scrollbar-thumb:hover {
+            background: #d35400;
+        }
+
+        .help-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid #e67e22;
+        }
+
+        .help-section h3 {
+            color: #e67e22;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .help-section p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .help-section ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .help-section li {
+            margin-bottom: 8px;
+        }
+
+        .help-section strong {
+            color: #f39c12;
+        }
+
+        .help-demo-box {
+            background: rgba(52, 152, 219, 0.1);
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .help-demo-box h4 {
+            color: #3498db;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
         
         .admin-panel {
             position: fixed;
@@ -1571,6 +1707,8 @@
                 <span class="insurance-label">🛡️ Ins:</span>
                 <span id="insurance-amount">0</span>
             </div>
+            <a href="../index.html" class="rules-btn" style="text-decoration: none; color: white; display: inline-block; text-align: center;">🏠 Lobby</a>
+            <button id="help-btn" class="rules-btn" style="background: linear-gradient(145deg, #e67e22, #d35400);">❓ Help</button>
             <button id="history-btn" class="rules-btn history-header-btn">History</button>
             <button id="rules-btn" class="rules-btn">Rules</button>
             <button id="matrix-btn" class="rules-btn">Matrix</button>
@@ -1748,6 +1886,323 @@
                         <li><span style="color: red;">♥ Hearts</span> and <span style="color: red;">♦ Diamonds</span> are red</li>
                         <li><span style="color: black;">♠ Spades</span> and <span style="color: black;">♣ Clubs</span> are black</li>
                     </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help/Tutorial Modal -->
+        <div id="help-modal" class="help-modal hidden">
+            <div class="help-header">
+                <h2>❓ Game Tutorial & Help</h2>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button id="help-lang-sv" class="rules-btn" style="padding: 5px 10px; font-size: 12px; background: linear-gradient(145deg, #006aa7, #005085);">🇸🇪 Svenska</button>
+                    <button id="help-lang-en" class="rules-btn" style="padding: 5px 10px; font-size: 12px; background: linear-gradient(145deg, #e67e22, #d35400); display: none;">🇬🇧 English</button>
+                </div>
+                <button id="close-help-btn" class="close-help-btn">&times;</button>
+            </div>
+            <div class="help-content" id="help-content">
+                <!-- English Version (Default) -->
+                <div id="help-content-en">
+                    <div class="help-section">
+                        <h3>🔵 Blinking Blue Border (Current Turn Indicator)</h3>
+                        <p>When it's a player's turn to select a card, the player's seat will have a <strong>blinking blue border</strong> with a glowing effect.</p>
+                        <ul>
+                            <li><strong>What it means:</strong> It's this player's turn to select a card</li>
+                            <li><strong>Visual indicator:</strong> Intense blue blinking, glowing border and scaling effect</li>
+                            <li><strong>When it appears:</strong> During the card selection phase when the player should choose their card</li>
+                            <li><strong>For you as a player:</strong> When your seat (You) blinks blue, it's your turn to click on an available card</li>
+                        </ul>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>🎮 Player Strategy Buttons (Random, Lowest, Highest, Manual)</h3>
+                        <p>As a human player, you can choose between four different strategies for how to play:</p>
+                        
+                        <div class="help-demo-box">
+                            <h4>📊 Strategy Options:</h4>
+                            <ul>
+                                <li><strong>🔄 Random:</strong> The game automatically selects a random available card for you. Perfect if you want to let the game run automatically.</li>
+                                <li><strong>⬇️ Lowest:</strong> The game automatically selects the cheapest/lowest available card (A, 2, 3...). Safe strategy with low risk and low reward.</li>
+                                <li><strong>⬆️ Highest:</strong> The game automatically selects the most expensive/highest available card (9, 8, 7...). High risk but big win potential.</li>
+                                <li><strong>👆 Manual:</strong> You manually select the card by clicking on it. Full control over your choices!</li>
+                            </ul>
+                        </div>
+                        
+                        <p><strong>How to change strategy:</strong> Click on your desired strategy button next to your player seat (to the left of "You" player) before or during the game.</p>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>🛡️ Insurance Button/Function</h3>
+                        <p>After all players have selected their cards, the <strong>insurance phase</strong> begins. Here, certain players can buy insurance to protect themselves.</p>
+                        
+                        <div class="help-demo-box">
+                            <h4>⚠️ Important Insurance Rules:</h4>
+                            <ul>
+                                <li><strong>Who can buy:</strong> ONLY players who have the SAME COLOR as the bank's suit can buy insurance!</li>
+                                <li><strong>Colors:</strong> Red (♥️ Hearts, ♦️ Diamonds) or Black (♣️ Clubs, ♠️ Spades)</li>
+                                <li><strong>Cost:</strong> $20 (default, can be changed in Admin Panel)</li>
+                                <li><strong>Minimum pot:</strong> The Insurance Jackpot must be at least $50 to be available</li>
+                                <li><strong>Win condition:</strong> If the bank draws the same number AND suit as your card, you win the Insurance Jackpot!</li>
+                                <li><strong>Visual indicator:</strong> Players who have purchased insurance will show a <strong>red marker</strong> at their player seat</li>
+                            </ul>
+                        </div>
+                        
+                        <p><strong>How to buy insurance:</strong> If your player seat has the same color as the bank's suit and insurance is available, an insurance button will appear. Click it to purchase insurance.</p>
+                        
+                        <div class="help-demo-box">
+                            <h4>🎛️ Human Player Insurance Settings:</h4>
+                            <p>As a human player, you can set your insurance behavior in the Bot Control Panel:</p>
+                            <ul>
+                                <li><strong>Always:</strong> Automatically buy insurance whenever available (if you have matching suit color)</li>
+                                <li><strong>Never:</strong> Never buy insurance automatically</li>
+                                <li><strong>Ask:</strong> Show a prompt asking if you want to buy insurance each time (default)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="help-demo-box" style="background: rgba(231, 76, 60, 0.1); border-color: #e74c3c;">
+                            <h4 style="color: #e74c3c;">⚠️ Important: Insurance Jackpot Rules</h4>
+                            <p>If you win the Insurance Jackpot:</p>
+                            <ul>
+                                <li>You <strong>WIN</strong> the entire Insurance Jackpot amount</li>
+                                <li>However, normal game rules still apply - you <strong>LOSE</strong> your bet if your card matches the bank's number</li>
+                                <li>The red marker at your player seat shows that you have purchased insurance</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>♥️ Hearts Jackpot</h3>
+                        <div class="help-demo-box" style="background: rgba(231, 76, 60, 0.1); border-color: #e74c3c;">
+                            <h4 style="color: #e74c3c;">💎 Hearts Jackpot Payout:</h4>
+                            <p>When you win the Hearts Jackpot (match rank AND suit with ♥️ Hearts):</p>
+                            <ul>
+                                <li><strong>You get:</strong> Your bet back <strong>PLUS</strong> the entire Hearts Jackpot!</li>
+                                <li><strong>Other players:</strong> Get refund (their bet back minus jackpot contribution)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>💎 Super Jackpot</h3>
+                        <div class="help-demo-box" style="background: rgba(142, 68, 173, 0.1); border-color: #8e44ad;">
+                            <h4 style="color: #8e44ad;">⭐ Super Jackpot Rules:</h4>
+                            <p>Win the Hearts Jackpot <strong>two times in a row</strong> to win the Super Jackpot!</p>
+                            <ul>
+                                <li><strong>How to win:</strong> Win Hearts Jackpot in Round 1, then win Hearts Jackpot again in Round 2 (consecutively)</li>
+                                <li><strong>Must be same player:</strong> You must win both Hearts Jackpots as the same player</li>
+                                <li><strong>Payout:</strong> When you win Hearts Jackpot for the second consecutive time, you receive BOTH the Hearts Jackpot AND the entire Super Jackpot!</li>
+                                <li><strong>Reset:</strong> After a Super Jackpot win, the Super Jackpot resets to zero</li>
+                                <li><strong>Example:</strong> Win with 5♥ in round 1, then win again with 8♥ in round 2 = You win Hearts Jackpot + Super Jackpot!</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>🎯 Game Flow - How the Game Works</h3>
+                        <ol>
+                            <li><strong>Start Round:</strong> Click "Start New Round" to begin a new round</li>
+                            <li><strong>Card Selection:</strong> Each player selects a card in turn order (with blinking blue border as indicator)</li>
+                            <li><strong>Insurance Phase:</strong> Players with matching color can buy insurance (if available)</li>
+                            <li><strong>Bank Draw:</strong> The bank draws a card (A-10)</li>
+                            <li><strong>Results:</strong> Results are calculated based on who won, lost, or gets refund</li>
+                            <li><strong>Elimination:</strong> Players who cannot pay are eliminated</li>
+                            <li><strong>Round Restart:</strong> New rounds start automatically until only 3 players remain</li>
+                        </ol>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>🏆 Winning Conditions</h3>
+                        <ul>
+                            <li><strong>✅ WIN:</strong> Your card is LOWER than the bank's card → You win and share the pot</li>
+                            <li><strong>❌ LOSS:</strong> Your card is the SAME as the bank's card → You lose your bet</li>
+                            <li><strong>💵 REFUND:</strong> Your card is HIGHER than the bank's card → You get your bet back minus jackpot contribution</li>
+                            <li><strong>🎰 HEARTS JACKPOT:</strong> Match both number AND suit with ♥️ Hearts → You win your bet back PLUS the entire Hearts Jackpot!</li>
+                            <li><strong>🛡️ INSURANCE JACKPOT:</strong> If you bought insurance and match both number and suit → You win the Insurance Jackpot! (But normal loss rules still apply for your bet)</li>
+                        </ul>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>⚙️ Admin Panel Functionality</h3>
+                        <p>Click "Admin Panel" to access advanced settings:</p>
+                        <ul>
+                            <li><strong>Game Settings:</strong> Change starting balance ($300-$2000), jackpot rate, bank rake</li>
+                            <li><strong>Testing Tools:</strong> Override the bank's card draw for testing</li>
+                            <li><strong>Bot Control:</strong> Control bot players' strategies and insurance behavior</li>
+                            <li><strong>Game Stats:</strong> View total balance, expected balance and validation</li>
+                        </ul>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>📊 Other Important Features</h3>
+                        <ul>
+                            <li><strong>History:</strong> View history of previous rounds and results</li>
+                            <li><strong>Rules:</strong> Read full rules and game details</li>
+                            <li><strong>Matrix:</strong> View payout matrix and odds for different card choices</li>
+                            <li><strong>Quick Rules & Jackpots:</strong> Side boxes can be minimized (▲/▼) to see more of the table</li>
+                        </ul>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>💡 Tips & Strategies</h3>
+                        <ul>
+                            <li><strong>Low cards (A-4):</strong> Low risk, low rewards - Perfect for staying in longer</li>
+                            <li><strong>High cards (5-9):</strong> High risk, big rewards - For those who dare to bet big</li>
+                            <li><strong>Insurance:</strong> Use when odds are favorable and the jackpot is large</li>
+                            <li><strong>Manual mode:</strong> Give yourself full control - Perfect for strategic players</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Swedish Version -->
+                <div id="help-content-sv" style="display: none;">
+                    <div class="help-section">
+                        <h3>🔵 Blinkande Blå Ram (Current Turn Indicator)</h3>
+                        <p>När det är en spelares tur att välja kort kommer spelarens plats att ha en <strong>blinkande blå ram</strong> med glödande effekt.</p>
+                        <ul>
+                            <li><strong>Vad det betyder:</strong> Det är denna spelares tur att välja ett kort</li>
+                            <li><strong>Visuell indikator:</strong> Intensiv blå blinkning, glödande kant och skalningseffekt</li>
+                            <li><strong>När den visas:</strong> Under kortvalfasen när spelaren ska välja sitt kort</li>
+                            <li><strong>För dig som spelare:</strong> När din plats (You) blinkar blått är det din tur att klicka på ett tillgängligt kort</li>
+                        </ul>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>🎮 Player Strategy Knappar (Random, Lowest, Highest, Manual)</h3>
+                        <p>Som mänsklig spelare kan du välja mellan fyra olika strategier för hur du ska spela:</p>
+                        
+                        <div class="help-demo-box">
+                            <h4>📊 Strategy Options:</h4>
+                            <ul>
+                                <li><strong>🔄 Random:</strong> Spelet väljer automatiskt ett slumpmässigt tillgängligt kort åt dig. Perfekt om du vill låta spelet köra automatiskt.</li>
+                                <li><strong>⬇️ Lowest:</strong> Spelet väljer automatiskt det billigaste/lägsta tillgängliga kortet (A, 2, 3...). Säker strategi med låg risk och låg vinst.</li>
+                                <li><strong>⬆️ Highest:</strong> Spelet väljer automatiskt det dyraste/högsta tillgängliga kortet (9, 8, 7...). Hög risk men stor vinstpotential.</li>
+                                <li><strong>👆 Manual:</strong> Du väljer manuellt kortet genom att klicka på det. Full kontroll över dina val!</li>
+                            </ul>
+                        </div>
+                        
+                        <p><strong>Hur man ändrar strategi:</strong> Klicka på önskad strategi-knapp bredvid din spelarplats (till vänster om "You" spelaren) innan eller under spelet.</p>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>🛡️ Insurance Knapp/Funktion</h3>
+                        <p>Efter att alla spelare har valt sina kort kommer <strong>insurance-fasen</strong>. Här kan vissa spelare köpa försäkring för att skydda sig.</p>
+                        
+                        <div class="help-demo-box">
+                            <h4>⚠️ Viktiga Regler för Insurance:</h4>
+                            <ul>
+                                <li><strong>Vem kan köpa:</strong> ENDAST spelare som har samma FÄRG som bankens suit kan köpa insurance!</li>
+                                <li><strong>Färger:</strong> Rött (♥️ Hearts, ♦️ Diamonds) eller Svart (♣️ Clubs, ♠️ Spades)</li>
+                                <li><strong>Kostnad:</strong> $20 (standard, kan ändras i Admin Panel)</li>
+                                <li><strong>Minimum pot:</strong> Insurance-jackpotten måste vara minst $50 för att vara tillgänglig</li>
+                                <li><strong>Vinst:</strong> Om banken drar samma nummer OCH samma suit som ditt kort vinner du insurance-jackpotten!</li>
+                                <li><strong>Visuell indikator:</strong> Spelare som har köpt insurance visar en <strong>röd markering</strong> vid sin spelarplats</li>
+                            </ul>
+                        </div>
+                        
+                        <p><strong>Hur man köper insurance:</strong> Om din spelarplats har samma färg som bankens suit och insurance är tillgänglig kommer en insurance-knapp att visas. Klicka på den för att köpa försäkring.</p>
+                        
+                        <div class="help-demo-box">
+                            <h4>🎛️ Human Player Insurance Inställningar:</h4>
+                            <p>Som mänsklig spelare kan du ställa in ditt insurance-beteende i Bot Control Panel:</p>
+                            <ul>
+                                <li><strong>Always (Alltid):</strong> Köp automatiskt insurance när det är tillgängligt (om du har matchande färg)</li>
+                                <li><strong>Never (Aldrig):</strong> Köp aldrig insurance automatiskt</li>
+                                <li><strong>Ask (Fråga):</strong> Visa en prompt som frågar om du vill köpa insurance varje gång (standard)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="help-demo-box" style="background: rgba(231, 76, 60, 0.1); border-color: #e74c3c;">
+                            <h4 style="color: #e74c3c;">⚠️ Viktigt: Insurance Jackpot Regler</h4>
+                            <p>Om du vinner Insurance Jackpotten:</p>
+                            <ul>
+                                <li>Du <strong>VINNER</strong> hela Insurance Jackpot-beloppet</li>
+                                <li>Men normala spelregler gäller fortfarande - du <strong>FÖRLORAR</strong> din insats om ditt kort matchar bankens nummer</li>
+                                <li>Den röda markeringen vid din spelarplats visar att du har köpt insurance</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>♥️ Hearts Jackpot</h3>
+                        <div class="help-demo-box" style="background: rgba(231, 76, 60, 0.1); border-color: #e74c3c;">
+                            <h4 style="color: #e74c3c;">💎 Hearts Jackpot Utdelning:</h4>
+                            <p>När du vinner Hearts Jackpotten (matcha rank OCH suit med ♥️ Hearts):</p>
+                            <ul>
+                                <li><strong>Du får:</strong> Din insats tillbaka <strong>PLUS</strong> hela Hearts Jackpotten!</li>
+                                <li><strong>Övriga spelare:</strong> Får refund (sin insats tillbaka minus jackpot-avdrag)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>💎 Super Jackpot</h3>
+                        <div class="help-demo-box" style="background: rgba(142, 68, 173, 0.1); border-color: #8e44ad;">
+                            <h4 style="color: #8e44ad;">⭐ Super Jackpot Regler:</h4>
+                            <p>Vinn Hearts Jackpotten <strong>två gånger i rad</strong> för att vinna Super Jackpotten!</p>
+                            <ul>
+                                <li><strong>Hur man vinner:</strong> Vinn Hearts Jackpot i Omgång 1, sedan vinn Hearts Jackpot igen i Omgång 2 (i följd)</li>
+                                <li><strong>Måste vara samma spelare:</strong> Du måste vinna båda Hearts Jackpottarna som samma spelare</li>
+                                <li><strong>Utdelning:</strong> När du vinner Hearts Jackpot för andra gången i rad får du BÅDE Hearts Jackpotten OCH hela Super Jackpotten!</li>
+                                <li><strong>Återställning:</strong> Efter en Super Jackpot-vinst återställs Super Jackpotten till noll</li>
+                                <li><strong>Exempel:</strong> Vinn med 5♥ i omgång 1, sedan vinn igen med 8♥ i omgång 2 = Du vinner Hearts Jackpot + Super Jackpot!</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>🎯 Game Flow - Hur Spelet Fungerar</h3>
+                        <ol>
+                            <li><strong>Start Round:</strong> Klicka på "Start New Round" för att börja en ny omgång</li>
+                            <li><strong>Card Selection:</strong> Varje spelare väljer ett kort i turordning (med blinkande blå ram som indikator)</li>
+                            <li><strong>Insurance Phase:</strong> Spelare med matchande färg kan köpa insurance (om tillgänglig)</li>
+                            <li><strong>Bank Draw:</strong> Banken drar ett kort (A-10)</li>
+                            <li><strong>Results:</strong> Resultat beräknas baserat på vem som vann, förlorade eller får refund</li>
+                            <li><strong>Elimination:</strong> Spelare som inte kan betala elimineras</li>
+                            <li><strong>Round Restart:</strong> Nya omgångar startar automatiskt tills endast 3 spelare återstår</li>
+                        </ol>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>🏆 Winning Conditions</h3>
+                        <ul>
+                            <li><strong>✅ WIN:</strong> Ditt kort är LÄGRE än bankens kort → Du vinner och delar potten</li>
+                            <li><strong>❌ LOSS:</strong> Ditt kort är SAMMA som bankens kort → Du förlorar din insats</li>
+                            <li><strong>💵 REFUND:</strong> Ditt kort är HÖGRE än bankens kort → Du får tillbaka din insats minus jackpot-bidrag</li>
+                            <li><strong>🎰 HEARTS JACKPOT:</strong> Matcha både nummer OCH suit med ♥️ Hearts → Du får din insats tillbaka PLUS hela Hearts Jackpotten!</li>
+                            <li><strong>🛡️ INSURANCE JACKPOT:</strong> Om du köpt insurance och matchar både nummer och suit → Du vinner Insurance Jackpotten! (Men normala förlustregler gäller fortfarande för din insats)</li>
+                        </ul>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>⚙️ Admin Panel Funktionalitet</h3>
+                        <p>Klicka på "Admin Panel" för att få tillgång till avancerade inställningar:</p>
+                        <ul>
+                            <li><strong>Game Settings:</strong> Ändra startbalans ($300-$2000), jackpot rate, bank rake</li>
+                            <li><strong>Testing Tools:</strong> Överstyr bankens kortdragning för testning</li>
+                            <li><strong>Bot Control:</strong> Kontrollera bot-spelarnas strategier och insurance-beteende</li>
+                            <li><strong>Game Stats:</strong> Se totalbalans, förväntad balans och validering</li>
+                        </ul>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>📊 Andra Viktiga Funktioner</h3>
+                        <ul>
+                            <li><strong>History:</strong> Se historik över tidigare omgångar och resultat</li>
+                            <li><strong>Rules:</strong> Läs fullständiga regler och detaljer om spelet</li>
+                            <li><strong>Matrix:</strong> Se payout-matris och odds för olika kortval</li>
+                            <li><strong>Quick Rules & Jackpots:</strong> Boxarna på sidorna kan minimeras (▲/▼) för att se mer av bordet</li>
+                        </ul>
+                    </div>
+
+                    <div class="help-section">
+                        <h3>💡 Tips & Strategier</h3>
+                        <ul>
+                            <li><strong>Låga kort (A-4):</strong> Låg risk, låga vinster - Perfekt för att hålla sig kvar längre</li>
+                            <li><strong>Höga kort (5-9):</strong> Hög risk, stora vinster - För de som vågar satsa stort</li>
+                            <li><strong>Insurance:</strong> Använd när odds är gynnsamma och jackpotten är stor</li>
+                            <li><strong>Manual mode:</strong> Ge dig full kontroll - Perfekt för strategiska spelare</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -11072,6 +11527,118 @@
             console.log(`Updated jackpot chip stack: $${jackpotAmount} = ${chipCount} chips`);
         }
         
+        // Help/Tutorial Modal Functions
+        function initializeHelpModal() {
+            const helpBtn = document.getElementById('help-btn');
+            const helpModal = document.getElementById('help-modal');
+            const closeHelpBtn = document.getElementById('close-help-btn');
+            const langSvBtn = document.getElementById('help-lang-sv');
+            const langEnBtn = document.getElementById('help-lang-en');
+            const helpContentEn = document.getElementById('help-content-en');
+            const helpContentSv = document.getElementById('help-content-sv');
+            
+            if (!helpBtn || !helpModal || !closeHelpBtn) {
+                console.error('Help modal elements not found');
+                return;
+            }
+            
+            // Language switching
+            if (langSvBtn && langEnBtn && helpContentEn && helpContentSv) {
+                langSvBtn.addEventListener('click', () => {
+                    helpContentEn.style.display = 'none';
+                    helpContentSv.style.display = 'block';
+                    langSvBtn.style.display = 'none';
+                    langEnBtn.style.display = 'block';
+                });
+                
+                langEnBtn.addEventListener('click', () => {
+                    helpContentSv.style.display = 'none';
+                    helpContentEn.style.display = 'block';
+                    langEnBtn.style.display = 'none';
+                    langSvBtn.style.display = 'block';
+                });
+            }
+            
+            // Open help modal
+            const openHelpModal = () => {
+                helpModal.classList.remove('hidden');
+                // Reset to English (default)
+                if (helpContentEn && helpContentSv && langSvBtn && langEnBtn) {
+                    helpContentEn.style.display = 'block';
+                    helpContentSv.style.display = 'none';
+                    langSvBtn.style.display = 'block';
+                    langEnBtn.style.display = 'none';
+                }
+            };
+            
+            helpBtn.addEventListener('click', openHelpModal);
+            
+            // Check if URL has #help hash and open help modal automatically
+            if (window.location.hash === '#help') {
+                setTimeout(openHelpModal, 500); // Small delay to ensure page is loaded
+            }
+            
+            // Close help modal
+            closeHelpBtn.addEventListener('click', () => {
+                helpModal.classList.add('hidden');
+            });
+            
+            // Close on outside click
+            helpModal.addEventListener('click', (e) => {
+                if (e.target === helpModal) {
+                    helpModal.classList.add('hidden');
+                }
+            });
+            
+            // Make help modal draggable
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+            
+            const helpHeader = helpModal.querySelector('.help-header');
+            if (helpHeader) {
+                helpHeader.addEventListener('mousedown', dragStart);
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('mouseup', dragEnd);
+            }
+            
+            function dragStart(e) {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+                
+                if (e.target === helpHeader || helpHeader.contains(e.target)) {
+                    isDragging = true;
+                }
+            }
+            
+            function drag(e) {
+                if (isDragging) {
+                    e.preventDefault();
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                    
+                    xOffset = currentX;
+                    yOffset = currentY;
+                    
+                    setTranslate(currentX, currentY, helpModal);
+                }
+            }
+            
+            function dragEnd(e) {
+                initialX = currentX;
+                initialY = currentY;
+                isDragging = false;
+            }
+            
+            function setTranslate(xPos, yPos, el) {
+                el.style.transform = `translate(${xPos}px, ${yPos}px) translateX(-50%)`;
+            }
+        }
+
         // Initialize game when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM loaded, initializing Nine Card Game...');
@@ -11082,6 +11649,10 @@
                 window.updateJackpotChipStack = updateJackpotChipStack;
                 showVersionInfo();
                 checkForUpdates();
+                
+                // Initialize help modal
+                initializeHelpModal();
+                
                 console.log('Game initialized successfully!');
                 console.log('Type "game.getGameStats()" in console for game info');
             } catch (error) {
