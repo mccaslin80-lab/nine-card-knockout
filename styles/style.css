@@ -31,6 +31,8 @@ body {
     margin-bottom: 20px;
     backdrop-filter: blur(10px);
     border: 2px solid rgba(59, 130, 246, 0.3);
+    position: relative;
+    z-index: 1500; /* Higher than quick-rules and jackpot boxes (z-index: 1000) */
 }
 
 .game-header h1 {

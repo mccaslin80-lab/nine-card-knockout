@@ -67,15 +67,17 @@
             background: linear-gradient(145deg, #28a745, #20c997);
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 5px 10px; /* Reduced from 6px 12px for tighter fit */
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 10px; /* Reduced from 11px */
             font-weight: bold;
             transition: all 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             white-space: nowrap;
             flex-shrink: 0;
+            position: relative;
+            z-index: 1501; /* Higher than header z-index */
         }
 
         .rules-btn:hover {
@@ -1493,7 +1495,7 @@
         .jackpot-promo {
             position: fixed;
             right: 100px;
-            top: 22.5%;
+            top: 32.5%; /* Moved down to avoid header overlap */
             transform: translateY(-50%);
             background: rgba(255, 215, 0, 0.1);
             color: #ffd700;
@@ -1502,15 +1504,73 @@
             border: 1px solid rgba(255, 215, 0, 0.3);
             text-align: center;
             width: 500px;
+            max-width: 500px;
+            max-height: 70vh;
+            overflow-y: auto;
             box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
             z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .jackpot-promo.minimized {
+            width: 200px;
+            max-height: 50px;
+            overflow: hidden;
+            cursor: pointer;
+            top: 22.5%; /* Adjusted for minimized state */
+        }
+
+        .jackpot-promo.minimized .promo-text {
+            display: none;
+        }
+
+        .jackpot-promo.minimized::before {
+            content: "💎 Jackpots";
+            display: block;
+            text-align: center;
+            padding: 10px 0;
+            font-weight: bold;
+            font-size: 12px;
+            color: #ffd700;
+        }
+
+        .jackpot-promo .toggle-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 215, 0, 0.3);
+            border: none;
+            color: #ffd700;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 1502; /* Higher than header z-index (1500) */
+        }
+
+        .jackpot-promo .toggle-btn:hover {
+            background: rgba(255, 215, 0, 0.5);
+            transform: scale(1.1);
+        }
+
+        .jackpot-promo.minimized .toggle-btn::after {
+            content: "▼";
+        }
+
+        .jackpot-promo:not(.minimized) .toggle-btn::after {
+            content: "▲";
         }
 
         /* Quick Rules Promotion Box */
         .quick-rules-promo {
             position: fixed;
             left: 50px;
-            top: 40%;
+            top: 50%; /* Moved down to avoid header overlap */
             transform: translateY(-50%);
             background: rgba(52, 152, 219, 0.15);
             color: #3498db;
@@ -1518,8 +1578,67 @@
             border-radius: 8px;
             border: 2px solid rgba(52, 152, 219, 0.4);
             width: 350px;
+            max-width: 350px;
+            max-height: 70vh;
+            overflow-y: auto;
             box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
             z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .quick-rules-promo.minimized {
+            width: 200px;
+            max-height: 50px;
+            overflow: hidden;
+            cursor: pointer;
+            top: 22.5%; /* Adjusted for minimized state */
+        }
+
+        .quick-rules-promo.minimized .quick-rules-list,
+        .quick-rules-promo.minimized h3 {
+            display: none;
+        }
+
+        .quick-rules-promo.minimized::before {
+            content: "📋 Quick Rules";
+            display: block;
+            text-align: center;
+            padding: 10px 0;
+            font-weight: bold;
+            font-size: 12px;
+            color: #3498db;
+        }
+
+        .quick-rules-promo .toggle-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(52, 152, 219, 0.3);
+            border: none;
+            color: #3498db;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 1502; /* Higher than header z-index (1500) */
+        }
+
+        .quick-rules-promo .toggle-btn:hover {
+            background: rgba(52, 152, 219, 0.5);
+            transform: scale(1.1);
+        }
+
+        .quick-rules-promo.minimized .toggle-btn::after {
+            content: "▼";
+        }
+
+        .quick-rules-promo:not(.minimized) .toggle-btn::after {
+            content: "▲";
         }
 
         .quick-rules-promo h3 {
@@ -1617,18 +1736,20 @@
         /* Header Layout */
         .game-header {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             align-items: center;
-            gap: 8px;
+            gap: 4px; /* Reduced from 8px to 4px for tighter spacing */
             overflow-x: auto;
             overflow-y: hidden;
         }
 
         .game-header h1 {
             white-space: nowrap;
-            margin-right: 15px;
+            margin-right: 8px; /* Reduced from 15px */
             margin-bottom: 0;
             margin-top: 0;
+            font-size: 1.2em; /* Reduced from default larger size */
+            font-weight: bold;
         }
 
         /* Jackpot Display Boxes */
@@ -1636,23 +1757,25 @@
         .insurance-jackpot-display {
             display: inline-flex;
             align-items: center;
-            padding: 5px 10px;
+            padding: 4px 8px; /* Reduced padding for tighter fit */
             border-radius: 6px;
             white-space: nowrap;
             flex-shrink: 0;
+            font-size: 0.85em; /* Slightly smaller font */
         }
 
         /* Super Jackpot Display */
         .super-jackpot-display {
             display: inline-flex;
             align-items: center;
-            padding: 5px 10px;
+            padding: 4px 8px; /* Reduced padding for tighter fit */
             border-radius: 6px;
             border: 2px solid rgba(142, 68, 173, 0.6);
             background: rgba(142, 68, 173, 0.1);
             animation: superJackpotGlow 2s ease-in-out infinite alternate;
             white-space: nowrap;
             flex-shrink: 0;
+            font-size: 0.85em; /* Slightly smaller font */
         }
         
         @keyframes superJackpotGlow {
@@ -1743,6 +1866,7 @@
 
         <!-- Jackpot Promotional Text -->
         <div class="jackpot-promo">
+            <button class="toggle-btn" onclick="this.parentElement.classList.toggle('minimized')" title="Minimize/Expand"></button>
             <span class="promo-text">♥️ <strong>HEARTS JACKPOT:</strong> Match rank & suit with ♥️ Hearts<br>
             💎 <strong>SUPER JACKPOT:</strong> Win Hearts Jackpot twice in a row for MEGA payout!<br>
             🛡️ <strong>INSURANCE JACKPOT:</strong> Buy $20 insurance, match ANY suit (only same color as bank can buy)<br>
@@ -1752,6 +1876,7 @@
 
         <!-- Quick Rules Promotion Box -->
         <div class="quick-rules-promo">
+            <button class="toggle-btn" onclick="this.parentElement.classList.toggle('minimized')" title="Minimize/Expand"></button>
             <h3>📋 Quick Rules - Knock Out Version</h3>
             <ul class="quick-rules-list">
                 <li><strong>🎯 Knock Out Goal:</strong> Be one of the last 3 players! The top 3 players with highest stacks win. 1st place wins both jackpots. 2nd and 3rd place keep their balance.</li>
