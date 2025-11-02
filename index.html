@@ -93,7 +93,7 @@
         
         .version-cards {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 40px;
             margin-top: 60px;
             animation: fadeInUp 1s ease 0.3s both;
@@ -461,25 +461,49 @@
         </header>
         
         <div class="version-cards">
-            <a href="knock-out/index.html" class="version-card knockout">
+            <a href="knock-out-standard/index.html" class="version-card knockout">
                 <div class="version-title">
                     🥊 Knock Out
+                    <span class="version-badge">Standard Speed</span>
                 </div>
                 <p class="version-description">
                     Last 3 players win! Competitive elimination gameplay
                 </p>
                 <ul class="version-features">
+                    <li>Standard gameplay - $800 start balance</li>
+                    <li>20% jackpot rate from refunds</li>
                     <li>Elimination mode - survive to win</li>
                     <li>1st place wins both jackpots</li>
                     <li>Automatic round restarts</li>
                     <li>Strategic card selection</li>
                     <li>Insurance system available</li>
-                    <li>Fast-paced rounds</li>
-                    <li>Easy to learn, hard to master</li>
                     <li>Huge win potential</li>
                 </ul>
                 <div style="text-align: center;">
-                    <a href="knock-out/index.html" class="play-button">▶ Play Demo Now</a>
+                    <a href="knock-out-standard/index.html" class="play-button">▶ Play Demo Now</a>
+                </div>
+            </a>
+            
+            <a href="knock-out-fast/index.html" class="version-card knockout">
+                <div class="version-title">
+                    🥊 Knock Out
+                    <span class="version-badge">Fast Speed</span>
+                </div>
+                <p class="version-description">
+                    Last 3 players win! Faster elimination gameplay
+                </p>
+                <ul class="version-features">
+                    <li>Fast gameplay - $400 start balance</li>
+                    <li>30% jackpot rate from refunds</li>
+                    <li>Elimination mode - survive to win</li>
+                    <li>1st place wins both jackpots</li>
+                    <li>Automatic round restarts</li>
+                    <li>Strategic card selection</li>
+                    <li>Insurance system available</li>
+                    <li>Bigger jackpots, faster action</li>
+                </ul>
+                <div style="text-align: center;">
+                    <a href="knock-out-fast/index.html" class="play-button">▶ Play Demo Now</a>
                 </div>
             </a>
             
