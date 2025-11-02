@@ -258,8 +258,12 @@
             box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
         }
         
-        .unique-features {
+        .strategy-section {
             margin-top: 80px;
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            padding: 50px;
             text-align: center;
             animation: fadeIn 1s ease 0.6s both;
         }
@@ -267,6 +271,89 @@
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
+        }
+        
+        .strategy-title {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .strategy-subtitle {
+            font-size: 1.4em;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+        
+        .strategy-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .strategy-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+        
+        .strategy-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .strategy-card.low {
+            border-color: #4CAF50;
+        }
+        
+        .strategy-card.high {
+            border-color: #FF6B6B;
+        }
+        
+        .strategy-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .strategy-name {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .strategy-card.low .strategy-name {
+            color: #4CAF50;
+        }
+        
+        .strategy-card.high .strategy-name {
+            color: #FF6B6B;
+        }
+        
+        .strategy-description {
+            font-size: 1.1em;
+            line-height: 1.8;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .strategy-example {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.95em;
+            opacity: 0.85;
+        }
+        
+        .unique-features {
+            margin-top: 80px;
+            text-align: center;
+            animation: fadeIn 1s ease 0.9s both;
         }
         
         .unique-grid {
@@ -349,8 +436,16 @@
                 font-size: 2em;
             }
             
+            .strategy-comparison {
+                grid-template-columns: 1fr;
+            }
+            
             .unique-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .strategy-section {
+                padding: 30px 20px;
             }
         }
     </style>
@@ -410,6 +505,39 @@
                 </div>
             </a>
         </div>
+        
+        <section class="strategy-section">
+            <h2 class="strategy-title">⚔️ Choose Your Strategy</h2>
+            <p class="strategy-subtitle">
+                Low Cards = Lower Risk, Lower Wins | High Cards = Higher Risk, Higher Wins
+            </p>
+            
+            <div class="strategy-comparison">
+                <div class="strategy-card low">
+                    <div class="strategy-icon">🟢</div>
+                    <div class="strategy-name">Low Cards (A-4)</div>
+                    <div class="strategy-description">
+                        Lower risk, smaller bets, safer plays. Perfect for conservative players who want steady, reliable gameplay. 
+                        Lower chance of big losses, but also lower potential winnings.
+                    </div>
+                    <div class="strategy-example">
+                        <strong>Example:</strong> Ace (A) costs $10 - Low risk, small bet, steady wins
+                    </div>
+                </div>
+                
+                <div class="strategy-card high">
+                    <div class="strategy-icon">🔴</div>
+                    <div class="strategy-name">High Cards (5-9)</div>
+                    <div class="strategy-description">
+                        Higher risk, bigger bets, massive potential. For players who dare to win big! 
+                        Higher chance of losing, but when you win - the rewards are huge!
+                    </div>
+                    <div class="strategy-example">
+                        <strong>Example:</strong> Nine (9) costs $256 - High risk, big bet, huge wins
+                    </div>
+                </div>
+            </div>
+        </section>
         
         <section class="unique-features">
             <h2 style="font-size: 2.5em; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">
