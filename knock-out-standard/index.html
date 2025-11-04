@@ -6473,29 +6473,48 @@
                     const rank = card.dataset.rank;
                     console.log(`Processing card ${rank}, available: ${availableCards.includes(rank)}`);
                     if (availableCards.includes(rank)) {
-                        card.classList.remove('unavailable');
-                        card.style.pointerEvents = 'auto';
-                        card.style.cursor = 'pointer';
+                        // Check if player can afford this card
+                        const betValue = this.getBetValue({ rank, suit: 'spades' });
+                        const canAfford = player.balance >= betValue;
+                        
+                        if (canAfford) {
+                            card.classList.remove('unavailable');
+                            card.style.pointerEvents = 'auto';
+                            card.style.cursor = 'pointer';
+                            card.style.opacity = '1';
+                        } else {
+                            // Mark card as unavailable (too expensive)
+                            card.classList.add('unavailable');
+                            card.style.pointerEvents = 'none';
+                            card.style.cursor = 'not-allowed';
+                            card.style.opacity = '0.5';
+                            console.log(`Card ${rank} is too expensive ($${betValue}) for ${player.name}, marked as unavailable`);
+                        }
+                        
                         // Find the card-rank element inside this card
                         const cardRankElement = card.querySelector('.card-rank');
                         
                         if (cardRankElement) {
-                            // Create new event handler for the card-rank element
-                            cardRankElement._cardClickHandler = (e) => {
-                            console.log('=== HUMAN PLAYER CARD CLICKED ===');
-                            console.log('Card clicked, calling selectTableCard with playerId:', playerId);
-                                console.log('Card element:', card);
-                                console.log('Card rank:', card.dataset.rank);
-                                console.log('Event target:', e.target);
-                                console.log('Event currentTarget:', e.currentTarget);
-                                console.log('Player ID from handler:', playerId);
-                                console.log('Game state at click:', this.stateManager.getState());
-                            e.preventDefault();
-                            e.stopPropagation();
-                            this.selectTableCard(card, playerId);
-                        };
-                            cardRankElement.addEventListener('click', cardRankElement._cardClickHandler, true); // Use capture phase
-                            console.log(`Added click handler to card-rank element ${rank} for human player`);
+                            if (canAfford) {
+                                // Create new event handler for the card-rank element (only if player can afford)
+                                cardRankElement._cardClickHandler = (e) => {
+                                console.log('=== HUMAN PLAYER CARD CLICKED ===');
+                                console.log('Card clicked, calling selectTableCard with playerId:', playerId);
+                                    console.log('Card element:', card);
+                                    console.log('Card rank:', card.dataset.rank);
+                                    console.log('Event target:', e.target);
+                                    console.log('Event currentTarget:', e.currentTarget);
+                                    console.log('Player ID from handler:', playerId);
+                                    console.log('Game state at click:', this.stateManager.getState());
+                                e.preventDefault();
+                                e.stopPropagation();
+                                this.selectTableCard(card, playerId);
+                            };
+                                cardRankElement.addEventListener('click', cardRankElement._cardClickHandler, true); // Use capture phase
+                                console.log(`Added click handler to card-rank element ${rank} for human player`);
+                            } else {
+                                console.log(`Card ${rank} is unaffordable ($${betValue}), not adding click handler`);
+                            }
                         } else {
                             console.log(`Warning: No .card-rank element found inside card ${rank}`);
                         }
@@ -6829,11 +6848,13 @@
                 timerElement.id = `manual-timer-${playerId}`;
                 
                 // Apply proper timer styles inline to avoid any CSS interference
-                // Position timer at top-right of screen, outside game table area
+                // Position timer near center-top of screen, not in corner
                 timerElement.style.cssText = `
                     position: fixed !important;
-                    top: 20px !important;
-                    right: 20px !important;
+                    top: 50% !important;
+                    left: 50% !important;
+                    transform: translate(-50%, -50%) !important;
+                    margin-top: -120px !important;
                     width: 120px !important;
                     height: 40px !important;
                     background-color: rgba(255, 255, 255, 0.95) !important;
@@ -6851,7 +6872,7 @@
                     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
                 `;
                 
-                timerElement.textContent = '30';
+                timerElement.textContent = '15';
                 document.body.appendChild(timerElement);
                 console.log(`Brand new timer element added to body with inline styles`);
                 console.log(`Timer element initial text: ${timerElement.textContent}`);
@@ -6885,7 +6906,7 @@
                     visible: position.width > 0 && position.height > 0
                 });
 
-                let timeLeft = 30;
+                let timeLeft = 15; // Default timer set to 15 seconds
                 console.log(`Timer element created with inline styles, starting countdown from ${timeLeft}`);
                 
                 // Ensure timer element shows correct initial value
@@ -7035,38 +7056,67 @@
             makeRandomSelectionForPlayer(playerId, playerName) {
                 console.log(`Making random selection for ${playerName} (ID: ${playerId})`);
                 
+                const player = this.stateManager.getPlayer(playerId);
                 const availableCards = this.stateManager.getAvailableCards();
+                
                 if (availableCards.length > 0) {
-                    const randomRank = availableCards[Math.floor(Math.random() * availableCards.length)];
-                    const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
-                    const suit = suits[Math.floor(Math.random() * suits.length)];
-                    const card = { rank: randomRank, suit };
+                    // Filter to only affordable cards
+                    const affordableCards = availableCards.filter(rank => {
+                        const betValue = this.getBetValue({ rank, suit: 'spades' });
+                        return player.balance >= betValue;
+                    });
                     
-                    console.log(`Random selection: ${randomRank} of ${suit}`);
-                    
-                    if (this.stateManager.selectCard(playerId, card)) {
-                        console.log(`Random selection successful for ${playerName}`);
+                    if (affordableCards.length > 0) {
+                        // Select from affordable cards
+                        const randomRank = affordableCards[Math.floor(Math.random() * affordableCards.length)];
+                        const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+                        const suit = suits[Math.floor(Math.random() * suits.length)];
+                        const card = { rank: randomRank, suit };
                         
-                        // Play card selection sound
-                        this.soundManager.playSound('cardSelect');
+                        console.log(`Random selection: ${randomRank} of ${suit}`);
                         
-                        // Update displays
-                        this.updatePlayerDisplay(playerId);
-                        this.updateGameDisplay();
-                        
-                        // Update table card display
-                        this.updateTableCardDisplay(randomRank, playerName);
-                        
-                        // Check if all cards are selected - if so, move to insurance phase
-                        if (this.stateManager.allCardsSelected()) {
-                            console.log('All cards selected, moving to insurance purchase phase');
-                            this.stateManager.setState(GAME_STATES.INSURANCE_PURCHASE);
-                        } else {
-                            // Continue with remaining players
-                            setTimeout(() => {
-                                this.continueWithRemainingPlayers();
-                            }, 1000);
+                        if (this.stateManager.selectCard(playerId, card)) {
+                            console.log(`Random selection successful for ${playerName}`);
+                            
+                            // Play card selection sound
+                            this.soundManager.playSound('cardSelect');
+                            
+                            // Update displays
+                            this.updatePlayerDisplay(playerId);
+                            this.updateGameDisplay();
+                            
+                            // Update table card display
+                            this.updateTableCardDisplay(randomRank, playerName);
+                            
+                            // Check if all cards are selected - if so, move to insurance phase
+                            if (this.stateManager.allCardsSelected()) {
+                                console.log('All cards selected, moving to insurance purchase phase');
+                                this.stateManager.setState(GAME_STATES.INSURANCE_PURCHASE);
+                            } else {
+                                // Continue with remaining players
+                                setTimeout(() => {
+                                    this.continueWithRemainingPlayers();
+                                }, 1000);
+                            }
+                            return; // Successfully selected a card
                         }
+                    } else {
+                        // Player cannot afford any available card - eliminate and restart round
+                        console.log(`💥 Player ${playerName} (ID: ${playerId}) cannot afford any available card - eliminating and restarting round`);
+                        this.stateManager.eliminatePlayer(playerId);
+                        this.updatePlayerDisplay(playerId);
+                        // Clear selected cards so round can restart properly
+                        const gameData = this.stateManager.getGameData();
+                        gameData.players.forEach(p => {
+                            p.selectedCard = null;
+                        });
+                        gameData.selectedCards.clear();
+                        // Restart the round by transitioning back to card selection
+                        setTimeout(() => {
+                            console.log('🔄 Restarting round after elimination...');
+                            this.stateManager.setState(GAME_STATES.CARD_SELECTION);
+                        }, 1500);
+                        return; // Exit early
                     }
                 } else {
                     console.log(`No available cards for ${playerName}`);
