@@ -5428,6 +5428,7 @@
                 this.humanInsuranceTimer = null;
                 this.humanCountdownInterval = null;
                 this.insuranceModalActive = false; // Flag to prevent auto-start when insurance modal is active
+                this.insuranceStateProcessed = false; // Flag to prevent duplicate processing of insurance state
                 
                 // Bot moves processing flag to prevent multiple simultaneous executions
                 this.processingBotMoves = false;
@@ -6168,6 +6169,11 @@
                     this.autoStartTimer = null;
                 }
                 
+                // Reset insurance state processed flag when leaving insurance state
+                if (oldState === GAME_STATES.INSURANCE_PURCHASE && newState !== GAME_STATES.INSURANCE_PURCHASE) {
+                    this.insuranceStateProcessed = false;
+                }
+                
                 switch (newState) {
                     case GAME_STATES.WAITING_FOR_ROUND_START:
                         this.updateWaitingState();
@@ -6823,12 +6829,11 @@
                 timerElement.id = `manual-timer-${playerId}`;
                 
                 // Apply proper timer styles inline to avoid any CSS interference
+                // Position timer at top-right of screen, outside game table area
                 timerElement.style.cssText = `
                     position: fixed !important;
-                    top: 50% !important;
-                    left: 50% !important;
-                    transform: translate(-50%, -50%) !important;
-                    margin-top: -80px !important;
+                    top: 20px !important;
+                    right: 20px !important;
                     width: 120px !important;
                     height: 40px !important;
                     background-color: rgba(255, 255, 255, 0.95) !important;
@@ -7340,26 +7345,46 @@
 
             updateInsurancePurchaseState() {
                 console.log('Updating insurance purchase state...');
+                
+                // Guard: Only process if we're actually in insurance purchase state
+                const currentState = this.stateManager.getState();
+                if (currentState !== GAME_STATES.INSURANCE_PURCHASE) {
+                    console.log(`⚠️ updateInsurancePurchaseState called but state is ${currentState}, ignoring`);
+                    return;
+                }
+                
+                // Guard: Only process once (prevent duplicate calls)
+                if (this.insuranceStateProcessed) {
+                    console.log('⚠️ Insurance state already processed, skipping duplicate call');
+                    return;
+                }
+                this.insuranceStateProcessed = true;
+                
                 this.elements.startRoundBtn.disabled = true;
                 
                 // IMPORTANT: Reset flags when entering insurance phase (cards are revealed during card selection animation)
                 this.cardsRevealed = false;
                 this.bankDrawProcessed = false;
                 
-                // First: Check if there's a bank override from testing tools
+                // First: Check if bank suit is already set (to avoid regenerating it)
                 const gameData = this.stateManager.getGameData();
-                let bankSuit = null;
+                let bankSuit = gameData.bankCardSuit;
                 
-                // Check if admin has set an override (testing tools)
-                if (gameData.nextBankOverride && gameData.nextBankOverride.suit) {
-                    bankSuit = gameData.nextBankOverride.suit;
-                    console.log('🔧 Using bank suit from override:', bankSuit);
-                    this.stateManager.setBankCardSuit(bankSuit);
+                // Only generate bank suit if it's not already set
+                if (!bankSuit) {
+                    // Check if there's a bank override from testing tools
+                    if (gameData.nextBankOverride && gameData.nextBankOverride.suit) {
+                        bankSuit = gameData.nextBankOverride.suit;
+                        console.log('🔧 Using bank suit from override:', bankSuit);
+                        this.stateManager.setBankCardSuit(bankSuit);
+                    } else {
+                        // No override - generate random suit
+                        bankSuit = this.gameLogic.generateRandomSuit();
+                        this.stateManager.setBankCardSuit(bankSuit);
+                        console.log('🎲 Generated random bank suit:', bankSuit);
+                    }
                 } else {
-                    // No override - generate random suit
-                    bankSuit = this.gameLogic.generateRandomSuit();
-                    this.stateManager.setBankCardSuit(bankSuit);
-                    console.log('🎲 Generated random bank suit:', bankSuit);
+                    console.log('✅ Bank suit already set:', bankSuit);
                 }
                 
                 // Display bank's suit visually after a short delay
@@ -8237,17 +8262,17 @@
                             } else {
                                 // Player couldn't make a move - check if they can afford any card
                                 const availableCards = this.stateManager.getAvailableCards();
-                                const player = this.stateManager.getPlayer(player.id);
+                                const currentPlayer = this.stateManager.getPlayer(player.id); // Use different variable name to avoid shadowing
                                 const canAffordAny = availableCards.some(rank => {
                                     const betValue = this.getBetValue({ rank, suit: 'spades' });
-                                    return player.balance >= betValue;
+                                    return currentPlayer.balance >= betValue;
                                 });
                                 
                                 if (!canAffordAny && availableCards.length > 0) {
                                     // Player cannot afford any available card - eliminate and restart round
-                                    console.log(`💥 Player ${player.name} (ID: ${player.id}) cannot afford any available card - eliminating and restarting round`);
-                                    this.stateManager.eliminatePlayer(player.id);
-                                    this.updatePlayerDisplay(player.id);
+                                    console.log(`💥 Player ${currentPlayer.name} (ID: ${currentPlayer.id}) cannot afford any available card - eliminating and restarting round`);
+                                    this.stateManager.eliminatePlayer(currentPlayer.id);
+                                    this.updatePlayerDisplay(currentPlayer.id);
                                     // Clear selected cards so round can restart properly
                                     const gameData = this.stateManager.getGameData();
                                     gameData.players.forEach(p => {
@@ -8288,17 +8313,17 @@
                         } else {
                             // Player couldn't make a move - check if they can afford any card
                             const availableCards = this.stateManager.getAvailableCards();
-                            const player = this.stateManager.getPlayer(player.id);
+                            const currentPlayer = this.stateManager.getPlayer(player.id); // Use different variable name to avoid shadowing
                             const canAffordAny = availableCards.some(rank => {
                                 const betValue = this.getBetValue({ rank, suit: 'spades' });
-                                return player.balance >= betValue;
+                                return currentPlayer.balance >= betValue;
                             });
                             
                             if (!canAffordAny && availableCards.length > 0) {
                                 // Player cannot afford any available card - eliminate and restart round
-                                console.log(`💥 Player ${player.name} (ID: ${player.id}) cannot afford any available card - eliminating and restarting round`);
-                                this.stateManager.eliminatePlayer(player.id);
-                                this.updatePlayerDisplay(player.id);
+                                console.log(`💥 Player ${currentPlayer.name} (ID: ${currentPlayer.id}) cannot afford any available card - eliminating and restarting round`);
+                                this.stateManager.eliminatePlayer(currentPlayer.id);
+                                this.updatePlayerDisplay(currentPlayer.id);
                                 // Clear selected cards so round can restart properly
                                 const gameData = this.stateManager.getGameData();
                                 gameData.players.forEach(p => {

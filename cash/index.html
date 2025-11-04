@@ -1053,6 +1053,322 @@
             position: relative;
             margin: 0 auto;
         }
+
+        /* Header Layout */
+        .game-header {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 4px; /* Reduced from 8px to 4px for tighter spacing */
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .game-header h1 {
+            white-space: nowrap;
+            margin-right: 8px; /* Reduced from 15px */
+            margin-bottom: 0;
+            margin-top: 0;
+            font-size: 1.2em; /* Reduced from default larger size */
+            font-weight: bold;
+        }
+
+        /* Jackpot Display Boxes */
+        .jackpot-display,
+        .insurance-jackpot-display {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px; /* Reduced padding for tighter fit */
+            border-radius: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-size: 0.85em; /* Slightly smaller font */
+        }
+
+        /* Super Jackpot Display */
+        .super-jackpot-display {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px; /* Reduced padding for tighter fit */
+            border-radius: 6px;
+            border: 2px solid rgba(142, 68, 173, 0.6);
+            background: rgba(142, 68, 173, 0.1);
+            animation: superJackpotGlow 2s ease-in-out infinite alternate;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-size: 0.85em; /* Slightly smaller font */
+        }
+        
+        @keyframes superJackpotGlow {
+            0% {
+                box-shadow: 0 0 5px rgba(142, 68, 173, 0.5), 0 0 10px rgba(142, 68, 173, 0.3);
+                border-color: rgba(142, 68, 173, 0.6);
+            }
+            100% {
+                box-shadow: 0 0 15px rgba(142, 68, 173, 0.8), 0 0 25px rgba(142, 68, 173, 0.5), 0 0 35px rgba(142, 68, 173, 0.3);
+                border-color: rgba(142, 68, 173, 1);
+            }
+        }
+        
+        .super-jackpot-label {
+            font-weight: bold;
+            margin-right: 5px;
+            color: #8e44ad;
+        }
+
+        /* Ensure labels and amounts stay on one line */
+        .jackpot-label,
+        .super-jackpot-label,
+        .insurance-label {
+            display: inline;
+            white-space: nowrap;
+        }
+
+        #jackpot-amount,
+        #super-jackpot-amount,
+        #insurance-amount {
+            display: inline;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+        /* Bot Control Panel Styles */
+        .bot-control-panel {
+            position: fixed;
+            top: 200px;
+            left: 50px;
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border: 2px solid #e74c3c;
+            border-radius: 10px;
+            padding: 0;
+            z-index: 1000;
+            max-width: 500px;
+            max-height: 600px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            color: white;
+            cursor: move;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .bot-control-header {
+            background: linear-gradient(145deg, #1a252f, #2c3e50);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px 8px 0 0;
+            cursor: move;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .bot-control-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #e74c3c;
+        }
+        
+        .bot-control-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+            max-height: calc(600px - 60px);
+        }
+        
+        .close-bot-control-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-bot-control-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+        }
+        
+        .bot-control-section {
+            padding: 15px;
+            color: white;
+        }
+        
+        .bot-control-section h4 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .bot-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+        }
+        
+        .bot-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(231, 76, 60, 0.5);
+        }
+        
+        .bot-name {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .bot-controls-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .bot-control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 120px;
+        }
+        
+        .bot-control-group label {
+            font-size: 11px;
+            color: #bdc3c7;
+            font-weight: 500;
+        }
+        
+        .bot-control-group input,
+        .bot-control-group select {
+            padding: 4px 6px;
+            font-size: 11px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background: #34495e;
+            color: white;
+            transition: all 0.2s ease;
+        }
+        
+        .bot-control-group input:focus,
+        .bot-control-group select:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+        }
+
+        /* Insurance Modal Styles */
+        .insurance-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border: 3px solid #3498db;
+            border-radius: 10px;
+            padding: 0;
+            z-index: 5000;
+            max-width: 500px;
+            max-height: 80vh;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .insurance-header {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .insurance-header h2 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        
+        .insurance-info {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .insurance-timer {
+            margin-top: 8px;
+            font-weight: bold;
+            color: #f39c12;
+        }
+        
+        .insurance-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .insurance-select-all {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            border: 1px solid #3498db;
+        }
+        
+        .insurance-players {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        
+        .insurance-player-item {
+            padding: 8px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .insurance-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .insurance-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .insurance-btn.confirm {
+            background: linear-gradient(145deg, #27ae60, #2ecc71);
+            color: white;
+        }
+        
+        .insurance-btn.confirm:hover {
+            background: linear-gradient(145deg, #2ecc71, #27ae60);
+            transform: scale(1.05);
+        }
+        
+        .insurance-btn.skip {
+            background: linear-gradient(145deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+        
+        .insurance-btn.skip:hover {
+            background: linear-gradient(145deg, #7f8c8d, #95a5a6);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -1061,8 +1377,16 @@
         <header class="game-header">
             <h1>🎯 Nine Card Cash <span class="version-badge">v1.154.0</span></h1>
             <div class="jackpot-display">
-                <span class="jackpot-label">Jackpot:</span>
+                <span class="jackpot-label">♥️ Jackpot:</span>
                 <span id="jackpot-amount">0</span>
+            </div>
+            <div class="super-jackpot-display">
+                <span class="super-jackpot-label">💎 Super:</span>
+                <span id="super-jackpot-amount">0</span>
+            </div>
+            <div class="insurance-jackpot-display">
+                <span class="insurance-label">🛡️ Ins:</span>
+                <span id="insurance-amount">0</span>
             </div>
         <div class="bank-history">
             <span class="history-label">Bank History:</span>
@@ -1129,6 +1453,7 @@
         <div class="game-controls">
             <button id="start-round-btn" class="control-btn primary">Start New Round</button>
             <button id="admin-panel-btn" class="control-btn">Admin Panel</button>
+            <button id="bot-control-btn" class="control-btn">Bot Control</button>
         </div>
 
         <!-- Rules Modal -->
@@ -1542,6 +1867,8 @@
                     <div>Expected: <span id="expected-balance">9000</span></div>
                     <div>Player Balances: <span id="player-balances">0</span></div>
                     <div>Jackpot: <span id="admin-jackpot">0</span></div>
+                    <div>Super Jackpot: <span id="admin-super-jackpot">0</span></div>
+                    <div>Insurance: <span id="admin-insurance">0</span></div>
                     <div>Bank Rake: <span id="admin-bank-rake">0</span></div>
                     <div>Round: <span id="admin-round">1</span></div>
                 </div>
@@ -1587,6 +1914,52 @@
             </div>
         </div>
 
+        <!-- Bot Control Panel -->
+        <div id="bot-control-panel" class="bot-control-panel hidden">
+            <div class="bot-control-header">
+                <h3>Bot Control Panel</h3>
+                <button id="close-bot-control-btn" class="close-bot-control-btn">&times;</button>
+            </div>
+            <div class="bot-control-content">
+                <div class="bot-control-section">
+                    <h4>Bot Settings</h4>
+                    <div class="bot-list" id="bot-list">
+                        <!-- Bot controls will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insurance Purchase Modal -->
+        <div id="insurance-modal" class="insurance-modal hidden">
+            <div class="insurance-content">
+                <div class="insurance-header">
+                    <h2>🛡️ Insurance Purchase</h2>
+                    <div class="insurance-info">
+                        <p>Cost: $<span id="modal-insurance-cost">20</span> | Insurance Pot: $<span id="modal-insurance-pot">0</span></p>
+                        <div class="insurance-timer">
+                            <span>Time remaining: </span>
+                            <span id="insurance-countdown">10</span>s
+                        </div>
+                    </div>
+                </div>
+                <div class="insurance-body">
+                    <p>Select players who want to buy insurance:</p>
+                    <div class="insurance-select-all">
+                        <input type="checkbox" id="select-all-bots" class="select-all-checkbox">
+                        <label for="select-all-bots">Select All Bots</label>
+                    </div>
+                    <div class="insurance-players" id="insurance-players">
+                        <!-- Player checkboxes will be generated here -->
+                    </div>
+                    <div class="insurance-actions">
+                        <button id="confirm-insurance-btn" class="insurance-btn confirm">Confirm Purchases</button>
+                        <button id="skip-insurance-btn" class="insurance-btn skip">Skip Insurance</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Game Status -->
         <div class="game-status">
             <div id="game-state">Waiting for round to start</div>
@@ -1609,6 +1982,7 @@
             WAITING_FOR_ROUND_START: 'waiting_for_round_start',
             CARD_SELECTION: 'card_selection',
             REVEALING_CARDS: 'revealing_cards',
+            INSURANCE_PURCHASE: 'insurance_purchase',
             BANK_DRAW: 'bank_draw',
             DISTRIBUTE_WINNINGS: 'distribute_winnings',
             ROUND_SUMMARY: 'round_summary'
@@ -1637,12 +2011,29 @@
             BANK_RATE: 0.02,     // 2% from losing players
             JACKPOT_PAYOUT_RATE: 0.90,
             JACKPOT_CARRYOVER_RATE: 0.10,
+            INSURANCE_JACKPOT_RATE: 0.20,    // 20% stays as insurance
+            INSURANCE_COST: 20,               // Cost to buy insurance
+            INSURANCE_MIN_POT: 50,            // Minimum insurance pot to enable purchases
+            INSURANCE_TIMER: 10,              // Seconds to decide on insurance purchase
             CASCADE_RATE: 0.50,
             CARD_SELECTION_TIMEOUT: 10000,
             BOT_DELAY: 2000,
             AUTO_START_NEXT_ROUND: true,
             ROUND_DELAY: 3000
         };
+
+        // Helper function to check if two suits have the same color
+        // Red: Hearts, Diamonds
+        // Black: Clubs, Spades
+        function hasSameSuitColor(suit1, suit2) {
+            const redSuits = ['hearts', 'diamonds'];
+            const blackSuits = ['clubs', 'spades'];
+            
+            const suit1IsRed = redSuits.includes(suit1);
+            const suit2IsRed = redSuits.includes(suit2);
+            
+            return suit1IsRed === suit2IsRed;
+        }
 
         // Dynamic Matrix Calculator
         class MatrixCalculator {
@@ -1821,6 +2212,9 @@
                     players: [],
                     bankCard: null,
                     jackpot: 0,
+                    insuranceJackpot: 0,
+                    superJackpot: 10000,  // Initial $10,000 - funded externally, not from table
+                    superJackpotFromTable: 0,
                     bankRake: 0,
                     previousLoser: null,
                     selectedCards: new Map(),
@@ -1861,6 +2255,9 @@
                 }
 
                 this.gameData.jackpot = 0;
+                this.gameData.insuranceJackpot = 0;
+                this.gameData.superJackpot = 10000;  // Initial $10,000 - funded externally, not from table
+                this.gameData.superJackpotFromTable = 0;
                 this.gameData.bankRake = 0;
                 this.gameData.selectedCards.clear();
                 this.gameData.previousLoser = null;
@@ -1959,8 +2356,8 @@
                 const allSelected = this.allCardsSelected();
                 console.log('All cards selected check:', allSelected, 'Selected cards count:', this.gameData.selectedCards.size, 'Total players:', GAME_CONFIG.TOTAL_PLAYERS);
                 if (allSelected) {
-                    console.log('All cards selected, moving to reveal phase...');
-                    this.setState(GAME_STATES.REVEALING_CARDS);
+                    console.log('All cards selected, moving to insurance purchase phase...');
+                    this.setState(GAME_STATES.INSURANCE_PURCHASE);
                 }
                 
                 return true;
@@ -1992,6 +2389,7 @@
 
             setBankCard(card) {
                 this.gameData.bankCard = card;
+                this.gameData.bankCardSuit = card ? card.suit : null;
                 
                 // Add to bank history
                 if (!this.gameData.bankHistory) {
@@ -2013,9 +2411,7 @@
                 const player = this.getPlayer(playerId);
                 if (player) {
                     player.balance += amount;
-                    if (player.balance < 0) {
-                        player.balance = 0;
-                    }
+                    // Allow negative balances (rebuy/loan system)
                     // Round to nearest integer
                     player.balance = Math.round(player.balance);
                 }
@@ -2070,6 +2466,34 @@
                 if (this.gameData.bankRake < 0) {
                     this.gameData.bankRake = 0;
                 }
+            }
+
+            updateInsuranceJackpot(amount) {
+                // Safety check for NaN or undefined
+                if (isNaN(amount) || amount === undefined || amount === null) {
+                    console.error('Invalid insurance jackpot amount:', amount);
+                    return;
+                }
+                
+                this.gameData.insuranceJackpot += amount;
+                if (this.gameData.insuranceJackpot < 0) {
+                    this.gameData.insuranceJackpot = 0;
+                }
+                console.log('Insurance jackpot updated:', this.gameData.insuranceJackpot);
+            }
+
+            updateSuperJackpot(amount) {
+                // Safety check for NaN or undefined
+                if (isNaN(amount) || amount === undefined || amount === null) {
+                    console.error('Invalid super jackpot amount:', amount);
+                    return;
+                }
+                
+                this.gameData.superJackpot += amount;
+                if (this.gameData.superJackpot < 0) {
+                    this.gameData.superJackpot = 0;
+                }
+                console.log('Super jackpot updated:', this.gameData.superJackpot);
             }
 
             getTotalBalance() {
@@ -2559,11 +2983,24 @@
                 const jackpotAmount = gameData.jackpot;
                 
                 if (jackpotAmount > 0) {
-                    const payout = jackpotAmount * GAME_CONFIG.JACKPOT_PAYOUT_RATE;
-                    const carryover = jackpotAmount * GAME_CONFIG.JACKPOT_CARRYOVER_RATE;
+                    // Calculate 20% of Hearts Jackpot to go to Insurance Jackpot
+                    const insuranceContribution = jackpotAmount * GAME_CONFIG.INSURANCE_JACKPOT_RATE;
+                    const remainingJackpot = jackpotAmount - insuranceContribution;
                     
+                    // Add to insurance jackpot
+                    this.stateManager.updateInsuranceJackpot(insuranceContribution);
+                    console.log(`💎 Hearts Jackpot: $${Math.round(jackpotAmount)} - $${Math.round(insuranceContribution)} (20%) added to Insurance Jackpot`);
+                    
+                    // Calculate payout from remaining jackpot
+                    const payout = remainingJackpot * GAME_CONFIG.JACKPOT_PAYOUT_RATE;
+                    const carryover = remainingJackpot * GAME_CONFIG.JACKPOT_CARRYOVER_RATE;
+                    
+                    // Give payout to winner
                     this.stateManager.updatePlayerBalance(losingPlayer.id, payout);
                     this.stateManager.updatePlayer(losingPlayer.id, { result: RESULT_TYPES.JACKPOT });
+                    
+                    // Update jackpot: remove what was paid out, but keep carryover
+                    // Remove the entire original jackpot amount, then add back the carryover
                     this.stateManager.updateJackpot(-jackpotAmount + carryover);
                 }
             }
@@ -3048,6 +3485,8 @@
                 this.initializeElements();
                 this.setupEventListeners();
                 this.setupStateListeners();
+                this.initializeInsuranceSettings();
+                this.setupBankOverrideUI();
             }
 
             initializeElements() {
@@ -3057,20 +3496,37 @@
                     playerSeats: document.querySelector('.player-seats'),
                     bankCard: document.getElementById('bank-card'),
                     jackpotAmount: document.getElementById('jackpot-amount'),
+                    superJackpotAmount: document.getElementById('super-jackpot-amount'),
+                    insuranceAmount: document.getElementById('insurance-amount'),
                     bankHistoryList: document.getElementById('bank-history-list'),
                     startRoundBtn: document.getElementById('start-round-btn'),
                     adminPanelBtn: document.getElementById('admin-panel-btn'),
                     adminPanel: document.getElementById('admin-panel'),
+                    botControlBtn: document.getElementById('bot-control-btn'),
+                    botControlPanel: document.getElementById('bot-control-panel'),
                     gameState: document.getElementById('game-state'),
                     gameTimer: document.getElementById('game-timer'),
                     totalBalance: document.getElementById('total-balance'),
                     expectedBalance: document.getElementById('expected-balance'),
                     playerBalances: document.getElementById('player-balances'),
                     adminJackpot: document.getElementById('admin-jackpot'),
+                    adminSuperJackpot: document.getElementById('admin-super-jackpot'),
+                    adminInsurance: document.getElementById('admin-insurance'),
                     adminBankRake: document.getElementById('admin-bank-rake'),
                     adminBankRakeDisplay: document.getElementById('admin-bank-rake-display'),
                     adminRound: document.getElementById('admin-round'),
                     currentRound: document.getElementById('current-round'),
+                    
+                    // Insurance elements
+                    insuranceModal: document.getElementById('insurance-modal'),
+                    insurancePlayers: document.getElementById('insurance-players'),
+                    insuranceCountdown: document.getElementById('insurance-countdown'),
+                    modalInsuranceCost: document.getElementById('modal-insurance-cost'),
+                    modalInsurancePot: document.getElementById('modal-insurance-pot'),
+                    confirmInsuranceBtn: document.getElementById('confirm-insurance-btn'),
+                    skipInsuranceBtn: document.getElementById('skip-insurance-btn'),
+                    insuranceCostInput: document.getElementById('insurance-cost'),
+                    insuranceMinPotInput: document.getElementById('insurance-min-pot'),
                 };
                 
                 console.log('UI elements initialized:', this.elements);
@@ -3092,8 +3548,22 @@
                     this.elements.adminPanelBtn.addEventListener('click', () => this.toggleAdminPanel());
                 }
                 
+                // Bot Control button
+                if (this.elements.botControlBtn) {
+                    this.elements.botControlBtn.addEventListener('click', () => this.toggleBotControlPanel());
+                }
+                
+                // Close Bot Control Panel button
+                const closeBotControlBtn = document.getElementById('close-bot-control-btn');
+                if (closeBotControlBtn) {
+                    closeBotControlBtn.addEventListener('click', () => this.toggleBotControlPanel());
+                }
+                
                 // Make admin panel draggable
                 this.makeAdminPanelDraggable();
+                
+                // Make bot control panel draggable
+                this.makeBotControlPanelDraggable();
                 
                 // Sound toggle control
                 const soundToggle = document.getElementById('sound-toggle');
@@ -3204,7 +3674,351 @@
                     });
                 }
                 
+                // Insurance event listeners
+                if (this.elements.confirmInsuranceBtn) {
+                    this.elements.confirmInsuranceBtn.addEventListener('click', () => {
+                        this.confirmInsurancePurchases();
+                    });
+                }
+                
+                if (this.elements.skipInsuranceBtn) {
+                    this.elements.skipInsuranceBtn.addEventListener('click', () => {
+                        this.skipInsurance();
+                    });
+                }
+                
+                // Human insurance icon click handlers
+                this.setupHumanInsuranceListeners();
+                
                 console.log('Event listeners set up');
+            }
+            
+            setupHumanInsuranceListeners() {
+                // Set up click handlers for human insurance icons (will be called after seats are created)
+                document.addEventListener('click', (e) => {
+                    // Check if click is on the icon or any of its children
+                    const icon = e.target.closest('.human-insurance-icon');
+                    if (icon && !icon.classList.contains('disabled')) {
+                        const playerId = parseInt(icon.id.replace('human-insurance-', ''));
+                        console.log(`Human insurance icon clicked for player ${playerId}`);
+                        this.handleHumanInsuranceClick(playerId);
+                    }
+                });
+            }
+            
+            handleHumanInsuranceClick(playerId) {
+                console.log(`🛡️ handleHumanInsuranceClick called for player ${playerId}`);
+                const gameData = this.stateManager.getGameData();
+                const player = gameData.players.find(p => p.id === playerId);
+                
+                if (!player) {
+                    console.log('Early return: player not found');
+                    return;
+                }
+                
+                // Check if insurance phase is active
+                const currentState = this.stateManager.getState();
+                if (currentState !== GAME_STATES.INSURANCE_PURCHASE) {
+                    console.log('Insurance can only be purchased during insurance phase');
+                    return;
+                }
+                
+                // Check if player can afford insurance
+                if (player.balance < GAME_CONFIG.INSURANCE_COST) {
+                    console.log(`Player ${player.name} cannot afford insurance ($${GAME_CONFIG.INSURANCE_COST})`);
+                    return;
+                }
+                
+                // Check if insurance pot meets minimum requirement (only for purchases, not cancellations)
+                if (!player.hasInsurance) {
+                    const insurancePot = gameData.insuranceJackpot || 0;
+                    if (insurancePot < GAME_CONFIG.INSURANCE_MIN_POT) {
+                        console.log(`🛡️ Insurance pot too small: $${insurancePot} < $${GAME_CONFIG.INSURANCE_MIN_POT} - purchase not allowed`);
+                        return;
+                    }
+                }
+                
+                // Toggle insurance purchase
+                if (player.hasInsurance) {
+                    // Cancel insurance
+                    this.stateManager.updatePlayer(playerId, { hasInsurance: false });
+                    this.stateManager.updatePlayerBalance(playerId, GAME_CONFIG.INSURANCE_COST); // Refund
+                    // Subtract from pot if cancelling
+                    this.stateManager.updateInsuranceJackpot(-GAME_CONFIG.INSURANCE_COST);
+                    console.log(`${player.name} cancelled insurance purchase`);
+                } else {
+                    // Buy insurance
+                    this.stateManager.updatePlayer(playerId, { hasInsurance: true });
+                    this.stateManager.updatePlayerBalance(playerId, -GAME_CONFIG.INSURANCE_COST);
+                    
+                    // Add insurance cost to insurance jackpot
+                    this.stateManager.updateInsuranceJackpot(GAME_CONFIG.INSURANCE_COST);
+                    
+                    console.log(`${player.name} purchased insurance for $${GAME_CONFIG.INSURANCE_COST}`);
+                }
+                
+                // Update player display and insurance display
+                this.updatePlayerDisplay(playerId);
+                this.updateGameDisplay(); // This will update insurance amount display
+                
+                // Add/remove insurance marker
+                const updatedPlayer = this.stateManager.getGameData().players.find(p => p.id === playerId);
+                if (updatedPlayer && updatedPlayer.hasInsurance) {
+                    this.addInsuranceMarker(playerId);
+                } else {
+                    // If insurance cancelled, remove marker
+                    const marker = document.querySelector(`.insurance-marker[data-player-id="${playerId}"]`);
+                    if (marker) {
+                        marker.remove();
+                    }
+                }
+                
+                // If human player purchased insurance, automatically end human phase and proceed to bot phase
+                if (player.isHuman && updatedPlayer && updatedPlayer.hasInsurance) {
+                    console.log('🛡️ Human player purchased insurance - ending human phase');
+                    this.endHumanInsurancePhase();
+                }
+            }
+            
+            confirmInsurancePurchases() {
+                console.log('🛡️ Confirming insurance purchases');
+                
+                // Guard: Only process insurance if we're in insurance purchase state
+                const currentState = this.stateManager.getState();
+                if (currentState !== GAME_STATES.INSURANCE_PURCHASE) {
+                    console.log(`🛡️ Cannot confirm insurance - wrong state: ${currentState}`);
+                    this.hideInsuranceModal();
+                    return;
+                }
+                
+                const gameData = this.stateManager.getGameData();
+                const checkboxes = this.elements.insurancePlayers.querySelectorAll('input[type="checkbox"]:checked');
+                
+                let totalInsuranceCost = 0;
+                
+                // Process bot insurance purchases from modal
+                checkboxes.forEach(checkbox => {
+                    const playerId = parseInt(checkbox.value);
+                    const player = gameData.players.find(p => p.id === playerId);
+                    
+                    // Check insurance pot BEFORE each purchase
+                    const currentInsurancePot = gameData.insuranceJackpot || 0;
+                    if (currentInsurancePot < GAME_CONFIG.INSURANCE_MIN_POT) {
+                        console.log(`🛡️ Cannot process insurance purchase for ${player ? player.name : 'player ' + playerId} - pot too small`);
+                        return; // Skip this purchase
+                    }
+                    
+                    if (player && player.balance >= GAME_CONFIG.INSURANCE_COST && !player.hasInsurance) {
+                        console.log(`🛡️ Player ${player.name} (${playerId}) bought insurance for $${GAME_CONFIG.INSURANCE_COST}`);
+                        
+                        // Deduct insurance cost from player balance
+                        this.stateManager.updatePlayerBalance(playerId, -GAME_CONFIG.INSURANCE_COST);
+                        
+                        // Mark player as having insurance
+                        this.stateManager.updatePlayer(playerId, { hasInsurance: true });
+                        
+                        // Add to insurance jackpot using safe method
+                        this.stateManager.updateInsuranceJackpot(GAME_CONFIG.INSURANCE_COST);
+                        
+                        // Add insurance marker to player seat
+                        this.addInsuranceMarker(playerId);
+                        
+                        // Update player display immediately to show new balance
+                        this.updatePlayerDisplay(playerId);
+                        
+                        totalInsuranceCost += GAME_CONFIG.INSURANCE_COST;
+                    }
+                });
+                
+                // Process human insurance purchases (already handled by click events)
+                gameData.players.forEach(player => {
+                    if (player.isHuman && player.hasInsurance) {
+                        // Human player insurance was already added to pot in handleHumanInsuranceClick
+                        // Just make sure marker is added if missing
+                        this.addInsuranceMarker(player.id);
+                    }
+                });
+                
+                // Update admin panel and insurance display immediately
+                if (totalInsuranceCost > 0) {
+                    console.log(`🛡️ Processed $${totalInsuranceCost} in insurance purchases`);
+                    this.updateAdminPanel();
+                    this.updateGameDisplay(); // This will update insurance amount display
+                }
+                
+                this.hideInsuranceModal();
+                this.proceedWithoutInsurance();
+            }
+            
+            skipInsurance() {
+                console.log('🛡️ Skipping insurance phase');
+                
+                // Guard: Only process insurance if we're in insurance purchase state
+                const currentState = this.stateManager.getState();
+                if (currentState !== GAME_STATES.INSURANCE_PURCHASE) {
+                    console.log(`🛡️ Cannot skip insurance - wrong state: ${currentState}`);
+                    this.hideInsuranceModal();
+                    return;
+                }
+                
+                this.hideInsuranceModal();
+                this.proceedWithoutInsurance();
+            }
+            
+            proceedWithoutInsurance() {
+                console.log('🛡️ Proceeding without insurance');
+                // Move to revealing cards phase
+                this.stateManager.setState(GAME_STATES.REVEALING_CARDS);
+            }
+            
+            hideInsuranceModal() {
+                if (this.elements.insuranceModal) {
+                    this.elements.insuranceModal.classList.add('hidden');
+                }
+            }
+            
+            showInsuranceModal() {
+                if (this.elements.insuranceModal) {
+                    this.elements.insuranceModal.classList.remove('hidden');
+                }
+            }
+            
+            addInsuranceMarker(playerId) {
+                // Check if marker already exists
+                const existingMarker = document.querySelector(`.insurance-marker[data-player-id="${playerId}"]`);
+                if (existingMarker) {
+                    return; // Marker already exists
+                }
+                
+                const playerSeat = document.getElementById(`player-${playerId}`);
+                if (!playerSeat) return;
+                
+                const marker = document.createElement('div');
+                marker.className = 'insurance-marker';
+                marker.setAttribute('data-player-id', playerId);
+                marker.innerHTML = '<div style="background: #e74c3c; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: bold;">🛡️</div>';
+                marker.style.position = 'absolute';
+                marker.style.top = '-15px';
+                marker.style.right = '-15px';
+                marker.style.zIndex = '10';
+                
+                playerSeat.appendChild(marker);
+            }
+            
+            startHumanInsurancePhase() {
+                console.log('🛡️ Starting human insurance phase');
+                
+                const gameData = this.stateManager.getGameData();
+                const humanPlayer = gameData.players.find(p => p.isHuman);
+                const bankSuit = gameData.bankCardSuit;
+                
+                // Check if human player has matching suit
+                if (!humanPlayer || !humanPlayer.selectedCard || !hasSameSuitColor(humanPlayer.selectedCard.suit, bankSuit)) {
+                    console.log(`🛡️ Human player does not have matching suit color`);
+                    // Skip countdown and proceed directly to bot phase
+                    setTimeout(() => {
+                        this.endHumanInsurancePhase();
+                    }, 1000);
+                    return;
+                }
+                
+                console.log(`🛡️ Human player has matching suit color`);
+                
+                // Check if insurance pot is large enough
+                const insurancePot = gameData.insuranceJackpot || 0;
+                if (insurancePot < GAME_CONFIG.INSURANCE_MIN_POT) {
+                    console.log(`🛡️ Insurance pot too small: $${insurancePot} < $${GAME_CONFIG.INSURANCE_MIN_POT}`);
+                    setTimeout(() => {
+                        this.endHumanInsurancePhase();
+                    }, 1000);
+                    return;
+                }
+                
+                // Show insurance icon for human player
+                const icon = document.getElementById(`human-insurance-${humanPlayer.id}`);
+                if (icon) {
+                    icon.classList.remove('disabled');
+                }
+                
+                // Proceed to bot insurance phase after a short delay
+                setTimeout(() => {
+                    this.endHumanInsurancePhase();
+                }, 5000); // 5 seconds for human to decide
+            }
+            
+            endHumanInsurancePhase() {
+                console.log('🛡️ Ending human insurance phase, proceeding to bot phase');
+                // Show insurance modal for bots
+                this.showBotInsurancePhase();
+            }
+            
+            showBotInsurancePhase() {
+                console.log('🛡️ Showing bot insurance phase');
+                
+                const gameData = this.stateManager.getGameData();
+                const bankSuit = gameData.bankCardSuit;
+                const insurancePot = gameData.insuranceJackpot || 0;
+                
+                // Update modal info
+                if (this.elements.modalInsuranceCost) {
+                    this.elements.modalInsuranceCost.textContent = GAME_CONFIG.INSURANCE_COST;
+                }
+                if (this.elements.modalInsurancePot) {
+                    this.elements.modalInsurancePot.textContent = Math.round(insurancePot);
+                }
+                
+                // Build list of eligible players (matching suit color)
+                const eligiblePlayers = gameData.players.filter(player => {
+                    if (!player.selectedCard) return false;
+                    return hasSameSuitColor(player.selectedCard.suit, bankSuit);
+                });
+                
+                if (eligiblePlayers.length === 0) {
+                    console.log('🛡️ No eligible players for insurance');
+                    this.proceedWithoutInsurance();
+                    return;
+                }
+                
+                // Populate insurance players list
+                if (this.elements.insurancePlayers) {
+                    this.elements.insurancePlayers.innerHTML = '';
+                    
+                    eligiblePlayers.forEach(player => {
+                        if (player.isHuman) return; // Skip human, already handled
+                        
+                        const item = document.createElement('div');
+                        item.className = 'insurance-player-item';
+                        item.innerHTML = `
+                            <input type="checkbox" id="insurance-checkbox-${player.id}" value="${player.id}" 
+                                   ${player.balance < GAME_CONFIG.INSURANCE_COST ? 'disabled' : ''}>
+                            <label for="insurance-checkbox-${player.id}">
+                                ${player.name} (Balance: $${Math.round(player.balance)})
+                                ${player.balance < GAME_CONFIG.INSURANCE_COST ? ' - Cannot afford' : ''}
+                            </label>
+                        `;
+                        this.elements.insurancePlayers.appendChild(item);
+                    });
+                }
+                
+                // Set up select all checkbox
+                const selectAllCheckbox = document.getElementById('select-all-bots');
+                if (selectAllCheckbox) {
+                    selectAllCheckbox.addEventListener('change', (e) => {
+                        const checkboxes = this.elements.insurancePlayers.querySelectorAll('input[type="checkbox"]:not([disabled])');
+                        checkboxes.forEach(cb => cb.checked = e.target.checked);
+                    });
+                }
+                
+                // Show modal
+                this.showInsuranceModal();
+                
+                // Auto-confirm after timer expires
+                setTimeout(() => {
+                    if (!this.elements.insuranceModal.classList.contains('hidden')) {
+                        console.log('🛡️ Insurance timer expired, auto-confirming');
+                        this.confirmInsurancePurchases();
+                    }
+                }, GAME_CONFIG.INSURANCE_TIMER * 1000);
             }
 
             showRules() {
@@ -3294,6 +4108,9 @@
                         break;
                     case GAME_STATES.REVEALING_CARDS:
                         this.updateRevealingCardsState();
+                        break;
+                    case GAME_STATES.INSURANCE_PURCHASE:
+                        this.updateInsurancePurchaseState();
                         break;
                     case GAME_STATES.BANK_DRAW:
                         this.updateBankDrawState();
@@ -4102,10 +4919,20 @@
                 
                 // Safety checks for display values
                 const jackpot = isNaN(gameData.jackpot) ? 0 : gameData.jackpot;
+                const insuranceJackpot = isNaN(gameData.insuranceJackpot) ? 0 : gameData.insuranceJackpot;
+                const superJackpot = isNaN(gameData.superJackpot) ? 0 : gameData.superJackpot;
                 const bankRake = isNaN(gameData.bankRake) ? 0 : gameData.bankRake;
                 const totalBalance = this.stateManager.getTotalBalance();
                 
                 this.elements.jackpotAmount.textContent = `$${Math.round(jackpot)}`;
+                
+                // Update insurance and super jackpot displays
+                if (this.elements.insuranceAmount) {
+                    this.elements.insuranceAmount.textContent = `$${Math.round(insuranceJackpot)}`;
+                }
+                if (this.elements.superJackpotAmount) {
+                    this.elements.superJackpotAmount.textContent = `$${Math.round(superJackpot)}`;
+                }
                 
                 // Update jackpot chip stack
                 if (window.updateJackpotChipStack) {
@@ -4137,8 +4964,10 @@
                 // Calculate detailed balance breakdown
                 const playerBalances = gameData.players.reduce((sum, player) => sum + (player.balance || 0), 0);
                 const jackpot = gameData.jackpot || 0;
+                const superJackpot = gameData.superJackpot || 0;
+                const insuranceJackpot = gameData.insuranceJackpot || 0;
                 const bankRake = gameData.bankRake || 0;
-                const totalBalance = playerBalances + jackpot + bankRake;
+                const totalBalance = playerBalances + jackpot + superJackpot + insuranceJackpot + bankRake;
                 const expectedTotal = GAME_CONFIG.TOTAL_PLAYERS * GAME_CONFIG.INITIAL_BALANCE;
                 
                 // Update admin panel displays
@@ -4146,6 +4975,12 @@
                 this.elements.expectedBalance.textContent = `$${expectedTotal}`;
                 this.elements.playerBalances.textContent = `$${Math.round(playerBalances)}`;
                 this.elements.adminJackpot.textContent = `$${Math.round(jackpot)}`;
+                if (this.elements.adminSuperJackpot) {
+                    this.elements.adminSuperJackpot.textContent = `$${Math.round(superJackpot)}`;
+                }
+                if (this.elements.adminInsurance) {
+                    this.elements.adminInsurance.textContent = `$${Math.round(insuranceJackpot)}`;
+                }
                 this.elements.adminBankRake.textContent = `$${Math.round(bankRake)}`;
                 this.elements.adminBankRakeDisplay.textContent = `$${Math.round(bankRake)}`;
                 this.elements.adminRound.textContent = gameData.round;
@@ -4184,6 +5019,59 @@
                 
                 console.log('Starting bot moves...');
                 this.processBotMovesWithTurnIndication();
+            }
+
+            updateInsurancePurchaseState() {
+                console.log('Updating insurance purchase state...');
+                this.elements.startRoundBtn.disabled = true;
+                
+                // IMPORTANT: Reset flags when entering insurance phase
+                this.cardsRevealed = false;
+                this.bankDrawProcessed = false;
+                
+                // First: Check if there's a bank override from testing tools
+                const gameData = this.stateManager.getGameData();
+                let bankSuit = null;
+                
+                // Check if admin has set an override (testing tools)
+                if (gameData.nextBankOverride && gameData.nextBankOverride.suit) {
+                    bankSuit = gameData.nextBankOverride.suit;
+                    console.log('🔧 Using bank suit from override:', bankSuit);
+                    // Set bank suit in gameData
+                    this.stateManager.updateGameData({ bankCardSuit: bankSuit });
+                } else {
+                    // No override - generate random suit
+                    const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+                    bankSuit = suits[Math.floor(Math.random() * suits.length)];
+                    this.stateManager.updateGameData({ bankCardSuit: bankSuit });
+                    console.log('🎲 Generated random bank suit:', bankSuit);
+                }
+                
+                // Display bank's suit visually after a short delay
+                setTimeout(() => {
+                    this.displayBankSuit(bankSuit);
+                }, 1500); // 1.5 second delay before showing bank suit
+                
+                // Check if insurance pot is large enough to enable purchases
+                const insurancePot = gameData.insuranceJackpot || 0;
+                
+                if (insurancePot < GAME_CONFIG.INSURANCE_MIN_POT) {
+                    console.log(`🛡️ Insurance pot too small: $${insurancePot} < $${GAME_CONFIG.INSURANCE_MIN_POT} - skipping insurance phase`);
+                    this.elements.gameState.textContent = 'Insurance phase skipped - pot too small';
+                    // Skip insurance phase and go directly to revealing cards
+                    setTimeout(() => {
+                        this.stateManager.setState(GAME_STATES.REVEALING_CARDS);
+                    }, 2000); // Longer delay to show bank suit
+                    return;
+                }
+                
+                this.elements.gameState.textContent = `Bank's suit: ${bankSuit} - Insurance available for matching color players`;
+                this.elements.gameTimer.classList.add('hidden');
+                
+                // Start insurance purchase flow (only for matching color players) with delay to show bank suit
+                setTimeout(() => {
+                    this.startHumanInsurancePhase();
+                }, 2000);
             }
 
             updateRevealingCardsState() {
@@ -4471,8 +5359,8 @@
                 
                 // Check if all cards are selected after processing
                 if (this.stateManager.allCardsSelected()) {
-                    console.log('All cards selected, moving to reveal phase...');
-                    this.stateManager.setState(GAME_STATES.REVEALING_CARDS);
+                    console.log('All cards selected, moving to insurance purchase phase...');
+                    this.stateManager.setState(GAME_STATES.INSURANCE_PURCHASE);
                 }
             }
 
@@ -5007,6 +5895,231 @@
                 }
             }
 
+            toggleBotControlPanel() {
+                if (!this.elements.botControlPanel) return;
+                this.elements.botControlPanel.classList.toggle('hidden');
+                if (!this.elements.botControlPanel.classList.contains('hidden')) {
+                    this.updateBotControlPanel();
+                }
+            }
+            
+            updateBotControlPanel() {
+                const botList = document.getElementById('bot-list');
+                if (!botList) return;
+                
+                const gameData = this.stateManager.getGameData();
+                const bots = gameData.players.filter(player => !player.isHuman);
+                
+                botList.innerHTML = '';
+                
+                bots.forEach((bot, index) => {
+                    const botItem = document.createElement('div');
+                    botItem.className = 'bot-item';
+                    botItem.innerHTML = `
+                        <div class="bot-item-header">
+                            <div class="bot-name">Bot ${bot.id}</div>
+                        </div>
+                        <div class="bot-controls-row">
+                            <div class="bot-control-group">
+                                <label>Name:</label>
+                                <input type="text" id="bot-name-${bot.id}" value="${bot.name}" maxlength="15">
+                            </div>
+                            <div class="bot-control-group">
+                                <label>Strategy:</label>
+                                <select id="bot-strategy-${bot.id}">
+                                    <option value="random" ${bot.strategy === 'random' ? 'selected' : ''}>Random</option>
+                                    <option value="lowest" ${bot.strategy === 'lowest' ? 'selected' : ''}>Lowest</option>
+                                    <option value="highest" ${bot.strategy === 'highest' ? 'selected' : ''}>Highest</option>
+                                    <option value="manual" ${bot.strategy === 'manual' ? 'selected' : ''}>Manual</option>
+                                </select>
+                            </div>
+                            <div class="bot-control-group">
+                                <label>Insurance:</label>
+                                <select id="bot-insurance-${bot.id}">
+                                    <option value="ask" ${(bot.insuranceBehavior || 'always') === 'ask' ? 'selected' : ''}>Ask before round</option>
+                                    <option value="always" ${(bot.insuranceBehavior || 'always') === 'always' ? 'selected' : ''}>Always buy</option>
+                                    <option value="never" ${(bot.insuranceBehavior || 'always') === 'never' ? 'selected' : ''}>Never buy</option>
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                    
+                    botList.appendChild(botItem);
+                });
+                
+                // Set up event listeners for bot controls
+                this.setupBotControlListeners();
+            }
+            
+            setupBotControlListeners() {
+                const gameData = this.stateManager.getGameData();
+                const bots = gameData.players.filter(player => !player.isHuman);
+                
+                bots.forEach(bot => {
+                    // Name change
+                    const nameInput = document.getElementById(`bot-name-${bot.id}`);
+                    if (nameInput) {
+                        nameInput.addEventListener('change', (e) => {
+                            const newName = e.target.value.trim() || `Bot ${bot.id}`;
+                            this.stateManager.updatePlayerName(bot.id, newName);
+                            console.log(`Bot ${bot.id} name changed to: ${newName}`);
+                        });
+                    }
+                    
+                    // Strategy change
+                    const strategySelect = document.getElementById(`bot-strategy-${bot.id}`);
+                    if (strategySelect) {
+                        strategySelect.addEventListener('change', (e) => {
+                            this.stateManager.updatePlayerStrategy(bot.id, e.target.value);
+                            console.log(`Bot ${bot.id} strategy changed to: ${e.target.value}`);
+                        });
+                    }
+                    
+                    // Insurance behavior change
+                    const insuranceSelect = document.getElementById(`bot-insurance-${bot.id}`);
+                    if (insuranceSelect) {
+                        insuranceSelect.addEventListener('change', (e) => {
+                            this.stateManager.updatePlayerInsuranceBehavior(bot.id, e.target.value);
+                            console.log(`Bot ${bot.id} insurance behavior changed to: ${e.target.value}`);
+                        });
+                    }
+                });
+            }
+            
+            makeBotControlPanelDraggable() {
+                if (!this.elements.botControlPanel) return;
+                const panel = this.elements.botControlPanel;
+                const header = panel.querySelector('.bot-control-header');
+                if (!header) return;
+                
+                let isDragging = false;
+                let currentX;
+                let currentY;
+                let initialX;
+                let initialY;
+                let xOffset = 0;
+                let yOffset = 0;
+                
+                header.addEventListener('mousedown', dragStart);
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('mouseup', dragEnd);
+                
+                function dragStart(e) {
+                    initialX = e.clientX - xOffset;
+                    initialY = e.clientY - yOffset;
+                    
+                    if (e.target === header || header.contains(e.target)) {
+                        isDragging = true;
+                    }
+                }
+                
+                function drag(e) {
+                    if (isDragging) {
+                        e.preventDefault();
+                        currentX = e.clientX - initialX;
+                        currentY = e.clientY - initialY;
+                        
+                        xOffset = currentX;
+                        yOffset = currentY;
+                        
+                        panel.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                    }
+                }
+                
+                function dragEnd(e) {
+                    initialX = currentX;
+                    initialY = currentY;
+                    isDragging = false;
+                }
+            }
+
+            initializeInsuranceSettings() {
+                // Initialize insurance setting inputs with current GAME_CONFIG values
+                if (this.elements.insuranceCostInput) {
+                    this.elements.insuranceCostInput.value = GAME_CONFIG.INSURANCE_COST;
+                }
+                if (this.elements.insuranceMinPotInput) {
+                    this.elements.insuranceMinPotInput.value = GAME_CONFIG.INSURANCE_MIN_POT;
+                }
+                if (this.elements.insuranceTimer) {
+                    this.elements.insuranceTimer.value = GAME_CONFIG.INSURANCE_TIMER;
+                }
+            }
+
+            setupBankOverrideUI() {
+                // Build Testing Tools section dynamically inside admin panel
+                const panel = this.elements.adminPanel;
+                if (!panel) return;
+                
+                // Check if Testing Tools section already exists
+                if (document.getElementById('bank-override-rank')) return;
+                
+                const section = document.createElement('div');
+                section.className = 'admin-section';
+                section.innerHTML = `
+                    <h4>Testing Tools</h4>
+                    <div class="control-group">
+                        <label for="bank-override-rank">Next Bank Card (Rank):</label>
+                        <select id="bank-override-rank">
+                            <option value="A">A</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="bank-override-suit">Next Bank Card (Suit):</label>
+                        <select id="bank-override-suit">
+                            <option value="hearts">♥ hearts</option>
+                            <option value="diamonds">♦ diamonds</option>
+                            <option value="clubs">♣ clubs</option>
+                            <option value="spades">♠ spades</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <button id="set-bank-override" class="control-btn">Set Next Bank Card</button>
+                        <button id="clear-bank-override" class="control-btn secondary">Clear</button>
+                    </div>
+                    <div id="bank-override-display" style="font-size:12px;color:#ccc;margin-top:6px;">Next bank card: random</div>
+                `;
+                
+                // Safely append at end of admin panel
+                try {
+                    panel.appendChild(section);
+                } catch (e) {
+                    console.warn('Could not append Testing Tools section, admin panel structure unexpected:', e);
+                }
+
+                // Wire up events
+                const setBtn = document.getElementById('set-bank-override');
+                const clearBtn = document.getElementById('clear-bank-override');
+                const rankSel = document.getElementById('bank-override-rank');
+                const suitSel = document.getElementById('bank-override-suit');
+                const display = document.getElementById('bank-override-display');
+                
+                if (setBtn && clearBtn && rankSel && suitSel && display) {
+                    setBtn.addEventListener('click', () => {
+                        const rank = rankSel.value;
+                        const suit = suitSel.value;
+                        this.stateManager.setBankOverride({ rank, suit });
+                        display.textContent = `Next bank card: ${rank} of ${suit}`;
+                        console.log('🔧 Bank override set to:', rank, suit);
+                    });
+                    
+                    clearBtn.addEventListener('click', () => {
+                        this.stateManager.clearBankOverride();
+                        display.textContent = 'Next bank card: random';
+                        console.log('🔧 Bank override cleared');
+                    });
+                }
+            }
+
             showRules() {
                 const rulesModal = document.getElementById('rules-modal');
                 if (rulesModal) {
@@ -5465,8 +6578,8 @@
                         
                         // Check if all cards are selected
                         if (this.stateManager.allCardsSelected()) {
-                            console.log('All cards selected, moving to reveal phase');
-                            this.stateManager.setState(GAME_STATES.REVEALING_CARDS);
+                            console.log('All cards selected, moving to insurance purchase phase');
+                            this.stateManager.setState(GAME_STATES.INSURANCE_PURCHASE);
                         } else {
                             // Continue with remaining players
                             setTimeout(() => {
