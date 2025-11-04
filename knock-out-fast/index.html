@@ -7099,6 +7099,38 @@
                                 }, 1000);
                             }
                             return; // Successfully selected a card
+                        } else {
+                            // selectCard returned false - player might not afford it after all, or some other issue
+                            // Re-check if player can afford any cards
+                            const currentPlayer = this.stateManager.getPlayer(playerId);
+                            const stillAffordable = availableCards.filter(rank => {
+                                const betValue = this.getBetValue({ rank, suit: 'spades' });
+                                return currentPlayer.balance >= betValue;
+                            });
+                            
+                            if (stillAffordable.length === 0) {
+                                // Player truly cannot afford any card - eliminate
+                                console.log(`💥 Player ${playerName} (ID: ${playerId}) cannot afford any available card after failed selection - eliminating and restarting round`);
+                                this.stateManager.eliminatePlayer(playerId);
+                                this.updatePlayerDisplay(playerId);
+                                // Clear selected cards so round can restart properly
+                                const gameData = this.stateManager.getGameData();
+                                gameData.players.forEach(p => {
+                                    p.selectedCard = null;
+                                });
+                                gameData.selectedCards.clear();
+                                // Restart the round by transitioning back to card selection
+                                setTimeout(() => {
+                                    console.log('🔄 Restarting round after elimination...');
+                                    this.stateManager.setState(GAME_STATES.CARD_SELECTION);
+                                }, 1500);
+                                return; // Exit early
+                            } else {
+                                // Try again with a different card
+                                console.log(`⚠️ First selection failed for ${playerName}, retrying with affordable cards...`);
+                                // Recursive call to try again (will use filtered affordable cards)
+                                return this.makeRandomSelectionForPlayer(playerId, playerName);
+                            }
                         }
                     } else {
                         // Player cannot afford any available card - eliminate and restart round
