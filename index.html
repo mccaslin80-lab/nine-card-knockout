@@ -92,22 +92,17 @@
         }
         
         .version-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin-top: 60px;
             animation: fadeInUp 1s ease 0.3s both;
         }
         
-        @media (max-width: 1200px) {
-            .version-cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
         @media (max-width: 768px) {
             .version-cards {
-                grid-template-columns: 1fr;
+                display: flex;
+                justify-content: center;
             }
         }
         
@@ -476,7 +471,7 @@
     <div class="container">
         <header>
             <div style="position: absolute; top: 20px; right: 20px;">
-                <button onclick="window.open('knock-out-standard/index.html#help', '_blank')" style="display: inline-block; padding: 10px 20px; background: linear-gradient(145deg, #e67e22, #d35400); color: white; text-decoration: none; border: none; border-radius: 25px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3); transition: all 0.3s; cursor: pointer;">❓ Help</button>
+                <button onclick="window.open('knock-out-fast/index.html#help', '_blank')" style="display: inline-block; padding: 10px 20px; background: linear-gradient(145deg, #e67e22, #d35400); color: white; text-decoration: none; border: none; border-radius: 25px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3); transition: all 0.3s; cursor: pointer;">❓ Help</button>
             </div>
             <h1>🎯 Nine Card</h1>
             <p class="subtitle">The Ultimate Casino Card Game</p>
@@ -484,71 +479,27 @@
         </header>
         
         <div class="version-cards">
-            <div class="version-card knockout">
-                <div class="version-title">
-                    🥊 Knock Out
-                    <span class="version-badge">Standard Speed</span>
-                </div>
-                <p class="version-description">
-                    Last 3 players win! Competitive elimination gameplay
-                </p>
-                <ul class="version-features">
-                    <li>Standard gameplay - $800 start balance</li>
-                    <li>20% jackpot rate from refunds</li>
-                    <li>Elimination mode - survive to win</li>
-                    <li>1st place wins both jackpots</li>
-                    <li>Automatic round restarts</li>
-                    <li>Strategic card selection</li>
-                    <li>Insurance system available</li>
-                    <li>Huge win potential</li>
-                </ul>
-                <div style="text-align: center;">
-                    <a href="knock-out-standard/index.html" class="play-button">▶ Play Standard Speed</a>
-                </div>
-            </div>
-            
-            <div class="version-card knockout">
+            <div class="version-card knockout" style="max-width: 600px; width: 100%;">
                 <div class="version-title">
                     🥊 Knock Out
                     <span class="version-badge">Fast Speed</span>
                 </div>
                 <p class="version-description">
-                    Last 3 players win! Faster elimination gameplay
+                    Last 3 players win! Fast-paced elimination gameplay with bigger jackpots
                 </p>
                 <ul class="version-features">
                     <li>Fast gameplay - $400 start balance</li>
                     <li>30% jackpot rate from refunds</li>
                     <li>Elimination mode - survive to win</li>
-                    <li>1st place wins both jackpots</li>
+                    <li>Top 3 players share jackpots (60%/25%/15%)</li>
                     <li>Automatic round restarts</li>
                     <li>Strategic card selection</li>
                     <li>Insurance system available</li>
+                    <li>Rebuy system for extended gameplay</li>
                     <li>Bigger jackpots, faster action</li>
                 </ul>
                 <div style="text-align: center;">
-                    <a href="knock-out-fast/index.html" class="play-button fast-speed">▶ Play Fast Speed</a>
-                </div>
-            </div>
-            
-            <div class="version-card cash">
-                <div class="version-title">
-                    💰 Cash
-                </div>
-                <p class="version-description">
-                    Classic casino gameplay - win big every round
-                </p>
-                <ul class="version-features cash">
-                    <li>Traditional casino rules</li>
-                    <li>Win every round</li>
-                    <li>Strategic betting</li>
-                    <li>Insurance system available</li>
-                    <li>Jackpot opportunities</li>
-                    <li>Fast-paced rounds</li>
-                    <li>Simple rules to learn</li>
-                    <li>Huge win potential</li>
-                </ul>
-                <div style="text-align: center;">
-                    <a href="cash/index.html" class="play-button cash">▶ Play Demo Now</a>
+                    <a href="knock-out-fast/index.html" class="play-button fast-speed">▶ Play Now</a>
                 </div>
             </div>
         </div>
@@ -646,9 +597,8 @@
             <p class="highlight-text">
                 Nine Card is the perfect casino card game for players who want strategy, speed, and the chance to win big. 
                 With simple rules that take minutes to learn but offer endless strategic depth, every round is a new challenge. 
-                Whether you prefer the competitive elimination of <strong>Knock Out</strong> or the classic casino feel of <strong>Cash</strong>, 
-                you'll find fast-paced action, multiple jackpot opportunities, and the thrill of big wins. 
-                No downloads, no complicated rules - just pure casino card game excitement!
+                The competitive elimination of <strong>Knock Out Fast Speed</strong> offers fast-paced action, multiple jackpot opportunities, 
+                and the thrill of big wins. No downloads, no complicated rules - just pure casino card game excitement!
             </p>
         </section>
         
