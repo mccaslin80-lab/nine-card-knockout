@@ -6846,6 +6846,38 @@
                     });
                 }
             }
+
+            generateChipStack(balance) {
+                const denominations = [
+                    { value: 100, color: '#e74c3c', border: '#c0392b' },
+                    { value: 50, color: '#3498db', border: '#1f618d' },
+                    { value: 25, color: '#2ecc71', border: '#27ae60' },
+                    { value: 10, color: '#f1c40f', border: '#b7950b' },
+                    { value: 5, color: '#9b59b6', border: '#76448a' },
+                    { value: 1, color: '#ecf0f1', border: '#bdc3c7' }
+                ];
+                const chips = [];
+                let remaining = Math.max(0, Math.round(balance));
+                let totalChips = 0;
+                const maxChips = 12;
+
+                for (const denom of denominations) {
+                    if (remaining <= 0 || totalChips >= maxChips) break;
+                    const count = Math.min(Math.floor(remaining / denom.value), maxChips - totalChips);
+                    for (let i = 0; i < count; i++) {
+                        chips.push(`<div class="chip" style="background:${denom.color};border-color:${denom.border};"></div>`);
+                        totalChips++;
+                    }
+                    remaining -= count * denom.value;
+                }
+
+                if (chips.length === 0) {
+                    chips.push('<div class="chip" style="background:#bdc3c7;border-color:#95a5a6;"></div>');
+                }
+
+                return `<div class="chip-stack">${chips.join('')}</div>`;
+            }
+
             updatePlayerSeats() {
                 console.log('Updating player seats...');
                 const gameData = this.stateManager.getGameData();
