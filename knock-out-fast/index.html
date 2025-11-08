@@ -498,7 +498,6 @@
             padding: 15px;
             color: white;
         }
-        
         .bot-control-section h4 {
             color: #e74c3c;
             margin-bottom: 15px;
@@ -998,7 +997,6 @@
         .close-rules-btn:hover {
             background: rgba(255, 255, 255, 0.2);
         }
-
         .rules-body {
             padding: 20px;
             color: #ecf0f1;
@@ -1499,7 +1497,6 @@
         .matrix-body::-webkit-scrollbar {
             width: 8px;
         }
-        
         .matrix-body::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 4px;
@@ -10557,7 +10554,6 @@
                 // Set up event listeners for bot controls
                 this.setupBotControlListeners();
             }
-            
             setupBotControlListeners() {
                 const gameData = this.stateManager.getGameData();
                 const bots = gameData.players.filter(player => !player.isHuman);
@@ -11553,7 +11549,6 @@
                 // Keep the animated card in the player's card area - don't remove it
                 // The animated card will now stay in the player's white card area
             }
-
             showAdminManualSelection(botId, resolve) {
                 const player = this.stateManager.getPlayer(botId);
                 const availableCards = this.stateManager.getAvailableCards();
@@ -12012,7 +12007,6 @@
                     this.elements.insuranceCountdown.textContent = `${this.insuranceTimeLeft}s`;
                 }
             }
-
             confirmInsurancePurchases() {
                 console.log('🛡️ Confirming insurance purchases');
                 
@@ -12287,10 +12281,6 @@
                     // Use event delegation - attach listener once to the parent element
                     countdownElement.addEventListener('click', (e) => {
                         if (e.target && e.target.id === 'buy-insurance-btn') {
-                            if (e.target.disabled) {
-                                console.log('🛡️ Buy insurance button clicked but disabled (likely insufficient balance)');
-                                return;
-                            }
                             const gameData = this.stateManager.getGameData();
                             const humanPlayer = gameData.players.find(p => p.isHuman);
                             if (humanPlayer) {
@@ -12312,19 +12302,14 @@
                 const insurancePot = gameData.insuranceJackpot || 0;
                 
                 const hasInsurance = humanPlayer && humanPlayer.hasInsurance;
-                const canAffordInsurance = humanPlayer && humanPlayer.balance >= GAME_CONFIG.INSURANCE_COST;
-                const buttonText = hasInsurance ? 'Cancel Insurance' : (canAffordInsurance ? 'Buy Insurance' : `Need $${GAME_CONFIG.INSURANCE_COST}`);
-                const buttonColor = hasInsurance ? '#27ae60' : (canAffordInsurance ? '#e74c3c' : '#555');
-                const buttonCursor = canAffordInsurance || hasInsurance ? 'pointer' : 'not-allowed';
-                const buttonDisabledAttr = (!canAffordInsurance && !hasInsurance) ? 'disabled' : '';
-                const opacity = (!canAffordInsurance && !hasInsurance) ? '0.7' : '1';
+                const buttonText = hasInsurance ? 'Cancel Insurance' : 'Buy Insurance';
+                const buttonColor = hasInsurance ? '#27ae60' : '#e74c3c';
                 
                 countdownElement.innerHTML = `
                     <div>🛡️ INSURANCE AVAILABLE 🛡️</div>
                     <div style="margin-top: 10px;">Insurance Pot: $${insurancePot.toFixed(2)}</div>
                     <div style="margin-top: 10px;">Cost: $${GAME_CONFIG.INSURANCE_COST}</div>
-                    <button id="buy-insurance-btn" ${buttonDisabledAttr} style="margin-top: 15px; padding: 10px 20px; font-size: 16px; background: ${buttonColor}; color: white; border: none; border-radius: 5px; cursor: ${buttonCursor}; font-weight: bold; opacity: ${opacity};">${buttonText}</button>
-                    <div id="insurance-balance-warning" style="margin-top: 8px; color: #FFD700;"></div>
+                    <button id="buy-insurance-btn" style="margin-top: 15px; padding: 10px 20px; font-size: 16px; background: ${buttonColor}; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">${buttonText}</button>
                     <div id="insurance-countdown-timer" style="margin-top: 10px; font-size: 24px; color: #FFD700;">${timeLeft}s</div>
                 `;
                 
@@ -12346,72 +12331,14 @@
             updateBuyInsuranceButtonState() {
                 const buyBtn = document.getElementById('buy-insurance-btn');
                 if (buyBtn) {
-                    const warningEl = document.getElementById('insurance-balance-warning');
-                    if (warningEl) {
-                        warningEl.style.display = 'none';
-                        warningEl.textContent = '';
-                    }
-
-                    const gameData = this.stateManager ? this.stateManager.getGameData() : null;
-                    if (!gameData || !Array.isArray(gameData.players)) {
-                        buyBtn.disabled = true;
-                        buyBtn.textContent = 'Insurance unavailable';
-                        buyBtn.style.background = '#555';
-                        buyBtn.style.cursor = 'not-allowed';
-                        buyBtn.style.opacity = '0.7';
-                        if (warningEl) {
-                            warningEl.style.display = 'block';
-                            warningEl.textContent = 'Game data unavailable.';
-                        }
-                        return;
-                    }
-
+                    const gameData = this.stateManager.getGameData();
                     const humanPlayer = gameData.players.find(p => p.isHuman);
-                    if (!humanPlayer) {
-                        buyBtn.disabled = true;
-                        buyBtn.textContent = 'Insurance unavailable';
-                        buyBtn.style.background = '#555';
-                        buyBtn.style.cursor = 'not-allowed';
-                        buyBtn.style.opacity = '0.7';
-                        if (warningEl) {
-                            warningEl.style.display = 'block';
-                            warningEl.textContent = 'Human player not found.';
-                        }
-                        return;
-                    }
-
-                    const canAffordInsurance = humanPlayer.balance >= GAME_CONFIG.INSURANCE_COST;
-                    
                     if (humanPlayer && humanPlayer.hasInsurance) {
-                        buyBtn.disabled = false;
                         buyBtn.textContent = 'Cancel Insurance';
                         buyBtn.style.background = '#27ae60';
-                        buyBtn.style.cursor = 'pointer';
-                        buyBtn.style.opacity = '1';
-                        if (warningEl) {
-                            warningEl.style.display = 'block';
-                            warningEl.textContent = 'Insurance purchased - click again to cancel.';
-                        }
-                    } else if (!canAffordInsurance) {
-                        buyBtn.disabled = true;
-                        buyBtn.textContent = `Need $${GAME_CONFIG.INSURANCE_COST}`;
-                        buyBtn.style.background = '#555';
-                        buyBtn.style.cursor = 'not-allowed';
-                        buyBtn.style.opacity = '0.7';
-                        if (warningEl && humanPlayer) {
-                            warningEl.style.display = 'block';
-                            warningEl.textContent = `Balance $${Math.round(humanPlayer.balance)} is below the insurance cost.`;
-                        }
                     } else {
-                        buyBtn.disabled = false;
                         buyBtn.textContent = 'Buy Insurance';
                         buyBtn.style.background = '#e74c3c';
-                        buyBtn.style.cursor = 'pointer';
-                        buyBtn.style.opacity = '1';
-                        if (warningEl) {
-                            warningEl.style.display = 'none';
-                            warningEl.textContent = '';
-                        }
                     }
                 }
             }
@@ -12507,7 +12434,6 @@
                     }, 1000);
                 }
             }
-            
             processBotInsurancePurchase(playerId) {
                 const gameData = this.stateManager.getGameData();
                 const player = gameData.players.find(p => p.id === playerId);
