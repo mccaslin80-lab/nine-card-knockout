@@ -12347,9 +12347,40 @@
                 const buyBtn = document.getElementById('buy-insurance-btn');
                 if (buyBtn) {
                     const warningEl = document.getElementById('insurance-balance-warning');
-                    const gameData = this.stateManager.getGameData();
+                    if (warningEl) {
+                        warningEl.style.display = 'none';
+                        warningEl.textContent = '';
+                    }
+
+                    const gameData = this.stateManager ? this.stateManager.getGameData() : null;
+                    if (!gameData || !Array.isArray(gameData.players)) {
+                        buyBtn.disabled = true;
+                        buyBtn.textContent = 'Insurance unavailable';
+                        buyBtn.style.background = '#555';
+                        buyBtn.style.cursor = 'not-allowed';
+                        buyBtn.style.opacity = '0.7';
+                        if (warningEl) {
+                            warningEl.style.display = 'block';
+                            warningEl.textContent = 'Game data unavailable.';
+                        }
+                        return;
+                    }
+
                     const humanPlayer = gameData.players.find(p => p.isHuman);
-                    const canAffordInsurance = humanPlayer && humanPlayer.balance >= GAME_CONFIG.INSURANCE_COST;
+                    if (!humanPlayer) {
+                        buyBtn.disabled = true;
+                        buyBtn.textContent = 'Insurance unavailable';
+                        buyBtn.style.background = '#555';
+                        buyBtn.style.cursor = 'not-allowed';
+                        buyBtn.style.opacity = '0.7';
+                        if (warningEl) {
+                            warningEl.style.display = 'block';
+                            warningEl.textContent = 'Human player not found.';
+                        }
+                        return;
+                    }
+
+                    const canAffordInsurance = humanPlayer.balance >= GAME_CONFIG.INSURANCE_COST;
                     
                     if (humanPlayer && humanPlayer.hasInsurance) {
                         buyBtn.disabled = false;
