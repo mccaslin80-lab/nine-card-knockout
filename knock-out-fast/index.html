@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -495,7 +494,6 @@
             background: rgba(255,255,255,0.2);
             border-radius: 3px;
         }
-        
         .bot-control-section {
             padding: 15px;
             color: white;
@@ -637,7 +635,6 @@
         .history-content::-webkit-scrollbar-thumb:hover {
             background: #2ecc71;
         }
-        
         .close-history-btn {
             background: none;
             border: none;
@@ -982,7 +979,6 @@
             margin: 0;
             font-size: 16px;
         }
-
         .close-rules-btn {
             background: none;
             border: none;
@@ -1277,7 +1273,6 @@
             margin-left: 10px; /* Small offset to the right, but not covering chip stack */
             max-width: 120px; /* Limit width to prevent covering chip stack */
         }
-
         .rebuy-select {
             width: 100%;
             max-width: 120px; /* Limit width to prevent covering chip stack */
@@ -1291,7 +1286,6 @@
             transition: all 0.2s ease;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
-
         .rebuy-select:hover {
             border-color: #ff9800;
             box-shadow: 0 2px 6px rgba(255, 152, 0, 0.2);
@@ -1478,7 +1472,6 @@
             color: #f39c12;
             font-weight: bold;
         }
-
         .matrix-header {
             background: linear-gradient(145deg, #27ae60, #229954);
             color: white;
@@ -1924,7 +1917,6 @@
             margin-right: 5px;
             color: #8e44ad;
         }
-
         /* Ensure labels and amounts stay on one line */
         .jackpot-label,
         .super-jackpot-label,
@@ -2307,7 +2299,6 @@
                         </ul>
                     </div>
                 </div>
-
                 <!-- Swedish Version -->
                 <div id="help-content-sv" style="display: none;">
                     <div class="help-section">
@@ -2461,7 +2452,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Matrix Modal -->
         <div id="matrix-modal" class="matrix-modal hidden">
             <div class="matrix-content">
@@ -2805,7 +2795,6 @@
             <div id="game-timer" class="timer hidden"></div>
         </div>
     </div>
-
     <!-- Insurance Purchase Modal -->
     <div id="insurance-modal" class="insurance-modal hidden">
         <div class="insurance-content">
@@ -2835,7 +2824,6 @@
             </div>
         </div>
     </div>
-
     <!-- Scripts -->
     <script>
         // Game constants
@@ -3248,7 +3236,7 @@
                     console.warn(`selectCard: Invalid balance for player ${playerId}, resetting to INITIAL_BALANCE`);
                     player.balance = GAME_CONFIG.INITIAL_BALANCE;
                 }
-                
+
                 // Calculate bet value and subtract from player balance
                 const newBalance = player.balance - betValue;
                 console.log(`${player.name} selected ${card.rank} (bet: $${betValue}), balance: $${player.balance} -> $${newBalance}`);
@@ -3290,7 +3278,6 @@
             getActivePlayers() {
                 return this.gameData.players.filter(p => !p.eliminated);
             }
-
             // Eliminate a player
             eliminatePlayer(playerId) {
                 const player = this.getPlayer(playerId);
@@ -3310,17 +3297,17 @@
                 // Preserve balance for potential podium players (7th and 8th eliminated)
                 // Podium positions will be determined at game end based on balance ranking
                 if (alreadyEliminated === 6 || alreadyEliminated === 7) {
-                    // 7th or 8th player eliminated - keep balance for podium consideration
+                    // 7th or 8th player eliminated - keep balance for podium
                     player.podiumBalance = remainingBalance; // Keep balance for podium
                     player.balance = remainingBalance; // Keep balance, don't transfer to jackpot
                     console.log(`🏆 ${player.name} keeps balance for podium consideration: $${remainingBalance}`);
                 } else {
                     // Other eliminations (1st-6th) - balance goes to jackpot
                     player.balance = 0; // Set balance to 0
-                    // Add remaining balance to hearts jackpot
-                    if (remainingBalance > 0) {
-                        console.log(`💰 Adding $${remainingBalance} from eliminated player to hearts jackpot`);
-                        this.updateJackpot(remainingBalance);
+                // Add remaining balance to hearts jackpot
+                if (remainingBalance > 0) {
+                    console.log(`💰 Adding $${remainingBalance} from eliminated player to hearts jackpot`);
+                    this.updateJackpot(remainingBalance);
                     }
                 }
                 
@@ -3337,7 +3324,7 @@
                     if (player.podiumBalance !== undefined) {
                         console.log(`🏆 ${player.name} eliminated but keeps balance for podium consideration`);
                     } else {
-                        window.uiController.showEliminationMessage(playerId, remainingBalance);
+                    window.uiController.showEliminationMessage(playerId, remainingBalance);
                     }
                 }
 
@@ -3396,10 +3383,10 @@
                 
                 if (problematicStates.includes(this.currentState)) {
                     console.log(`🚨 Emergency reset from ${this.currentState} state`);
-                    this.setState(GAME_STATES.WAITING_FOR_ROUND_START);
+                        this.setState(GAME_STATES.WAITING_FOR_ROUND_START);
                     // Continue to reset logic below
-                }
-                
+                    }
+                    
                 if (this.currentState !== GAME_STATES.WAITING_FOR_ROUND_START && 
                     this.currentState !== GAME_STATES.ROUND_SUMMARY) {
                     console.log('Cannot start new round, invalid state:', this.currentState);
@@ -3481,7 +3468,6 @@
                     // Keep precise cents internally; UI will round for display
                 }
             }
-
             updatePlayerStrategy(playerId, strategy) {
                 const player = this.getPlayer(playerId);
                 if (player) {
@@ -3489,7 +3475,6 @@
                     console.log(`Player ${player.name} strategy updated to: ${strategy}`);
                 }
             }
-            
             updatePlayerName(playerId, name) {
                 const player = this.getPlayer(playerId);
                 if (player) {
@@ -3788,7 +3773,6 @@
                 // Note: Eliminated players' balances should already be transferred to jackpot
                 return playerBalances + jackpot + insuranceJackpot + bankRake;
             }
-
             allCardsSelected() {
                 // Only count active (non-eliminated) players
                 const activePlayers = this.getActivePlayers();
@@ -3974,7 +3958,6 @@
                 console.log('Resetting bank card display...');
             }
         }
-
         // Game Logic
         class GameLogic {
             constructor(stateManager) {
@@ -4283,7 +4266,6 @@
                 console.log('Final results:', gameData.players.map(p => ({ name: p.name, result: p.result })));
                 this.stateManager.setPreviousLoser(null);
             }
-
             processNoLoser() {
                 const gameData = this.stateManager.getGameData();
                 
@@ -4473,8 +4455,6 @@
                 
                 this.stateManager.setPreviousLoser(null);
             }
-
-
             distributeCascadeWinnings(bankCard, totalPool) {
                 console.log(`\n=== DISTRIBUTING CASCADE WINNINGS ===`);
                 console.log(`Bank card: ${bankCard.rank}, Total pool: ${totalPool}`);
@@ -4742,7 +4722,6 @@
                 
                 console.log(`=== END CASCADE DISTRIBUTION ===\n`);
             }
-
             processJackpotPayout(losingPlayer) {
                 const gameData = this.stateManager.getGameData();
                 const jackpotAmount = gameData.jackpot;
@@ -5124,7 +5103,6 @@
                     return turnOrder;
                 }
             }
-
             getTurnOrderC(gameData) {
                 // Clockwise order with marker - only active players
                 const activePlayers = this.stateManager.getActivePlayers();
@@ -5243,7 +5221,6 @@
                     }
                 }
             }
-
             updateClockwiseStartPlayer() {
                 // For clockwise mode, move to next player after each round
                 const turnOrderType = document.getElementById('turn-order-select')?.value || 'A';
@@ -5575,7 +5552,6 @@
                 return this.soundsEnabled;
             }
         }
-
         // Bot Controller
         class BotController {
             constructor(stateManager, gameLogic) {
@@ -5931,7 +5907,6 @@
                 return new Promise(resolve => setTimeout(resolve, ms));
             }
         }
-
         // UI Controller
         class UIController {
             constructor(stateManager, gameLogic, botController) {
@@ -6428,7 +6403,6 @@
                     insuranceSelect.value = behavior;
                 }
             }
-            
             setupInsuranceBehaviorListener() {
                 // Set up event listener for insurance behavior dropdown
                 document.addEventListener('change', (e) => {
@@ -6560,7 +6534,7 @@
                     // Don't auto-end if player just cancelled (they might want to buy again)
                     // Only auto-end if they actually purchased insurance
                     setTimeout(() => {
-                        this.endHumanInsurancePhase();
+                    this.endHumanInsurancePhase();
                     }, 1000); // Give user time to see the purchase
                 }
             }
@@ -6577,7 +6551,6 @@
                     this.elements.insuranceTimer.value = GAME_CONFIG.INSURANCE_TIMER;
                 }
             }
-
             updatePauseButtons() {
                 const pauseBtn = document.getElementById('pause-game-btn');
                 const resumeBtn = document.getElementById('resume-game-btn');
@@ -6878,7 +6851,6 @@
                     });
                 }
             }
-
             updatePlayerSeats() {
                 console.log('Updating player seats...');
                 const gameData = this.stateManager.getGameData();
@@ -7183,7 +7155,6 @@
                     });
                 }
             }
-
             selectTableCard(cardElement, playerId) {
                 console.log('=== selectTableCard called ===');
                 console.log('PlayerId:', playerId);
@@ -7230,7 +7201,7 @@
                             // Still can't afford after rebuy
                             console.log(`❌ Player ${player.name} still cannot afford ${rank} after rebuy`);
                             alert(`Still cannot afford ${rank} after rebuy!`);
-                            return;
+                    return;
                         }
                     } else if (rebuyBehavior === 'ask') {
                         // Ask for rebuy
@@ -7370,7 +7341,6 @@
                     }
                 }
             }
-
             startManualCountdown(playerId, playerName) {
                 console.log(`Starting manual countdown for ${playerName} (ID: ${playerId})`);
                 
@@ -7656,7 +7626,6 @@
                 
                 console.log('=== Duplicate card cleanup complete ===');
             }
-
             async makeRandomSelectionForPlayer(playerId, playerName) {
                 console.log(`Making random selection for ${playerName} (ID: ${playerId})`);
                 
@@ -7861,21 +7830,21 @@
                             }
                         } else {
                             // Never rebuy - eliminate
-                            console.log(`💥 Player ${playerName} (ID: ${playerId}) cannot afford any available card - eliminating and restarting round`);
-                            this.stateManager.eliminatePlayer(playerId);
-                            this.updatePlayerDisplay(playerId);
-                            // Clear selected cards so round can restart properly
-                            const gameData = this.stateManager.getGameData();
-                            gameData.players.forEach(p => {
-                                p.selectedCard = null;
-                            });
-                            gameData.selectedCards.clear();
-                            // Restart the round by transitioning back to card selection
-                            setTimeout(() => {
-                                console.log('🔄 Restarting round after elimination...');
-                                this.stateManager.setState(GAME_STATES.CARD_SELECTION);
-                            }, 1500);
-                            return; // Exit early
+                        console.log(`💥 Player ${playerName} (ID: ${playerId}) cannot afford any available card - eliminating and restarting round`);
+                        this.stateManager.eliminatePlayer(playerId);
+                        this.updatePlayerDisplay(playerId);
+                        // Clear selected cards so round can restart properly
+                        const gameData = this.stateManager.getGameData();
+                        gameData.players.forEach(p => {
+                            p.selectedCard = null;
+                        });
+                        gameData.selectedCards.clear();
+                        // Restart the round by transitioning back to card selection
+                        setTimeout(() => {
+                            console.log('🔄 Restarting round after elimination...');
+                            this.stateManager.setState(GAME_STATES.CARD_SELECTION);
+                        }, 1500);
+                        return; // Exit early
                         }
                     }
                 } else {
@@ -8200,7 +8169,6 @@
                     document.body.appendChild(rebuyModal);
                 });
             }
-
             updatePlayerDisplay(playerId) {
                 const player = this.stateManager.getPlayer(playerId);
                 const seat = document.getElementById(`player-${playerId}`);
@@ -8274,7 +8242,6 @@
                     }
                 }
             }
-
             updateGameDisplay() {
                 const gameData = this.stateManager.getGameData();
                 
@@ -8637,7 +8604,6 @@
                     this.animateChipsBackToPlayers();
                 }, 1000);
             }
-
             // Check for players who should be eliminated (balance $0 or cannot afford any card)
             checkAndEliminatePlayers() {
                 const gameData = this.stateManager.getGameData();
@@ -8799,31 +8765,31 @@
                                 }
                             } else {
                                 // Never rebuy - eliminate
-                                console.log(`💥 Player ${player.name} (ID: ${player.id}) has $0 balance and cannot afford any card - eliminating`);
+                            console.log(`💥 Player ${player.name} (ID: ${player.id}) has $0 balance and cannot afford any card - eliminating`);
+                            
+                            const balanceToTransfer = player.balance || 0;
+                            
+                            // Eliminate player
+                            if (this.stateManager.eliminatePlayer(player.id)) {
+                                // Show elimination message
+                                if (balanceToTransfer > 0) {
+                                    this.showEliminationMessage(player.id, balanceToTransfer);
+                                } else {
+                                    // Show elimination message even with $0 to indicate elimination
+                                    this.showEliminationMessage(player.id, 0);
+                                }
                                 
-                                const balanceToTransfer = player.balance || 0;
+                                // Remove lowest card from table immediately
+                                this.removeLowestCardFromTable();
                                 
-                                // Eliminate player
-                                if (this.stateManager.eliminatePlayer(player.id)) {
-                                    // Show elimination message
-                                    if (balanceToTransfer > 0) {
-                                        this.showEliminationMessage(player.id, balanceToTransfer);
-                                    } else {
-                                        // Show elimination message even with $0 to indicate elimination
-                                        this.showEliminationMessage(player.id, 0);
-                                    }
-                                    
-                                    // Remove lowest card from table immediately
-                                    this.removeLowestCardFromTable();
-                                    
-                                    // Re-place cards on table to reflect the removed card
-                                    this.placeCardsOnTable();
-                                    
-                                    // Update player display to show eliminated state
-                                    this.updatePlayerDisplay(player.id);
-                                    
-                                    // Ensure bank card display is preserved after elimination
-                                    this.preserveBankCardDisplay();
+                                // Re-place cards on table to reflect the removed card
+                                this.placeCardsOnTable();
+                                
+                                // Update player display to show eliminated state
+                                this.updatePlayerDisplay(player.id);
+                                
+                                // Ensure bank card display is preserved after elimination
+                                this.preserveBankCardDisplay();
                                 }
                             }
                         }
@@ -8965,26 +8931,26 @@
                                 // Never rebuy - eliminate
                                 console.log(`💥 Player ${player.name} (ID: ${player.id}) has $0 balance and cannot afford any card - eliminating`);
                                 
-                                const balanceToTransfer = player.balance || 0;
+                            const balanceToTransfer = player.balance || 0;
+                            
+                            // Eliminate player
+                            if (this.stateManager.eliminatePlayer(player.id)) {
+                                // Show elimination message
+                                if (balanceToTransfer > 0) {
+                                    this.showEliminationMessage(player.id, balanceToTransfer);
+                                }
                                 
-                                // Eliminate player
-                                if (this.stateManager.eliminatePlayer(player.id)) {
-                                    // Show elimination message
-                                    if (balanceToTransfer > 0) {
-                                        this.showEliminationMessage(player.id, balanceToTransfer);
-                                    }
-                                    
-                                    // Remove lowest card from table immediately
-                                    this.removeLowestCardFromTable();
-                                    
-                                    // Re-place cards on table to reflect the removed card
-                                    this.placeCardsOnTable();
-                                    
-                                    // Update player display to show eliminated state
-                                    this.updatePlayerDisplay(player.id);
-                                    
-                                    // Ensure bank card display is preserved after elimination
-                                    this.preserveBankCardDisplay();
+                                // Remove lowest card from table immediately
+                                this.removeLowestCardFromTable();
+                                
+                                // Re-place cards on table to reflect the removed card
+                                this.placeCardsOnTable();
+                                
+                                // Update player display to show eliminated state
+                                this.updatePlayerDisplay(player.id);
+                                
+                                // Ensure bank card display is preserved after elimination
+                                this.preserveBankCardDisplay();
                                 }
                             }
                         }
@@ -9112,7 +9078,6 @@
                 this.stateManager.setRoundJackpotWin(false, null, 0);
                 this.stateManager.setRoundInsuranceWin(false, null, 0);
             }
-            
             endKnockoutGame(activePlayers) {
                 // Safety check: ensure activePlayers is valid
                 if (!activePlayers || activePlayers.length === 0) {
@@ -9257,7 +9222,6 @@
                     this.elements.adminPanel.style.opacity = '0.5';
                 }
             }
-            
             showWinnersPodium(podium) {
                 // Safety check: ensure podium is valid and not empty
                 if (!podium || podium.length === 0) {
@@ -9492,7 +9456,7 @@
                 
                 console.log('🏆 Winners podium displayed');
             }
-            
+
             showGameOverScreen(players, heartsJackpot, insuranceJackpot) {
                 // Create game over overlay
                 const gameOverOverlay = document.createElement('div');
@@ -9611,7 +9575,6 @@
                 
                 console.log('💀 Game over screen displayed');
             }
-
             async processBotMoves() {
                 const gameData = this.stateManager.getGameData();
                 const bots = gameData.players.filter(p => p.isBot && !p.selectedCard);
@@ -9831,7 +9794,6 @@
                     console.log('✅ Bot moves processing complete, flag reset');
                 }
             }
-
             async continueWithRemainingPlayers() {
                 console.log('=== continueWithRemainingPlayers called ===');
                 console.log('Current game state:', this.stateManager.getState());
@@ -10107,7 +10069,6 @@
                     default: return '';
                 }
             }
-
             getSuitSymbol(suit) {
                 const symbols = {
                     hearts: '<span style="color: red;">♥</span>',
@@ -10480,611 +10441,6 @@
             getBetValue(card) {
                 return CARD_VALUES[card.rank] || 0;
             }
-
-            // Show elimination message for a player
-            showEliminationMessage(playerId, remainingBalance) {
-                const player = this.stateManager.getPlayer(playerId);
-                if (!player) return;
-
-                const playerSeat = document.getElementById(`player-${playerId}`);
-                if (!playerSeat) return;
-
-                // Add eliminated class to player seat
-                playerSeat.classList.add('eliminated');
-
-                // Create elimination message
-                const eliminationMsg = document.createElement('div');
-                eliminationMsg.className = 'elimination-message';
-                eliminationMsg.innerHTML = `
-                    <div class="elimination-text">💥 ELIMINATED</div>
-                    <div class="elimination-balance">$${Math.round(remainingBalance)} → Jackpot</div>
-                `;
-                eliminationMsg.style.position = 'fixed';
-                
-                const seatRect = playerSeat.getBoundingClientRect();
-                eliminationMsg.style.left = (seatRect.left + seatRect.width / 2 - 80) + 'px';
-                eliminationMsg.style.top = (seatRect.top - 60) + 'px';
-                eliminationMsg.style.zIndex = '10000';
-                
-                document.body.appendChild(eliminationMsg);
-
-                // Remove message after 3 seconds
-                setTimeout(() => {
-                    if (eliminationMsg.parentNode) {
-                        eliminationMsg.parentNode.removeChild(eliminationMsg);
-                    }
-                }, 3000);
-
-                // Update player display to show eliminated state
-                this.updatePlayerDisplay(playerId);
-                
-                console.log(`💥 Elimination message shown for ${player.name}, $${remainingBalance} added to jackpot`);
-            }
-
-            // Show game end screen when only 3 players remain
-            showGameEndScreen(winners) {
-                console.log(`🏆 Showing game end screen with ${winners.length} winners`);
-
-                // Create game end overlay
-                const gameEndOverlay = document.createElement('div');
-                gameEndOverlay.className = 'game-end-overlay';
-                gameEndOverlay.innerHTML = `
-                    <div class="game-end-content">
-                        <div class="game-end-title">🏆 GAME OVER 🏆</div>
-                        <div class="game-end-subtitle">Knock-out Tournament Complete!</div>
-                        <div class="winners-section">
-                            <div class="winners-title">Winners (Final 3 Players):</div>
-                            <div class="winners-list">
-                                ${winners.map((winner, index) => `
-                                    <div class="winner-item">
-                                        <div class="winner-rank">${index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}</div>
-                                        <div class="winner-name">${winner.name}</div>
-                                        <div class="winner-balance">$${Math.round(winner.balance)}</div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                        <div class="game-end-message">
-                            <p>Congratulations to all winners!</p>
-                            <p>They keep their final balances.</p>
-                        </div>
-                        <button class="game-end-button" onclick="location.reload()">New Game</button>
-                    </div>
-                `;
-                
-                gameEndOverlay.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0, 0, 0, 0.85);
-                    z-index: 20000;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                `;
-                
-                document.body.appendChild(gameEndOverlay);
-
-                // Play victory sound
-                if (this.soundManager) {
-                    this.soundManager.playSound('win');
-                }
-            }
-
-            // Update player display to show eliminated state
-            updatePlayerDisplay(playerId) {
-                const player = this.stateManager.getPlayer(playerId);
-                if (!player) return;
-
-                const playerSeat = document.getElementById(`player-${playerId}`);
-                if (!playerSeat) return;
-
-                // Update balance display
-                const balanceElement = playerSeat.querySelector('.player-balance');
-                if (balanceElement) {
-                    balanceElement.textContent = player.eliminated ? 'ELIMINATED' : `$${Math.round(player.balance)}`;
-                }
-
-                // Update player name to show eliminated status
-                const nameElement = playerSeat.querySelector('.player-name');
-                if (nameElement && player.eliminated) {
-                    nameElement.style.textDecoration = 'line-through';
-                    nameElement.style.opacity = '0.6';
-                }
-
-                // Update chip stack
-                const chipStack = document.getElementById(`chip-stack-${playerId}`);
-                if (chipStack) {
-                    if (player.eliminated) {
-                        chipStack.style.opacity = '0.3';
-                    } else {
-                        chipStack.innerHTML = this.generateChipStack(player.balance);
-                    }
-                }
-            }
-            
-
-            generateChipStack(balance) {
-                const chips = [];
-                let remainingBalance = balance;
-                
-                // Generate different colored chips based on balance
-                const chipValues = [100, 50, 25, 10, 5, 1];
-                const chipColors = ['#ff0000', '#0000ff', '#00ff00', '#ffff00', '#ff00ff', '#00ffff'];
-                
-                chipValues.forEach((value, index) => {
-                    const count = Math.floor(remainingBalance / value);
-                    if (count > 0) {
-                        for (let i = 0; i < Math.min(count, 3); i++) { // Max 3 chips per value for 3 columns
-                            chips.push(`<div class="chip" style="background: ${chipColors[index]}; border-color: ${chipColors[index]};"></div>`);
-                        }
-                        remainingBalance -= count * value;
-                    }
-                });
-                
-                // If still have balance, add small chips
-                if (remainingBalance > 0) {
-                    for (let i = 0; i < Math.min(remainingBalance, 3); i++) {
-                        chips.push(`<div class="chip" style="background: #888; border-color: #888;"></div>`);
-                    }
-                }
-                
-                // Fill empty slots to maintain 3-column grid
-                while (chips.length < 9) {
-                    chips.push(`<div class="chip" style="background: transparent; border-color: transparent;"></div>`);
-                }
-                
-                return chips.join('');
-            }
-            
-            updateCardAffordabilityDisplay(playerId) {
-                console.log(`🎴 Updating card affordability display for player ${playerId}`);
-                
-                const player = this.stateManager.getPlayer(playerId);
-                if (!player) return;
-                
-                const playerBalance = player.balance;
-                const availableCards = this.stateManager.getAvailableCards(); // Get list of available card ranks
-                const tableCards = document.querySelectorAll('.table-card');
-                
-                tableCards.forEach(card => {
-                    const rank = card.dataset.rank;
-                    const cardValue = this.getBetValue({ rank, suit: 'spades' });
-                    const canAfford = playerBalance >= cardValue;
-                    const isAvailable = availableCards.includes(rank); // Check if card is still available (not selected)
-                    
-                    // Reset previous state
-                    card.classList.remove('affordable', 'unaffordable');
-                    
-                    // Remove lock overlay if it exists
-                    const existingLock = card.querySelector('.unaffordable-overlay');
-                    if (existingLock) {
-                        existingLock.remove();
-                    }
-                    
-                    if (!isAvailable) {
-                        // Card is already selected - don't show flash or darken, just leave it as is
-                        card.style.opacity = '';
-                        card.style.filter = '';
-                        card.style.pointerEvents = '';
-                        card.style.cursor = '';
-                    } else if (canAfford) {
-                        // Card is affordable AND available - flash it to show it's selectable
-                        card.classList.add('affordable');
-                        card.style.opacity = '1';
-                        card.style.filter = 'brightness(1.0)';
-                        card.style.pointerEvents = 'auto';
-                        card.style.cursor = 'pointer';
-                    } else {
-                        // Card is NOT affordable but is available - make it dark and unclickable
-                        card.classList.add('unaffordable');
-                        card.style.opacity = '0.25';
-                        card.style.filter = 'brightness(0.3) grayscale(0.8)';
-                        card.style.pointerEvents = 'none';
-                        card.style.cursor = 'not-allowed';
-                        
-                        // Add a visual "locked" indicator
-                        const lockOverlay = document.createElement('div');
-                        lockOverlay.className = 'unaffordable-overlay';
-                        lockOverlay.innerHTML = '🔒';
-                        lockOverlay.style.cssText = `
-                            position: absolute;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            font-size: 2em;
-                            z-index: 10;
-                            pointer-events: none;
-                            opacity: 0.8;
-                            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-                        `;
-                        card.appendChild(lockOverlay);
-                    }
-                });
-                
-                console.log(`🎴 Updated affordability display: Balance $${playerBalance}, Available cards: [${availableCards.join(', ')}]`);
-            }
-            
-            clearCardAffordabilityDisplay() {
-                console.log('🎴 Clearing card affordability display');
-                
-                const tableCards = document.querySelectorAll('.table-card');
-                tableCards.forEach(card => {
-                    card.classList.remove('affordable', 'unaffordable');
-                    card.style.opacity = '';
-                    card.style.filter = '';
-                    card.style.pointerEvents = '';
-                    card.style.cursor = '';
-                    
-                    // Remove lock overlays
-                    const existingLock = card.querySelector('.unaffordable-overlay');
-                    if (existingLock) {
-                        existingLock.remove();
-                    }
-                });
-            }
-
-            animateChipToCard(playerId, cardElement) {
-                console.log(`Animating chip from player ${playerId} to chip pile`);
-                
-                const player = this.stateManager.getPlayer(playerId);
-                if (!player || !player.selectedCard) return;
-                
-                const betValue = this.getBetValue(player.selectedCard);
-                const chipStack = document.getElementById(`chip-stack-${playerId}`);
-                if (!chipStack) {
-                    console.error(`Chip stack not found for player ${playerId}`);
-                    return;
-                }
-                
-                // Get chip stack position
-                const stackRect = chipStack.getBoundingClientRect();
-                console.log(`Chip stack position: (${stackRect.left}, ${stackRect.top})`);
-                
-                // Validate position
-                if (stackRect.left < 0 || stackRect.top < 0) {
-                    console.error('Invalid chip stack position, skipping chip animation');
-                    return;
-                }
-                
-                // Create animated chip
-                const animatedChip = document.createElement('div');
-                animatedChip.className = 'animated-chip';
-                animatedChip.style.position = 'fixed';
-                animatedChip.style.left = `${stackRect.left}px`;
-                animatedChip.style.top = `${stackRect.top}px`;
-                animatedChip.style.width = '20px';
-                animatedChip.style.height = '16px';
-                animatedChip.style.borderRadius = '50%';
-                animatedChip.style.background = this.getChipColor(betValue);
-                animatedChip.style.border = `3px solid ${this.getChipColor(betValue)}`;
-                animatedChip.style.zIndex = '1000';
-                animatedChip.style.transition = 'all 0.8s ease-out';
-                animatedChip.style.boxShadow = '0 3px 6px rgba(0,0,0,0.4)';
-                
-                document.body.appendChild(animatedChip);
-                
-                // Animate directly to chip pile area
-                setTimeout(() => {
-                    const gameTable = document.querySelector('.game-table');
-                    if (gameTable) {
-                        const tableRect = gameTable.getBoundingClientRect();
-                        const targetX = tableRect.left + tableRect.width/2 + 40; // 40px to the right of center
-                        const targetY = tableRect.top + tableRect.height/2 - 4; // Center vertically
-                        
-                        console.log(`Animating chip to pile position: (${targetX}, ${targetY})`);
-                        animatedChip.style.left = `${targetX}px`;
-                        animatedChip.style.top = `${targetY}px`;
-                    } else {
-                        console.error('Game table not found for chip animation');
-                        animatedChip.remove();
-                    }
-                }, 100);
-                
-                // Make the chip permanent and part of the pile
-                setTimeout(() => {
-                    const gameTable = document.querySelector('.game-table');
-                    if (gameTable) {
-                    animatedChip.style.position = 'absolute';
-                    animatedChip.style.pointerEvents = 'none';
-                    animatedChip.style.transition = 'none';
-                    
-                        const tableRect = gameTable.getBoundingClientRect();
-                        const currentRect = animatedChip.getBoundingClientRect();
-                        
-                        // Calculate offset for this specific chip to create a vertical stack
-                        const existingChips = gameTable.querySelectorAll('.animated-chip');
-                        const chipIndex = existingChips.length;
-                        const offsetX = 0; // No horizontal offset for vertical stack
-                        const offsetY = chipIndex * 6; // 6px vertical offset per chip for better visibility with larger chips
-                        
-                        animatedChip.style.left = `${currentRect.left - tableRect.left + offsetX}px`;
-                        animatedChip.style.top = `${currentRect.top - tableRect.top + offsetY}px`;
-                        animatedChip.style.zIndex = `${100 + chipIndex}`; // Higher z-index for newer chips
-                        
-                        console.log(`Making chip permanent at position: (${currentRect.left - tableRect.left + offsetX}, ${currentRect.top - tableRect.top + offsetY})`);
-                        
-                        // Remove from body and add to game table
-                        if (animatedChip.parentNode === document.body) {
-                            document.body.removeChild(animatedChip);
-                        }
-                        gameTable.appendChild(animatedChip);
-                    } else {
-                        console.error('Game table not found for final chip placement');
-                        animatedChip.remove();
-                    }
-                }, 1000);
-            }
-
-            getChipColor(value) {
-                if (value >= 100) return '#ff0000';
-                if (value >= 50) return '#0000ff';
-                if (value >= 25) return '#00ff00';
-                if (value >= 10) return '#ffff00';
-                if (value >= 5) return '#ff00ff';
-                return '#00ffff';
-            }
-
-            animateChipsBackToPlayers() {
-                console.log('Animating chips back to players based on results');
-                
-                const gameData = this.stateManager.getGameData();
-                const gameTable = document.querySelector('.game-table');
-                if (!gameTable) return;
-                
-                const animatedChips = gameTable.querySelectorAll('.animated-chip');
-                console.log(`Found ${animatedChips.length} chips to animate back`);
-                
-                animatedChips.forEach((chip, index) => {
-                    // Find which player this chip belongs to (based on order)
-                    const player = gameData.players[index];
-                    if (!player) return;
-                    
-                    const playerSeat = document.getElementById(`player-${player.id}`);
-                    if (!playerSeat) return;
-                    
-                    // Skip if player is eliminated
-                    if (player.eliminated) {
-                        console.log(`${player.name} is eliminated - skipping chip animation`);
-                        chip.style.opacity = '0';
-                        chip.style.transform = 'scale(0)';
-                        return;
-                    }
-                    
-                    const seatRect = playerSeat.getBoundingClientRect();
-                    const tableRect = gameTable.getBoundingClientRect();
-                    
-                    // Calculate target position (player's chip stack area)
-                    const targetX = seatRect.left - tableRect.left + 130; // 130px to the right of player seat
-                    const targetY = seatRect.top - tableRect.top + 20; // 20px down from top of seat
-                    
-                    // Update chip color based on result
-                    if (player.result === 'win') {
-                        // Keep colorful chips for winners
-                        console.log(`${player.name} won - keeping colorful chip`);
-                    } else if (player.result === 'refund') {
-                        // Make chips gray for refunds
-                        chip.style.background = '#888';
-                        chip.style.borderColor = '#888';
-                        console.log(`${player.name} got refund - making chip gray`);
-                    } else if (player.result === 'loss') {
-                        // Losers don't get chips back - fade out
-                        chip.style.opacity = '0';
-                        chip.style.transform = 'scale(0)';
-                        console.log(`${player.name} lost - removing chip`);
-                        return; // Don't animate back
-                    }
-                    
-                    // Animate chip back to player
-                    setTimeout(() => {
-                        chip.style.left = `${targetX}px`;
-                        chip.style.top = `${targetY}px`;
-                        chip.style.transition = 'all 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                    }, index * 200); // Stagger animations by 200ms per chip
-                    
-                    // Remove chip after animation
-                    setTimeout(() => {
-                        if (chip.parentNode) {
-                            chip.remove();
-                        }
-                    }, 1000 + (index * 200));
-                });
-            }
-
-            startNewRound() {
-                console.log('Start new round clicked');
-                
-                // Close insurance modal if still open
-                if (this.elements.insuranceModal && !this.elements.insuranceModal.classList.contains('hidden')) {
-                    console.log('🛡️ Closing insurance modal before starting new round');
-                    this.hideInsuranceModal();
-                    this.clearInsuranceTimer();
-                    this.insuranceModalActive = false;
-                }
-                
-                if (this.stateManager.startNewRound()) {
-                    // Play round start sound
-                    this.soundManager.playSound('roundStart');
-                    
-                    // Reset flags
-                    this.bankDrawProcessed = false;
-                    this.cardsRevealed = false;
-                    // Don't recreate player seats - just update them to preserve dropdown values
-                    this.updatePlayerSeats();
-                    this.updateGameDisplay();
-                    this.resetBankCardDisplay();
-                    this.clearPlayerResultClasses();
-                    this.clearCardSelectedClasses();
-                    this.placeCardsOnTable();
-                    
-                    // Remove animated chips from previous round
-                    const animatedChips = document.querySelectorAll('.animated-chip');
-                    animatedChips.forEach(chip => chip.remove());
-                    
-                    // Remove insurance markers from previous round
-                    this.removeInsuranceMarkers();
-                    
-                    console.log('New round started successfully');
-                } else {
-                    console.log('Failed to start new round');
-                }
-            }
-
-            placeCardsOnTable() {
-                // Remove existing cards - be very thorough
-                const existingCards = document.querySelectorAll('.table-card');
-                console.log(`🎯 Found ${existingCards.length} existing table cards to remove`);
-                existingCards.forEach(card => {
-                    console.log(`🎯 Removing table card: ${card.dataset.rank}`);
-                    card.remove();
-                });
-                
-                // Also remove any orphaned card elements that might exist
-                const allPossibleCards = document.querySelectorAll('[data-rank]');
-                allPossibleCards.forEach(card => {
-                    // Only remove if it's not inside a player seat (those should be player cards)
-                    const playerSeat = card.closest('.player-seat');
-                    if (!playerSeat && card.classList.contains('table-card')) {
-                        console.log(`🎯 Removing orphaned table card with data-rank: ${card.dataset.rank}`);
-                        card.remove();
-                    }
-                });
-                
-                // One more nuclear cleanup - remove any div with card-rank class that's not in player seat
-                const orphanedCardRanks = document.querySelectorAll('.card-rank');
-                orphanedCardRanks.forEach(element => {
-                    const playerSeat = element.closest('.player-seat');
-                    const tableCard = element.closest('.table-card');
-                    if (!playerSeat && !tableCard) {
-                        console.log(`🎯 Removing orphaned card-rank element with text: ${element.textContent}`);
-                        element.parentElement?.remove();
-                    }
-                });
-                
-                // Get available card ranks based on eliminated players (knock-out system)
-                const allRanks = ['A', '2', '3', '4', '5', '6', '7', '8', '9'];
-                const gameData = this.stateManager.getGameData();
-                const lowestRemoved = gameData.lowestCardRemoved;
-                
-                // If no cards removed yet (null), show all cards
-                let cardRanks;
-                if (lowestRemoved === null || lowestRemoved === undefined) {
-                    cardRanks = allRanks;
-                    console.log(`🎯 Placing cards on table: ${cardRanks.length} cards (${cardRanks.join(', ')}) - no cards removed yet`);
-                } else {
-                const cardOrder = ['A', '2', '3', '4', '5', '6', '7', '8', '9'];
-                const lowestIndex = cardOrder.indexOf(lowestRemoved);
-                
-                    // Only show cards AFTER lowestCardRemoved
-                    // Example: If lowestCardRemoved is '2', show '3'-'9' (7 cards), hide 'A' and '2'
-                    cardRanks = allRanks.filter((rank, index) => index > lowestIndex);
-                    
-                    console.log(`🎯 Placing cards on table: ${cardRanks.length} cards (${cardRanks.join(', ')}) - removed cards up to and including ${lowestRemoved}`);
-                }
-                
-                // Position the card selection ring slightly up and to the left of the bank card
-                const centerX = 435; // Move left from bank card center (half the previous offset)
-                const centerY = 335; // Move up from bank card center (half the previous offset)
-                const radius = 140; // Slightly bigger radius for better spacing
-                
-                cardRanks.forEach((rank, index) => {
-                    const card = document.createElement('div');
-                    card.className = 'table-card';
-                    card.dataset.rank = rank;
-                    
-                    // Calculate card value (bet amount)
-                    const cardValue = this.getBetValue({ rank: rank, suit: 'spades' });
-                    
-                    // Create card content with rank and value (vertically stacked)
-                    card.innerHTML = `
-                        <div class="card-content">
-                            <div class="card-rank">${rank}</div>
-                            <div class="card-value">$${cardValue}</div>
-                        </div>
-                    `;
-                    
-                    // Position cards in a circle around the bank card
-                    // Adjust angle calculation for dynamic number of cards
-                    const angle = (index * 2 * Math.PI) / cardRanks.length;
-                    const x = centerX + radius * Math.cos(angle) - 20; // -20 to center the smaller card
-                    const y = centerY + radius * Math.sin(angle) - 30; // -30 to center the smaller card
-                    
-                    card.style.left = `${x}px`;
-                    card.style.top = `${y}px`;
-                    
-                    // Add to the game table container, not the general game container
-                    const gameTable = document.querySelector('.game-table');
-                    if (gameTable) {
-                        gameTable.appendChild(card);
-                    } else {
-                        this.elements.gameContainer.appendChild(card);
-                    }
-                });
-            }
-
-            // Remove the lowest card from the table immediately when a player is eliminated
-            removeLowestCardFromTable() {
-                const gameData = this.stateManager.getGameData();
-                const lowestCardRemoved = gameData.lowestCardRemoved;
-                
-                // Define card rank order for player cards (A-9)
-                const playerCardRanks = ['A', '2', '3', '4', '5', '6', '7', '8', '9'];
-                
-                if (lowestCardRemoved) {
-                    // lowestCardRemoved is already set - remove all cards up to and including it
-                    const removedIndex = playerCardRanks.indexOf(lowestCardRemoved);
-                    
-                    if (removedIndex === -1) {
-                        console.log(`⚠️ Invalid lowestCardRemoved: ${lowestCardRemoved}`);
-                        return; // Invalid card rank
-                    }
-                    
-                    // Remove all cards up to and including the lowest removed card from the table
-                    for (let i = 0; i <= removedIndex; i++) {
-                        const rankToRemove = playerCardRanks[i];
-                        const cardsToRemove = document.querySelectorAll(`.table-card[data-rank="${rankToRemove}"]`);
-                        cardsToRemove.forEach(card => {
-                            console.log(`🗑️ Removing card ${rankToRemove} from table due to player elimination (lowestCardRemoved: ${lowestCardRemoved})`);
-                            card.remove();
-                        });
-                    }
-                } else {
-                    // lowestCardRemoved is not set yet - find the lowest card currently on the table and remove it
-                    const availableCards = this.stateManager.getAvailableCards();
-                    
-                    if (availableCards.length === 0) {
-                        console.log('No available cards to remove from table');
-                        return;
-                    }
-                    
-                    // Find the lowest card from available cards
-                    const lowestAvailableIndex = playerCardRanks.findIndex(rank => availableCards.includes(rank));
-                    
-                    if (lowestAvailableIndex === -1) {
-                        console.log('Could not find lowest available card');
-                        return;
-                    }
-                    
-                    const lowestRank = playerCardRanks[lowestAvailableIndex];
-                    const cardsToRemove = document.querySelectorAll(`.table-card[data-rank="${lowestRank}"]`);
-                    
-                    if (cardsToRemove.length > 0) {
-                        cardsToRemove.forEach(card => {
-                            console.log(`🗑️ Removing lowest available card ${lowestRank} from table due to player elimination`);
-                            card.remove();
-                        });
-                        
-                        // Update lowestCardRemoved in gameData for future reference
-                        gameData.lowestCardRemoved = lowestRank;
-                        console.log(`✅ Set lowestCardRemoved to ${lowestRank}`);
-                    } else {
-                        console.log(`⚠️ No cards found with rank ${lowestRank} to remove from table`);
-                    }
-                }
-            }
-
             // Show elimination message for a player
             showEliminationMessage(playerId, remainingBalance) {
                 const player = this.stateManager.getPlayer(playerId);
@@ -11131,7 +10487,6 @@
                     this.updateAdminPanel();
                 }
             }
-            
             toggleBotControlPanel() {
                 this.elements.botControlPanel.classList.toggle('hidden');
                 if (!this.elements.botControlPanel.classList.contains('hidden')) {
@@ -11582,7 +10937,6 @@
                     console.log('Rules modal opened');
                 }
             }
-
             hideRules() {
                 const rulesModal = document.getElementById('rules-modal');
                 if (rulesModal) {
@@ -11699,7 +11053,6 @@
                     return { display: `${refund}`, cssClass: 'refund' };
                 }
             }
-            
             calculateWinAmount(playerRank, bankRank, betValue) {
                 // Simulate the actual cascade distribution logic
                 const cardValues = { 'A': 10, '2': 15, '3': 23, '4': 34, '5': 51, '6': 76, '7': 114, '8': 171, '9': 256 };
@@ -11781,7 +11134,6 @@
                 const cardOrder = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
                 return cardOrder.indexOf(rank);
             }
-            
             calculateJackpotContribution(bankRank) {
                 // Calculate total jackpot contribution for each bank card
                 // This is the sum of jackpot contributions from all refund players
@@ -11981,7 +11333,6 @@
                     }
                 }
             }
-
             animateCardToPlayerSeat(cardElement, playerId) {
                 console.log(`=== animateCardToPlayerSeat called for player ${playerId} ===`);
                 
@@ -12345,7 +11696,6 @@
                 // Resolve the promise
                 resolve(true);
             }
-
             cleanupAdminSelection() {
                 console.log('=== CLEANING UP ADMIN SELECTION ===');
                 const tableCards = document.querySelectorAll('.table-card');
@@ -12391,8 +11741,6 @@
                 });
                 console.log('=== ADMIN SELECTION CLEANUP COMPLETE ===');
             }
-
-
             makeRandomSelectionForPlayer(playerId, playerName) {
                 console.log(`Making random selection for ${playerName} (ID: ${playerId})`);
                 
@@ -12413,17 +11761,17 @@
                     if (affordableCards.length > 0) {
                         // Select from affordable cards
                         const randomRank = affordableCards[Math.floor(Math.random() * affordableCards.length)];
-                        const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
-                        const suit = suits[Math.floor(Math.random() * suits.length)];
-                        const card = { rank: randomRank, suit };
-                        
+                    const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+                    const suit = suits[Math.floor(Math.random() * suits.length)];
+                    const card = { rank: randomRank, suit };
+                    
                         console.log(`Random selection from affordable cards: ${randomRank} of ${suit} (affordable: [${affordableCards.join(', ')}])`);
+                    
+                    if (this.stateManager.selectCard(playerId, card)) {
+                        console.log(`Random selection successful for ${playerName}`);
                         
-                        if (this.stateManager.selectCard(playerId, card)) {
-                            console.log(`Random selection successful for ${playerName}`);
-                            
-                            // Play card selection sound
-                            this.soundManager.playSound('cardSelect');
+                        // Play card selection sound
+                        this.soundManager.playSound('cardSelect');
                             
                             // Stop manual countdown
                             this.stopManualCountdown();
@@ -12433,30 +11781,30 @@
                             
                             // Clear affordability display
                             this.clearCardAffordabilityDisplay();
-                            
-                            // Update displays
-                            this.updatePlayerDisplay(playerId);
-                            this.updateGameDisplay();
-                            
-                            // Update table card display
-                            this.updateTableCardDisplay(randomRank, playerName);
-                            
-                            // Check if all cards are selected
-                            if (this.stateManager.allCardsSelected()) {
-                                // Guard: Only transition to insurance if we're still in card selection state
-                                const currentState = this.stateManager.getState();
-                                if (currentState === GAME_STATES.CARD_SELECTION) {
-                                    console.log('All cards selected, moving to insurance purchase phase');
-                                    this.stateManager.setState(GAME_STATES.INSURANCE_PURCHASE);
-                                } else {
-                                    console.log(`All cards selected but already in ${currentState} state, skipping transition`);
-                                }
+                        
+                        // Update displays
+                        this.updatePlayerDisplay(playerId);
+                        this.updateGameDisplay();
+                        
+                        // Update table card display
+                        this.updateTableCardDisplay(randomRank, playerName);
+                        
+                        // Check if all cards are selected
+                        if (this.stateManager.allCardsSelected()) {
+                            // Guard: Only transition to insurance if we're still in card selection state
+                            const currentState = this.stateManager.getState();
+                            if (currentState === GAME_STATES.CARD_SELECTION) {
+                                console.log('All cards selected, moving to insurance purchase phase');
+                                this.stateManager.setState(GAME_STATES.INSURANCE_PURCHASE);
                             } else {
-                                // Continue with remaining players
-                                setTimeout(() => {
-                                    this.continueWithRemainingPlayers();
-                                }, 1000);
+                                console.log(`All cards selected but already in ${currentState} state, skipping transition`);
                             }
+                        } else {
+                            // Continue with remaining players
+                            setTimeout(() => {
+                                this.continueWithRemainingPlayers();
+                            }, 1000);
+                        }
                         } else {
                             console.log(`Random selection failed for ${playerName} - card selection blocked`);
                         }
@@ -12482,7 +11830,6 @@
                     console.log(`No available cards for ${playerName}`);
                 }
             }
-
             delay(ms) {
                 return new Promise(resolve => {
                     const checkPause = () => {
@@ -12908,7 +12255,6 @@
                     this.endHumanInsurancePhase();
                 }, 5000);
             }
-            
             showHumanInsuranceCountdown() {
                 // Clear any existing interval first
                 if (this.humanCountdownInterval) {
@@ -12941,6 +12287,10 @@
                     // Use event delegation - attach listener once to the parent element
                     countdownElement.addEventListener('click', (e) => {
                         if (e.target && e.target.id === 'buy-insurance-btn') {
+                            if (e.target.disabled) {
+                                console.log('🛡️ Buy insurance button clicked but disabled (likely insufficient balance)');
+                                return;
+                            }
                             const gameData = this.stateManager.getGameData();
                             const humanPlayer = gameData.players.find(p => p.isHuman);
                             if (humanPlayer) {
@@ -12961,18 +12311,25 @@
                 const humanPlayer = gameData.players.find(p => p.isHuman);
                 const insurancePot = gameData.insuranceJackpot || 0;
                 
-                // Determine button state
                 const hasInsurance = humanPlayer && humanPlayer.hasInsurance;
-                const buttonText = hasInsurance ? 'Cancel Insurance' : 'Buy Insurance';
-                const buttonColor = hasInsurance ? '#27ae60' : '#e74c3c';
+                const canAffordInsurance = humanPlayer && humanPlayer.balance >= GAME_CONFIG.INSURANCE_COST;
+                const buttonText = hasInsurance ? 'Cancel Insurance' : (canAffordInsurance ? 'Buy Insurance' : `Need $${GAME_CONFIG.INSURANCE_COST}`);
+                const buttonColor = hasInsurance ? '#27ae60' : (canAffordInsurance ? '#e74c3c' : '#555');
+                const buttonCursor = canAffordInsurance || hasInsurance ? 'pointer' : 'not-allowed';
+                const buttonDisabledAttr = (!canAffordInsurance && !hasInsurance) ? 'disabled' : '';
+                const opacity = (!canAffordInsurance && !hasInsurance) ? '0.7' : '1';
                 
                 countdownElement.innerHTML = `
                     <div>🛡️ INSURANCE AVAILABLE 🛡️</div>
                     <div style="margin-top: 10px;">Insurance Pot: $${insurancePot.toFixed(2)}</div>
                     <div style="margin-top: 10px;">Cost: $${GAME_CONFIG.INSURANCE_COST}</div>
-                    <button id="buy-insurance-btn" style="margin-top: 15px; padding: 10px 20px; font-size: 16px; background: ${buttonColor}; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">${buttonText}</button>
+                    <button id="buy-insurance-btn" ${buttonDisabledAttr} style="margin-top: 15px; padding: 10px 20px; font-size: 16px; background: ${buttonColor}; color: white; border: none; border-radius: 5px; cursor: ${buttonCursor}; font-weight: bold; opacity: ${opacity};">${buttonText}</button>
+                    <div id="insurance-balance-warning" style="margin-top: 8px; color: #FFD700;"></div>
                     <div id="insurance-countdown-timer" style="margin-top: 10px; font-size: 24px; color: #FFD700;">${timeLeft}s</div>
                 `;
+                
+                // Update button state and warning message after rendering
+                this.updateBuyInsuranceButtonState();
                 
                 // Update countdown every second
                 this.humanCountdownInterval = setInterval(() => {
@@ -12986,22 +12343,47 @@
                     }
                 }, 1000);
             }
-            
             updateBuyInsuranceButtonState() {
                 const buyBtn = document.getElementById('buy-insurance-btn');
                 if (buyBtn) {
+                    const warningEl = document.getElementById('insurance-balance-warning');
                     const gameData = this.stateManager.getGameData();
                     const humanPlayer = gameData.players.find(p => p.isHuman);
+                    const canAffordInsurance = humanPlayer && humanPlayer.balance >= GAME_CONFIG.INSURANCE_COST;
+                    
                     if (humanPlayer && humanPlayer.hasInsurance) {
+                        buyBtn.disabled = false;
                         buyBtn.textContent = 'Cancel Insurance';
                         buyBtn.style.background = '#27ae60';
+                        buyBtn.style.cursor = 'pointer';
+                        buyBtn.style.opacity = '1';
+                        if (warningEl) {
+                            warningEl.style.display = 'block';
+                            warningEl.textContent = 'Insurance purchased - click again to cancel.';
+                        }
+                    } else if (!canAffordInsurance) {
+                        buyBtn.disabled = true;
+                        buyBtn.textContent = `Need $${GAME_CONFIG.INSURANCE_COST}`;
+                        buyBtn.style.background = '#555';
+                        buyBtn.style.cursor = 'not-allowed';
+                        buyBtn.style.opacity = '0.7';
+                        if (warningEl && humanPlayer) {
+                            warningEl.style.display = 'block';
+                            warningEl.textContent = `Balance $${Math.round(humanPlayer.balance)} is below the insurance cost.`;
+                        }
                     } else {
+                        buyBtn.disabled = false;
                         buyBtn.textContent = 'Buy Insurance';
                         buyBtn.style.background = '#e74c3c';
+                        buyBtn.style.cursor = 'pointer';
+                        buyBtn.style.opacity = '1';
+                        if (warningEl) {
+                            warningEl.style.display = 'none';
+                            warningEl.textContent = '';
+                        }
                     }
                 }
             }
-            
             endHumanInsurancePhase() {
                 // Clear timers
                 if (this.humanInsuranceTimer) {
@@ -13379,7 +12761,6 @@
                 console.log(`🛡️ Insurance win animation created for player ${playerId}`);
             }
         }
-
         // Main Game Class
         class NineCardGame {
             constructor() {
@@ -13531,7 +12912,6 @@
             
             console.log(`Updated jackpot chip stack: $${jackpotAmount} = ${chipCount} chips`);
         }
-        
         // Help/Tutorial Modal Functions
         function initializeHelpModal() {
             const helpBtn = document.getElementById('help-btn');
@@ -13643,7 +13023,6 @@
                 el.style.transform = `translate(${xPos}px, ${yPos}px) translateX(-50%)`;
             }
         }
-
         // Initialize game when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM loaded, initializing Nine Card Game...');
