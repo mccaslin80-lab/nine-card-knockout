@@ -226,6 +226,14 @@ body {
     box-shadow: none !important;
 }
 
+/* QUICK OVERRIDE: Force table card numbers/values upright across variants */
+.table-card .card-rank,
+.table-card .card-value {
+    transform: rotate(0deg) !important;
+    transform-origin: center !important;
+    display: inline-block !important;
+}
+
 .bank-card {
     width: 80px;
     height: 120px;
@@ -317,6 +325,22 @@ body {
     border-color: #00bfff;
     box-shadow: 0 0 25px rgba(0, 191, 255, 0.8);
     animation: turnPulse 1.5s ease-in-out infinite;
+}
+
+.player-seat.eliminated {
+    position: relative;
+}
+
+.player-seat.eliminated:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 15px;
+    pointer-events: none;
 }
 
 @keyframes turnPulse {
@@ -1194,6 +1218,17 @@ body {
 /* Utility Classes */
 .hidden {
     display: none !important;
+}
+
+/* NOTE: legacy `.player-cards` removed — markup standardized to `.player-card` */
+
+/* If a .player-card is empty, make sure no background or decoration shows */
+.player-card:empty {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    min-width: 0;
+    min-height: 0;
 }
 
 .text-center {

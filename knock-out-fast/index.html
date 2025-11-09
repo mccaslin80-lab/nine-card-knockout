@@ -6,6 +6,254 @@
         <title>Nine Card - Fast Speed v1.154.0</title>
     <link rel="stylesheet" href="../styles/style.css">
     <style>
+        .table-cards {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            z-index: 1;
+        }
+
+        .table-card {
+            width: 54px;
+            height: 82px;
+            background: #cc0000;
+            border-radius: 8px;
+            position: relative;
+            background-image: 
+                linear-gradient(45deg, #aa0000 25%, transparent 25%),
+                linear-gradient(-45deg, #aa0000 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #aa0000 75%),
+                linear-gradient(-45deg, transparent 75%, #aa0000 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            border: 3px solid #fff;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+            border: 2px solid #666;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: absolute;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            transform-origin: center center;
+        }
+
+        .table-card:hover {
+            transform: scale(1.1) translateY(-5px) !important;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 2;
+        }
+
+        .table-card .card-inner {
+            text-align: center;
+            width: calc(100% - 6px);
+            height: calc(100% - 6px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+            margin: 3px;
+            transform-origin: 50% 50%;
+        }
+        /* Ensure inner content stays visually upright by using a CSS variable
+           --card-rotation which is kept in sync from JS. The inner element
+           counter-rotates using the negative of that variable. This is
+           more robust than relying on inline child transforms which can be
+           accidentally overwritten by later JS/CSS animations. */
+        .table-card {
+            --card-rotation: 0deg;
+        }
+        .table-card .card-inner {
+            /* Apply a counter-rotation based on the parent's --card-rotation */
+            transform: rotate(calc(-1 * var(--card-rotation, 0deg)));
+        }
+        /* QUICK OVERRIDE: force the visible rank/value upright in case other
+           styles or scripts override child transforms. This is intentionally
+           specific to table cards and uses !important as a temporary fix. */
+        .table-card .card-rank,
+        .table-card .card-value {
+            transform: rotate(0deg) !important;
+            transform-origin: center !important;
+            display: inline-block !important;
+        }
+        
+        .table-card .card-inner::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 2px solid #990000;
+            border-radius: 4px;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(153, 0, 0, 0.1) 10px,
+                rgba(153, 0, 0, 0.1) 20px
+            );
+        }
+        
+        .table-card.revealed {
+            background: #ffffff;
+            background-image: none;
+            border: 2px solid #666;
+        }
+        
+        .table-card.revealed .card-inner {
+            background: #ffffff;
+        }
+        
+        .table-card.revealed .card-inner::before {
+            display: none;
+        }
+        
+        /* Card back design */
+        .facedown {
+            background: repeating-linear-gradient(
+                45deg,
+                #cc0000,
+                #cc0000 10px,
+                #aa0000 10px,
+                #aa0000 20px
+            ) !important;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            border: 2px solid #ffffff;
+        }
+        
+        .facedown .card-inner {
+            background: repeating-linear-gradient(
+                45deg,
+                #cc0000,
+                #cc0000 10px,
+                #aa0000 10px,
+                #aa0000 20px
+            ) !important;
+        }
+        
+        .facedown .card-value,
+        .facedown .card-rank,
+        .facedown .card-suit {
+            display: none !important;
+        }
+        
+        .facedown::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 2px solid #990000;
+            border-radius: 4px;
+        }
+        
+        .table-card[data-facedown="true"] .card-inner {
+            background: #cc0000 !important;
+            background-image: repeating-linear-gradient(
+                45deg,
+                #aa0000 0,
+                #aa0000 5px,
+                #cc0000 5px,
+                #cc0000 10px
+            ) !important;
+            border: 3px solid #ffffff;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+        
+        .table-card[data-facedown="true"] .card-value,
+        .table-card[data-facedown="true"] .card-rank,
+        .table-card[data-facedown="true"] .card-suit {
+            display: none !important;
+        }
+        
+        .table-card.face-down .card-inner {
+            background: #cc0000;
+            background-image: 
+                linear-gradient(30deg, #aa0000 25%, transparent 25%),
+                linear-gradient(-30deg, #aa0000 25%, transparent 25%),
+                linear-gradient(30deg, transparent 75%, #aa0000 75%),
+                linear-gradient(-30deg, transparent 75%, #aa0000 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 0, 10px 10px, 10px 10px;
+            border: 4px solid #ffffff;
+            box-sizing: border-box;
+        }
+        
+        /* Hide the card content when face down */
+        .table-card.face-down .card-value,
+        .table-card.face-down .card-rank,
+        .table-card.face-down .card-suit {
+            display: none;
+        }
+        
+        .table-card.face-down .card-inner::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            border: 2px solid #990000;
+            border-radius: 4px;
+            background: 
+                linear-gradient(30deg, #cc0000 25%, transparent 25%) -10px -10px,
+                linear-gradient(-30deg, #cc0000 25%, transparent 25%) -10px -10px,
+                linear-gradient(30deg, transparent 75%, #cc0000 75%) -10px -10px,
+                linear-gradient(-30deg, transparent 75%, #cc0000 75%) -10px -10px;
+            background-color: #aa0000;
+            background-size: 20px 20px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .table-card .card-value,
+        .table-card .card-rank {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .table-card .card-suit {
+            font-size: 14px;
+            margin-top: 3px;
+            color: #666;
+        }
+        /* Bank card specific styling to ensure suit is visible when revealed */
+        .bank-card .card-rank {
+            font-size: 28px;
+            font-weight: 700;
+            color: #222;
+            text-align: center;
+        }
+        .bank-card .card-suit {
+            display: block;
+            font-size: 42px;
+            margin-top: 6px;
+            text-align: center;
+            line-height: 1;
+            z-index: 2;
+        }
+        .table-card .card-suit.card-suit-hidden {
+            visibility: hidden;
+        }
+        .table-card .card-player-label {
+            margin-top: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+
         .player-seat.current-turn {
             border: 5px solid #00aaff !important;
             box-shadow: 0 0 25px #00aaff, 0 0 50px #007bff, inset 0 0 20px rgba(0, 170, 255, 0.3);
@@ -413,7 +661,6 @@
             background: rgba(255,255,255,0.2);
             border-radius: 3px;
         }
-
         /* Bot Control Panel Styles */
         .bot-control-panel {
             position: fixed;
@@ -573,7 +820,6 @@
         .bot-control-group select:hover {
             border-color: #e74c3c;
         }
-        
         /* History Panel Styles */
         .history-panel {
             position: fixed;
@@ -728,19 +974,16 @@
         .history-result.refund {
             color: #f39c12;
         }
-        
         .history-jackpot {
             color: #f1c40f;
             font-weight: bold;
             font-size: 12px;
             margin-top: 5px;
         }
-        
         .admin-panel .admin-section {
             padding: 15px;
             color: white;
         }
-        
         .admin-panel .admin-section h4 {
             color: #3498db;
             margin-bottom: 10px;
@@ -1067,7 +1310,6 @@
             gap: 2px;
             font-size: 0.8rem;
         }
-
         .payout-matrix__header {
             display: contents;
         }
@@ -1176,6 +1418,7 @@
         }
 
         .chip-stack-container {
+            display: none !important;
             position: absolute;
             width: 40px;
             height: 60px;
@@ -1183,7 +1426,7 @@
         }
 
         .chip-stack {
-            display: grid;
+            display: none !important;
             grid-template-columns: repeat(3, 1fr);
             gap: 2px;
             width: 100%;
@@ -1192,20 +1435,50 @@
         }
 
         .chip {
+            display: none !important;
             width: 10px;
             height: 6px;
-            border-radius: 1px;
-            border: 1px solid;
+            border-radius: 50%;
+            position: relative;
+            background: radial-gradient(circle at 30% 30%, 
+                rgba(255, 255, 255, 0.4) 0%, 
+                transparent 40%),
+                linear-gradient(135deg, 
+                    var(--chip-color-light, #4CAF50) 0%, 
+                    var(--chip-color-main, #388E3C) 50%, 
+                    var(--chip-color-dark, #1B5E20) 100%);
+            border: 1px solid rgba(0, 0, 0, 0.3);
             box-shadow: 
                 0 2px 4px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+                inset 0 1px 2px rgba(255, 255, 255, 0.5),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
             transform: perspective(100px) rotateX(15deg);
             transition: transform 0.2s ease;
+        }
+        
+        .chip::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 
+                inset 0 0 0 1px rgba(0, 0, 0, 0.2),
+                0 0 3px rgba(255, 255, 255, 0.3);
         }
 
         .chip:hover {
             transform: perspective(100px) rotateX(15deg) translateY(-2px);
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.5),
+                inset 0 1px 2px rgba(255, 255, 255, 0.6),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.3);
         }
 
         .human-strategy-container {
@@ -1224,7 +1497,6 @@
             margin-left: 10px; /* Small offset to the right, but not covering chip stack */
             max-width: 120px; /* Limit width to prevent covering chip stack */
         }
-
         .insurance-behavior label {
             font-size: 11px;
             color: #2196F3;
@@ -1300,22 +1572,48 @@
             font-size: 11px;
         }
         .animated-chip {
+            display: none !important;
             position: absolute;
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            border: 2px solid;
+            position: relative;
+            background: radial-gradient(circle at 30% 30%, 
+                rgba(255, 255, 255, 0.5) 0%, 
+                transparent 40%),
+                linear-gradient(135deg, 
+                    var(--chip-color-light, #4CAF50) 0%, 
+                    var(--chip-color-main, #388E3C) 50%, 
+                    var(--chip-color-dark, #1B5E20) 100%);
+            border: 2px solid rgba(0, 0, 0, 0.3);
             box-shadow: 
                 0 4px 8px rgba(0, 0, 0, 0.4),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3),
-                inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+                inset 0 2px 4px rgba(255, 255, 255, 0.5),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+                0 0 0 2px rgba(255, 255, 255, 0.2);
             transform: perspective(100px) rotateX(15deg);
             z-index: 1000;
             pointer-events: none;
             transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
+        
+        .animated-chip::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 
+                inset 0 0 0 1px rgba(0, 0, 0, 0.2),
+                0 0 4px rgba(255, 255, 255, 0.4);
+        }
 
         .chip-pile {
+            display: none !important;
             position: absolute;
             width: 40px;
             height: 30px;
@@ -1329,17 +1627,41 @@
             position: absolute;
             width: 10px;
             height: 6px;
-            border-radius: 1px;
-            border: 1px solid;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, 
+                rgba(255, 255, 255, 0.4) 0%, 
+                transparent 40%),
+                linear-gradient(135deg, 
+                    var(--chip-color-light, #4CAF50) 0%, 
+                    var(--chip-color-main, #388E3C) 50%, 
+                    var(--chip-color-dark, #1B5E20) 100%);
+            border: 1px solid rgba(0, 0, 0, 0.3);
             box-shadow: 
                 0 2px 4px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+                inset 0 1px 2px rgba(255, 255, 255, 0.5),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
             transform: perspective(100px) rotateX(15deg);
+        }
+        
+        .chip-pile .chip::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 
+                inset 0 0 0 1px rgba(0, 0, 0, 0.2),
+                0 0 3px rgba(255, 255, 255, 0.3);
         }
 
         /* Jackpot Chip Stack Styles */
         .jackpot-chip-stack {
+            display: none !important;
             position: absolute;
             left: -70px;
             top: 35%;
@@ -1350,6 +1672,7 @@
         }
         
         .chip-stack-label {
+            display: none !important;
             position: absolute;
             left: -70px;
             top: 20%;
@@ -1363,6 +1686,7 @@
         }
         
         #jackpot-chip-pile {
+            display: none !important;
             position: relative;
             width: 70px;
             height: 100px;
@@ -1373,28 +1697,51 @@
             align-items: center;
             justify-content: flex-end;
         }
-
         #jackpot-chip-pile .chip {
             position: absolute;
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            border: 3px solid #f39c12;
-            background: linear-gradient(145deg, #f39c12, #e67e22);
+            background: radial-gradient(circle at 30% 30%, 
+                rgba(255, 255, 255, 0.6) 0%, 
+                transparent 40%),
+                linear-gradient(135deg, 
+                    #FFD700 0%, 
+                    #FFA500 50%, 
+                    #FF8C00 100%);
+            border: 3px solid rgba(139, 69, 19, 0.6);
             box-shadow: 
                 0 6px 12px rgba(0, 0, 0, 0.5),
-                inset 0 3px 0 rgba(255, 255, 255, 0.4),
-                inset 0 -3px 0 rgba(0, 0, 0, 0.3);
+                inset 0 3px 6px rgba(255, 255, 255, 0.6),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.3),
+                0 0 0 2px rgba(255, 215, 0, 0.4);
             transform: perspective(100px) rotateX(15deg);
             transition: all 0.3s ease;
+        }
+        
+        #jackpot-chip-pile .chip::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 
+                inset 0 0 0 2px rgba(139, 69, 19, 0.3),
+                0 0 6px rgba(255, 215, 0, 0.6);
         }
 
         #jackpot-chip-pile .chip:hover {
             transform: perspective(100px) rotateX(15deg) translateY(-3px);
             box-shadow: 
                 0 8px 16px rgba(0, 0, 0, 0.7),
-                inset 0 3px 0 rgba(255, 255, 255, 0.5),
-                inset 0 -3px 0 rgba(0, 0, 0, 0.4);
+                inset 0 3px 6px rgba(255, 255, 255, 0.7),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.4),
+                0 0 0 2px rgba(255, 215, 0, 0.5),
+                0 0 12px rgba(255, 215, 0, 0.4);
         }
         
         .version-info {
@@ -1527,20 +1874,17 @@
             background: rgba(255, 255, 255, 0.2);
             border-radius: 3px;
         }
-
         .matrix-image {
             max-width: 100%;
             height: auto;
             border: 2px solid #333;
             border-radius: 5px;
         }
-
         /* Payout Matrix Table Styles */
         .payout-matrix {
             margin-top: 20px;
             overflow-x: auto;
         }
-
         .matrix-table {
             width: 100%;
             border-collapse: collapse;
@@ -1716,7 +2060,6 @@
         .quick-rules-promo.minimized h3 {
             display: none;
         }
-
         .quick-rules-promo.minimized::before {
             content: "📋 Quick Rules";
             display: block;
@@ -1869,7 +2212,6 @@
             font-size: 1.2em; /* Reduced from default larger size */
             font-weight: bold;
         }
-
         /* Jackpot Display Boxes */
         .jackpot-display,
         .insurance-jackpot-display {
@@ -1973,6 +2315,11 @@
                         <span id="current-round">Round 1</span>
                     </div>
                 </div>
+            </div>
+
+            <!-- Table Cards Area -->
+            <div class="table-cards">
+                <!-- Cards will be dynamically placed here -->
             </div>
 
             <!-- Player Seats (9 players in circle) -->
@@ -2131,7 +2478,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Help/Tutorial Modal -->
         <div id="help-modal" class="help-modal hidden">
             <div class="help-header">
@@ -2638,7 +2984,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Admin Panel -->
         <div id="admin-panel" class="admin-panel hidden">
             <div class="admin-header">
@@ -2783,7 +3128,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Game Status -->
         <div class="game-status">
             <div id="game-state">Waiting for round to start</div>
@@ -3044,7 +3388,6 @@
                 return matrix;
             }
         }
-
         // State Manager
         class StateManager {
             constructor() {
@@ -3077,6 +3420,10 @@
                 this.isPaused = false;
             }
 
+            setUIController(uiController) {
+                this.uiController = uiController;
+            }
+
             initializeGame() {
                 console.log('Initializing game data...');
                 this.gameData.players = [];
@@ -3090,10 +3437,10 @@
                     selectedCard: null,
                     result: null,
                     isBot: false,
-                    strategy: 'random',
+                    strategy: 'manual',
                         hasInsurance: false,
-                        insuranceBehavior: 'always',
-                        rebuyBehavior: 'never', // Rebuy option: never, always, ask
+                        insuranceBehavior: 'ask',
+                        rebuyBehavior: 'ask', // Rebuy option: never, always, ask
                     eliminated: false  // Knock-out tracking
                 });
 
@@ -3340,6 +3687,17 @@
                 if (currentRemoved === null || currentRemoved === undefined) {
                     this.gameData.lowestCardRemoved = 'A';
                     console.log(`🃏 First elimination - removing card A (lowest card)`);
+                    // Refresh UI table so the card ring rebuilds to reflect removed card
+                    if (window.uiController && typeof window.uiController.placeCardsOnTable === 'function') {
+                        setTimeout(() => {
+                            try {
+                                window.uiController.placeCardsOnTable();
+                                console.log('UI refreshed after removing lowest card (A)');
+                            } catch (err) {
+                                console.error('Error refreshing UI after removing lowest card:', err);
+                            }
+                        }, 200);
+                    }
                     return;
                 }
                 
@@ -3349,6 +3707,17 @@
                     // Move to next card (A -> 2 -> 3 -> etc)
                     this.gameData.lowestCardRemoved = cardOrder[currentIndex + 1];
                     console.log(`🃏 Lowest card removed: ${currentRemoved}, now removing cards from ${this.gameData.lowestCardRemoved} and up`);
+                    // Refresh UI table so the card ring rebuilds to reflect removed card
+                    if (window.uiController && typeof window.uiController.placeCardsOnTable === 'function') {
+                        setTimeout(() => {
+                            try {
+                                window.uiController.placeCardsOnTable();
+                                console.log('UI refreshed after updating lowest removed card to', this.gameData.lowestCardRemoved);
+                            } catch (err) {
+                                console.error('Error refreshing UI after updating lowest removed card:', err);
+                            }
+                        }, 200);
+                    }
                 } else {
                     console.log('🃏 All cards except 9 have been removed');
                 }
@@ -3366,6 +3735,23 @@
                 }
             }
 
+            clearPlayerResults() {
+                console.log('🧹 Clearing player results and classes...');
+                this.gameData.players.forEach(player => {
+                    const playerSeat = document.querySelector(`#player-${player.id}`);
+                    if (playerSeat) {
+                        // Remove result classes
+                        playerSeat.classList.remove('win', 'loss', 'refund', 'jackpot');
+                        // Keep only essential classes
+                        const isHuman = player.isHuman;
+                        const isEliminated = player.eliminated;
+                        playerSeat.className = `player-seat ${isHuman ? 'human' : ''} ${isEliminated ? 'eliminated' : ''}`;
+
+                        const existingResults = playerSeat.querySelectorAll('.result-text');
+                        existingResults.forEach(result => result.remove());
+                    }
+                });
+            }
             startNewRound() {
                 console.log('startNewRound called, current state:', this.currentState);
                 
@@ -3378,10 +3764,10 @@
                 
                 if (problematicStates.includes(this.currentState)) {
                     console.log(`🚨 Emergency reset from ${this.currentState} state`);
-                        this.setState(GAME_STATES.WAITING_FOR_ROUND_START);
+                    this.setState(GAME_STATES.WAITING_FOR_ROUND_START);
                     // Continue to reset logic below
-                    }
-                    
+                }
+                
                 if (this.currentState !== GAME_STATES.WAITING_FOR_ROUND_START && 
                     this.currentState !== GAME_STATES.ROUND_SUMMARY) {
                     console.log('Cannot start new round, invalid state:', this.currentState);
@@ -3389,17 +3775,44 @@
                 }
 
                 console.log('Starting new round...');
+                
+                // Clear player states and cards
                 this.gameData.players.forEach(player => {
                     player.selectedCard = null;
                     player.result = null;
                     player.hasInsurance = false; // Reset insurance status
+                    
+                    // Clear player card area in UI (standardized `.player-card`)
+                    if (this.uiController) {
+                        const cardArea = document.querySelector(`#player-${player.id} .player-card`);
+                        if (cardArea) { cardArea.innerHTML = ''; }
+                    }
                 });
+                
+                // Clear game state
                 this.gameData.selectedCards.clear();
                 this.gameData.bankCard = null;
                 this.gameData.bankCardSuit = null; // Reset bank suit
+                this.gameData.bankCardRank = null; // Reset bank rank
 
-                // Reset bank card display to card back
+                // Clear all table cards
+                const tableCards = document.querySelector('.table-cards');
+                if (tableCards) {
+                    tableCards.innerHTML = '';
+                }
+
+                // Legacy holder cleanup removed — markup standardized to use `.player-card`.
+
+                // Clear visual states
+                this.clearPlayerResults(); // Clear win/loss/refund classes
                 this.resetBankCardDisplay();
+                if (this.uiController) {
+                    this.uiController.resetBankCardDisplay();
+                }
+
+                // Clear any remaining animations
+                const animations = document.querySelectorAll('.card-animation, .chip-animation');
+                animations.forEach(anim => anim.remove());
 
                 // Start with card selection phase (insurance comes AFTER cards are selected)
                 this.setState(GAME_STATES.CARD_SELECTION);
@@ -3425,7 +3838,6 @@
             getBankCard() {
                 return this.gameData.bankCard;
             }
-            
             setBankCardSuit(suit) {
                 this.gameData.bankCardSuit = suit;
                 console.log(`Bank suit set to: ${suit}`);
@@ -3790,7 +4202,6 @@
                 console.log(`allCardsSelected: ${allSelected} (${activeSelectedCount}/${totalActivePlayers} active players, ${uniqueSelectedCards.size}/9 unique cards selected)`);
                 return allSelected;
             }
-
             getAvailableCards() {
                 const selectedRanks = Array.from(this.gameData.selectedCards.values())
                     .map(card => card.rank);
@@ -3949,8 +4360,19 @@
             }
 
             resetBankCardDisplay() {
-                // This will be called by the UI controller to reset the bank card display
+                // Reset bank card state in game data
                 console.log('Resetting bank card display...');
+                this.gameData.bankCard = null;
+                this.gameData.bankCardSuit = null;
+                this.gameData.bankCardRank = null;
+                
+                // Also clear any temporary bank card states
+                if (this.gameData.tempBankCard) {
+                    delete this.gameData.tempBankCard;
+                }
+                if (this.gameData.preservedBankCard) {
+                    delete this.gameData.preservedBankCard;
+                }
             }
         }
         // Game Logic
@@ -3962,6 +4384,40 @@
             
             setUIController(uiController) {
                 this.uiController = uiController;
+            }
+
+            getAvailableCards() {
+                const selectedCards = this.stateManager.getGameData().selectedCards;
+                const selectedRanks = Array.from(selectedCards.values()).map(card => card.rank);
+                console.log('Selected ranks:', selectedRanks);
+                
+                // Define all possible cards
+                const allRanks = ['A', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+                // Filter out already selected ranks
+                let availableRanks = allRanks.filter(rank => !selectedRanks.includes(rank));
+
+                // Respect eliminated players: remove lowest ranks up to and including lowestCardRemoved
+                const lowestRemoved = this.stateManager.getGameData().lowestCardRemoved;
+                if (lowestRemoved !== null && lowestRemoved !== undefined) {
+                    const removedIndex = allRanks.indexOf(lowestRemoved);
+                    if (removedIndex !== -1) {
+                        availableRanks = availableRanks.filter(rank => allRanks.indexOf(rank) > removedIndex);
+                        console.log(`GameLogic.getAvailableCards: removed ranks up to ${lowestRemoved}`);
+                    } else {
+                        console.warn(`GameLogic.getAvailableCards: unexpected lowestCardRemoved '${lowestRemoved}'`);
+                    }
+                }
+                
+                // Map ranks to full card objects with suits
+                const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+                const availableCards = availableRanks.map(rank => ({
+                    rank: rank,
+                    suit: suits[Math.floor(Math.random() * suits.length)]
+                }));
+                
+                console.log('Available cards:', availableCards);
+                return availableCards;
             }
 
             generateRandomSuit() {
@@ -5245,7 +5701,6 @@
                     }
                 }
             }
-
             validateGameState() {
                 const gameData = this.stateManager.getGameData();
                 // Validate only the table economy (exclude superJackpot)
@@ -5842,6 +6297,19 @@
                 
                 // Create a copy of the card for animation
                 const animatedCard = cardElement.cloneNode(true);
+                // Try to preserve the visual rotation by copying the dataset rotation
+                let srcRotation = 0;
+                if (cardElement.dataset && cardElement.dataset.rotation) {
+                    srcRotation = parseFloat(cardElement.dataset.rotation) || 0;
+                } else {
+                    const cs = getComputedStyle(cardElement);
+                    const varVal = cs.getPropertyValue('--card-rotation');
+                    if (varVal) {
+                        srcRotation = parseFloat(varVal) || 0;
+                    }
+                }
+                // set CSS variable so inner counter-rotation works on the clone
+                animatedCard.style.setProperty('--card-rotation', `${srcRotation}deg`);
                 animatedCard.style.position = 'fixed';
                 animatedCard.style.zIndex = '1000';
                 animatedCard.style.pointerEvents = 'none';
@@ -5866,12 +6334,13 @@
                 animatedCard.style.top = `${startY}px`;
                 animatedCard.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                 
-                // Animate to player position
+                // Animate to player position (keep rotation while scaling)
                 setTimeout(() => {
                     console.log(`Moving card to player position: (${targetX}, ${targetY})`);
                     animatedCard.style.left = `${targetX}px`;
                     animatedCard.style.top = `${targetY}px`;
-                    animatedCard.style.transform = 'scale(0.6)';
+                    // include rotation so we don't drop the orientation during animation
+                    animatedCard.style.transform = `rotate(${srcRotation}deg) scale(0.6)`;
                 }, 50);
                 
                 // Remove the animated card after animation
@@ -6050,7 +6519,7 @@
                 if (this.elements.startRoundBtn) {
                     this.elements.startRoundBtn.addEventListener('click', () => {
                         console.log('Start round button clicked');
-                        this.startNewRound();
+                        this.stateManager.startNewRound();
                     });
                 } else {
                     console.error('Start round button not found!');
@@ -6703,7 +7172,6 @@
                 this.clearPlayerResultClasses();
                 console.log('Game UI initialized');
             }
-
             createPlayerSeats() {
                 console.log('Creating player seats...');
                 this.elements.playerSeats.innerHTML = '';
@@ -7257,19 +7725,18 @@
                     }
                 }
                 
-                // Assign a random suit when card is selected
+                    // Assign a random suit when card is selected
                 const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
                 const suit = suits[Math.floor(Math.random() * suits.length)];
-                const selectedCard = { rank, suit };
+                // Use let here since we need to pass this to stateManager and update its properties
+                let selectedCard = { rank, suit };
                 console.log('Selected card:', selectedCard);
                 
                 console.log('=== About to call stateManager.selectCard ===');
                 console.log('Current game state:', this.stateManager.getState());
                 console.log('Player ID:', playerId);
                 console.log('Selected card:', selectedCard);
-                console.log('Current selected cards:', this.stateManager.getGameData().selectedCards);
-                
-                const selectionResult = this.stateManager.selectCard(playerId, selectedCard);
+                console.log('Current selected cards:', this.stateManager.getGameData().selectedCards);                const selectionResult = this.stateManager.selectCard(playerId, selectedCard);
                 console.log('Selection result:', selectionResult);
                 
                 if (selectionResult) {
@@ -7295,24 +7762,40 @@
                     cardElement.classList.add('selected');
                     cardElement.setAttribute('data-selected-by', playerName);
                     
+                    const suitElement = cardElement.querySelector('.card-suit');
+                    if (suitElement) {
+                        // Use the selected suit determined earlier (variable `suit`)
+                        const suitSymbol = this.getSuitSymbol ? this.getSuitSymbol(suit) : '';
+                        suitElement.innerHTML = suitSymbol || '&nbsp;';
+                        suitElement.classList.remove('card-suit-hidden');
+                    }
+
                     // White card styling for all players
                     cardElement.style.background = 'linear-gradient(145deg, #fff, #f0f0f0)';
                     cardElement.style.border = '2px solid #333';
                     cardElement.style.color = '#333';
                     cardElement.style.fontWeight = 'bold';
                     
-                    // Show player name on card
-                    const originalText = cardElement.textContent;
-                    cardElement.textContent = `${originalText}\n${playerName}`;
+                    // Show player name on card only for human players
+                        if (playerName === 'You') {
+                            let label = cardElement.querySelector('.card-player-label');
+                            if (!label) {
+                                label = document.createElement('div');
+                                label.className = 'card-player-label';
+                                cardElement.appendChild(label);
+                            }
+                            label.textContent = playerName;
+                        }
+
+                    // Do not reassign the data object `selectedCard` to a DOM element.
+                    // Keep `selectedCard` as the data object ({rank, suit}) and use `cardElement` for DOM operations.
                     
                     // Update displays
                     this.updatePlayerDisplay(playerId);
                     this.updateGameDisplay();
                     
                     // Animate card to player seat for human player too
-                    this.animateCardToPlayerSeat(cardElement, playerId);
-                    
-                    // Animate chip from player to card for human player
+                    this.animateCardToPlayerSeat(cardElement, playerId);                    // Animate chip from player to card for human player
                     setTimeout(() => {
                         this.animateChipToCard(playerId, cardElement);
                     }, 200);
@@ -7407,7 +7890,6 @@
                     this.startManualCountdownDelayed(playerId, playerName);
                 }, 100);
             }
-            
             startManualCountdownDelayed(playerId, playerName) {
                 console.log(`Starting delayed manual countdown for ${playerName} (ID: ${playerId})`);
                 
@@ -7600,6 +8082,22 @@
                 });
                 // Don't clear affordable/unaffordable classes here - they should persist during manual countdown
                 console.log(`=== stopManualCountdown complete ===`);
+            }
+
+            clearCardAffordabilityDisplay() {
+                console.log('Clearing card affordability display...');
+                const tableCards = document.querySelectorAll('.table-card');
+                tableCards.forEach(card => {
+                    card.classList.remove('affordable', 'unaffordable', 'unavailable');
+                    card.style.pointerEvents = 'auto';
+                    card.style.cursor = 'pointer';
+                    card.style.opacity = '';
+                    card.style.filter = '';
+                    // Remove any unaffordable overlays (lock icons)
+                    const existingLock = card.querySelector('.unaffordable-overlay');
+                    if (existingLock) existingLock.remove();
+                });
+                console.log('Card affordability display cleared');
             }
             
             clearUnavailableCards() {
@@ -8074,7 +8572,6 @@
                     document.body.appendChild(rebuyModal);
                 });
             }
-
             askForBotRebuy(playerId) {
                 return new Promise((resolve) => {
                     const player = this.stateManager.getPlayer(playerId);
@@ -8305,7 +8802,6 @@
                     this.updatePlayerDisplay(player.id);
                 });
             }
-
             updateAdminPanel() {
                 const gameData = this.stateManager.getGameData();
                 
@@ -8537,6 +9033,70 @@
                 }, 2000);
             }
 
+            placeCardsOnTable() {
+                console.log('Placing cards on table for selection...');
+                const tableCards = document.querySelector('.table-cards');
+                if (!tableCards) {
+                    console.error('Table cards container not found!');
+                    return;
+                }
+
+                // Clear existing cards
+                tableCards.innerHTML = '';
+
+                // Get available cards from game logic
+                const availableCards = this.gameLogic.getAvailableCards();
+                console.log('Available cards for placement:', availableCards);
+
+                const radius = 150; // Radius of the circle
+                const centerX = 200; // Center X coordinate
+                const centerY = 200; // Center Y coordinate
+
+                // Create and place each card in a circle
+                availableCards.forEach((card, index) => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'card table-card';
+                    cardElement.setAttribute('data-rank', card.rank);
+                    cardElement.setAttribute('data-suit', card.suit);
+                    
+                    const angleStep = 360 / availableCards.length;
+                    const angleDeg = index * angleStep;
+                    const angleRad = angleDeg * (Math.PI / 180);
+
+                    const x = centerX + radius * Math.cos(angleRad) - 27; // 27 is half card width (54/2)
+                    const y = centerY + radius * Math.sin(angleRad) - 41; // 41 is half card height (82/2)
+
+                    cardElement.style.left = x + 'px';
+                    cardElement.style.top = y + 'px';
+                    // Keep cards upright - no rotation
+                    cardElement.style.setProperty('--card-rotation', `0deg`);
+                    cardElement.dataset.rotation = 0;
+
+                    const betValue = this.getBetValue({ rank: card.rank });
+
+                    cardElement.innerHTML = `
+                        <div class="card-inner">
+                            <div class="card-rank">${card.rank}</div>
+                            <div class="card-value">$${betValue}</div>
+                            <div class="card-suit card-suit-hidden">&nbsp;</div>
+                        </div>
+                    `;
+                    const inner = cardElement.querySelector('.card-inner');
+                    if (inner) {
+                        // child transform is handled by CSS using --card-rotation
+                        inner.style.transformOrigin = '50% 50%';
+                    }
+
+                    tableCards.appendChild(cardElement);
+
+                    // Animate the card appearing (no rotation)
+                    setTimeout(() => {
+                        cardElement.style.opacity = '1';
+                        cardElement.style.transform = `translateY(0)`;
+                    }, index * 100);
+                });
+            }
+
             updateCardSelectionState() {
                 console.log('Updating card selection state...');
                 this.elements.startRoundBtn.disabled = true;
@@ -8628,8 +9188,50 @@
                 
                 // Animate chips back to players after a delay
                 setTimeout(() => {
-                    this.animateChipsBackToPlayers();
+                    this.animateChipsReturn();
                 }, 1000);
+            }
+
+            animateChipsReturn() {
+                const gameData = this.stateManager.getGameData();
+                gameData.players.forEach(player => {
+                    if (player.result === 'refund' || player.result === 'win') {
+                        // Create chip animation
+                        const chipElement = document.createElement('div');
+                        chipElement.className = 'animated-chip';
+                        document.body.appendChild(chipElement);
+
+                        // Calculate start and end positions
+                        const bankArea = document.querySelector('.bank-area');
+                        const playerSeat = document.getElementById(`player-${player.id}`);
+                        
+                        if (bankArea && playerSeat) {
+                            const bankRect = bankArea.getBoundingClientRect();
+                            const playerRect = playerSeat.getBoundingClientRect();
+                            
+                            // Position chip at bank
+                            chipElement.style.left = `${bankRect.left + bankRect.width/2}px`;
+                            chipElement.style.top = `${bankRect.top + bankRect.height/2}px`;
+
+                            // Animate to player
+                            setTimeout(() => {
+                                chipElement.style.left = `${playerRect.left + playerRect.width/2}px`;
+                                chipElement.style.top = `${playerRect.top + playerRect.height/2}px`;
+                                chipElement.style.opacity = '0';
+                            }, 50);
+
+                            // Remove element after animation
+                            setTimeout(() => {
+                                chipElement.remove();
+                            }, 1000);
+                        }
+                    }
+                });
+
+                // Move to round summary after animations
+                setTimeout(() => {
+                    this.stateManager.setState(GAME_STATES.ROUND_SUMMARY);
+                }, 1500);
             }
             // Check for players who should be eliminated (balance $0 or cannot afford any card)
             checkAndEliminatePlayers() {
@@ -9010,6 +9612,13 @@
                 
                 // Record round history
                 this.recordRoundHistory();
+
+                // Auto-start next round after delay
+                console.log('Auto-starting next round in 3000ms...');
+                setTimeout(() => {
+                    console.log('Auto-starting new round...');
+                    this.stateManager.startNewRound();
+                }, 3000);
                 
                 // Update history panel if it's open
                 if (!this.elements.historyPanel.classList.contains('hidden')) {
@@ -10028,7 +10637,6 @@
                     console.error('❌ No bank card found!');
                 }
             }
-
             animateWinningsDistribution() {
                 console.log('Animating winnings distribution...');
                 const gameData = this.stateManager.getGameData();
@@ -10046,6 +10654,9 @@
                             seat.classList.remove('selected');
                             seat.classList.add(player.result);
                             
+                            const existingResults = seat.querySelectorAll('.result-text');
+                            existingResults.forEach(result => result.remove());
+
                             const resultText = document.createElement('div');
                             resultText.className = 'result-text';
                             resultText.textContent = this.getResultText(player.result, player);
@@ -10212,29 +10823,87 @@
             resetBankCardDisplay() {
                 console.log('Resetting bank card display to card back...');
                 if (this.elements.bankCard) {
+                    // First, remove all content
+                    // Remove any 'revealed' state and extra content
                     this.elements.bankCard.classList.remove('revealed');
+
+                    // Clear inner content and reset to card-back
                     this.elements.bankCard.innerHTML = '<div class="card-back">🏦</div>';
+
+                    // Remove any inline styles and data attributes
+                    this.elements.bankCard.removeAttribute('style');
+                    const attrs = Array.from(this.elements.bankCard.attributes);
+                    attrs.forEach(attr => {
+                        if (attr.name.startsWith('data-')) {
+                            this.elements.bankCard.removeAttribute(attr.name);
+                        }
+                    });
+
+                    // Clean up bank area (remove dynamic elements by class and by id if appended to body)
+                    const bankArea = document.querySelector('.bank-area');
+                    if (bankArea) {
+                        // Remove elements that might have been added with classes
+                        const elementsToRemove = bankArea.querySelectorAll('.bank-suit-display, .bank-rank-display, .symbol-display');
+                        elementsToRemove.forEach(el => el.remove());
+
+                        // Clean up bank info area
+                        const bankInfo = bankArea.querySelector('.bank-info');
+                        if (bankInfo) {
+                            // Keep only the round info element
+                            const roundInfo = bankInfo.querySelector('.round-info');
+                            if (roundInfo) {
+                                bankInfo.innerHTML = '';
+                                bankInfo.appendChild(roundInfo);
+                            } else {
+                                bankInfo.innerHTML = '';
+                            }
+                        }
+                    }
+
+                    // Also remove any global overlays that were appended to document.body by displayBankSuit
+                    const globalIds = ['bank-suit-display', 'bank-suit-symbol'];
+                    globalIds.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el && el.parentNode) {
+                            el.parentNode.removeChild(el);
+                        }
+                    });
                 }
             }
-            
+
             preserveBankCardDisplay() {
-                // Preserve bank card display if bank card has already been drawn
+                // Preserve bank card display only when the game state expects the bank to be visible
                 const bankCard = this.stateManager.getBankCard();
-                if (bankCard && this.elements.bankCard) {
-                    console.log('🔄 Preserving bank card display after elimination:', bankCard);
-                    // Restore bank card display if it was reset
-                    const currentContent = this.elements.bankCard.innerHTML;
-                    if (currentContent.includes('card-back') || !currentContent.includes(bankCard.rank)) {
-                        // Bank card was reset - restore it
-                        this.elements.bankCard.innerHTML = `
-                            <div class="card-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
-                                <div class="card-rank">${bankCard.rank}</div>
-                                <div class="card-suit">${this.getSuitSymbol(bankCard.suit)}</div>
-                            </div>
-                        `;
-                        this.elements.bankCard.classList.add('revealed');
-                        console.log('✅ Bank card display restored');
-                    }
+                const currentState = this.stateManager.getState ? this.stateManager.getState() : null;
+
+                const visibleStates = [
+                    GAME_STATES.BANK_DRAW,
+                    GAME_STATES.REVEALING_CARDS,
+                    GAME_STATES.DISTRIBUTE_WINNINGS,
+                    GAME_STATES.ROUND_SUMMARY,
+                    GAME_STATES.INSURANCE_PURCHASE
+                ];
+
+                if (!bankCard || !this.elements.bankCard) return;
+
+                if (!visibleStates.includes(currentState)) {
+                    // Don't restore the bank card if we're in card selection or starting a new round
+                    return;
+                }
+
+                console.log('🔄 Preserving bank card display after elimination (state allows restore):', bankCard);
+                // Restore bank card display if it was reset
+                const currentContent = this.elements.bankCard.innerHTML;
+                if (currentContent.includes('card-back') || !currentContent.includes(String(bankCard.rank))) {
+                    // Bank card was reset - restore it
+                    this.elements.bankCard.innerHTML = `
+                        <div class="card-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                            <div class="card-rank">${bankCard.rank}</div>
+                            <div class="card-suit">&nbsp;</div>
+                        </div>
+                    `;
+                    this.elements.bankCard.classList.add('revealed');
+                    console.log('✅ Bank card display restored');
                 }
             }
             
@@ -10410,7 +11079,6 @@
                     }, 4000);
                 }
             }
-
             // Big fireworks for Super Jackpot
             createSuperJackpotAnimation(playerId, totalAmount = 0) {
                 const playerSeat = document.getElementById(`player-${playerId}`);
@@ -10732,7 +11400,6 @@
                 }
                 return card || 'Unknown';
             }
-            
             updateHistoryPanel() {
                 const historyList = document.getElementById('history-list');
                 if (!historyList) return;
@@ -11048,7 +11715,6 @@
                 
                 console.log('Dynamic matrix generated successfully');
             }
-            
             calculateMatrixResult(playerRank, bankRank, betValue) {
                 const playerIndex = this.getCardIndex(playerRank);
                 const bankIndex = this.getCardIndex(bankRank);
@@ -11301,6 +11967,94 @@
                 this.continueWithRemainingPlayers();
             }
 
+            updateCardAffordabilityDisplay(playerId) {
+                console.log('Updating card affordability display for player:', playerId);
+        
+                // Get available cards from game logic
+                const availableCards = this.gameLogic.getAvailableCards();
+                console.log('Available cards:', availableCards);
+                
+                    // Get player to check their balance
+                    const player = this.stateManager.getPlayer(playerId);
+                    if (!player) return;
+                
+                    const tableCards = document.querySelectorAll('.table-card');
+                    tableCards.forEach(card => {
+                        const rank = card.dataset.rank;
+                        if (!rank) return;
+                    
+                        // Remove existing handlers and classes
+                        card.classList.remove('affordable', 'unaffordable');
+                        const oldHandler = card.dataset.clickHandler;
+                        if (oldHandler) {
+                            card.removeEventListener('click', window[oldHandler]);
+                        }
+                    
+                        // Skip if card is already selected
+                        if (card.classList.contains('selected')) return;
+                    
+                        // Check if player can afford this card
+                        const betValue = this.getBetValue({ rank, suit: 'spades' });
+                        const canAfford = player.balance >= betValue;
+                    
+                        // Add new click handler only if affordable
+                        if (canAfford) {
+                            const handlerName = `cardClickHandler_${playerId}_${rank}`;
+                            window[handlerName] = () => {
+                                if (!card.classList.contains('selected')) {
+                                    // Route to the established selection routine that expects the card element and playerId
+                                    this.selectTableCard(card, playerId);
+                                }
+                            };
+                            card.addEventListener('click', window[handlerName]);
+                            card.dataset.clickHandler = handlerName;
+                        
+                            // Make card look clickable
+                            card.style.opacity = '1';
+                            card.style.cursor = 'pointer';
+                            card.style.pointerEvents = 'auto';
+                            card.classList.add('affordable');
+                        } else {
+                            // Make card look unaffordable
+                            card.style.opacity = '0.5';
+                            card.style.cursor = 'not-allowed';
+                            card.style.pointerEvents = 'none';
+                            card.classList.add('unaffordable');
+                        }
+                });
+            }
+
+            handleManualCardSelect(rank, playerId) {
+                const player = this.game.players.find(p => p.id === playerId);
+                if (!player) return;
+
+                console.log(`Manual card selection: ${rank} by player ${playerId}`);
+                
+                // Update UI first
+                this.updateTableCardDisplay(rank, player.name);
+                
+                // Update game state
+                if (this.game.selectCard) {
+                    this.game.selectCard(playerId, rank);
+                }
+                
+                // Add selected class to player
+                this.addCardSelectedClass(playerId);
+                
+                // Animate card to player
+                const card = document.querySelector(`.table-card[data-rank="${rank}"]`);
+                if (card) {
+                    this.animateCardToPlayerSeat(card, playerId);
+                }
+                
+                // Continue with next player
+                setTimeout(() => {
+                    if (this.game.continueWithRemainingPlayers) {
+                        this.game.continueWithRemainingPlayers();
+                    }
+                }, 1000);
+            }
+
             updateTableCardDisplay(rank, playerName) {
                 console.log(`updateTableCardDisplay called with rank: ${rank}, playerName: ${playerName}`);
                 
@@ -11316,7 +12070,15 @@
                     if (card.dataset.rank === rank) {
                         console.log(`Updating card ${rank} with player name: ${playerName}`);
                         card.classList.add('selected');
+                        card.classList.add('revealed');
                         card.setAttribute('data-selected-by', playerName);
+                        
+                        const suitElement = card.querySelector('.card-suit');
+                        if (suitElement) {
+                            const suitSymbol = this.getSuitSymbol ? this.getSuitSymbol(card.dataset.suit) : '';
+                            suitElement.innerHTML = suitSymbol || '&nbsp;';
+                            suitElement.classList.remove('card-suit-hidden');
+                        }
                         
                         // White card styling for all players
                         card.style.background = 'linear-gradient(145deg, #fff, #f0f0f0)';
@@ -11326,10 +12088,15 @@
                         
                         // Show player name on card only for human players
                         if (playerName === 'You') {
-                            const originalText = card.textContent;
-                            card.textContent = `${originalText}\n${playerName}`;
+                            let label = card.querySelector('.card-player-label');
+                            if (!label) {
+                                label = document.createElement('div');
+                                label.className = 'card-player-label';
+                                card.appendChild(label);
+                            }
+                            label.textContent = playerName;
                         }
-                        
+
                         selectedCard = card;
                         
                         // Animate chip from player to card
@@ -11388,11 +12155,24 @@
                 
                 // Create a copy for animation
                 const animatedCard = cardElement.cloneNode(true);
-                
+
+                // Determine source rotation (prefer dataset.rotation, fall back to CSS var)
+                let srcRotation2 = 0;
+                if (cardElement.dataset && cardElement.dataset.rotation) {
+                    srcRotation2 = parseFloat(cardElement.dataset.rotation) || 0;
+                } else {
+                    const cs2 = getComputedStyle(cardElement);
+                    const varVal2 = cs2.getPropertyValue('--card-rotation');
+                    if (varVal2) srcRotation2 = parseFloat(varVal2) || 0;
+                }
+
                 // Immediately clear all classes and styles to prevent conflicts
                 animatedCard.className = '';
                 animatedCard.removeAttribute('class');
                 animatedCard.style.cssText = '';
+
+                // set the CSS var to preserve inner counter-rotation behavior
+                animatedCard.style.setProperty('--card-rotation', `${srcRotation2}deg`);
                 
                 // IMPORTANT: Clean up the card content to show only rank during animation
                 // Extract just the rank from the card (remove any player name or extra text)
@@ -11443,6 +12223,8 @@
                 
                 // Add to body to ensure proper positioning
                 document.body.appendChild(animatedCard);
+                // apply initial rotation visually so the clone matches the ring card
+                animatedCard.style.transform = `rotate(${srcRotation2}deg)`;
                 
                 // Hide the original card in the ring immediately
                 cardElement.style.opacity = '0';
@@ -11505,6 +12287,10 @@
                     console.log(`🎴 Player card area for ${playerId} should be empty, current content:`, finalPlayerCardArea.innerHTML);
                     
                     // Reset animated card styles for final positioning
+                    // Before we change to relative/100% sizing, clear rotation so the
+                    // revealed card content is upright in the player area.
+                    animatedCard.style.setProperty('--card-rotation', `0deg`);
+                    animatedCard.style.transform = '';
                     animatedCard.style.position = 'relative';
                     animatedCard.style.left = '0';
                     animatedCard.style.top = '0';
@@ -11514,7 +12300,7 @@
                     animatedCard.style.boxShadow = '';
                     animatedCard.style.cursor = '';
                     animatedCard.style.opacity = '';
-                    
+
                     // IMPORTANT: Clear any existing content and styles from the cloned card
                     animatedCard.innerHTML = '';
                     
@@ -11671,6 +12457,46 @@
                         console.log(`Card ${rank} is already selected, keeping it visible`);
                     }
                 });
+            }
+            animateChipToCard(playerId, cardElement) {
+                // Animate a chip from player seat to the given table card element
+                try {
+                    const playerSeat = document.getElementById(`player-${playerId}`);
+                    if (!playerSeat || !cardElement) return;
+
+                    const chip = document.createElement('div');
+                    chip.className = 'animated-chip';
+                    document.body.appendChild(chip);
+
+                    const seatRect = playerSeat.getBoundingClientRect();
+                    const cardRect = cardElement.getBoundingClientRect();
+
+                    // Start at player's seat center
+                    chip.style.position = 'fixed';
+                    chip.style.left = `${seatRect.left + seatRect.width/2}px`;
+                    chip.style.top = `${seatRect.top + seatRect.height/2}px`;
+                    chip.style.width = '20px';
+                    chip.style.height = '20px';
+                    chip.style.borderRadius = '50%';
+                    chip.style.background = '#ffcc00';
+                    chip.style.zIndex = 2000;
+                    chip.style.transition = 'all 0.6s ease-out';
+
+                    // Force layout then move to card
+                    requestAnimationFrame(() => {
+                        chip.style.left = `${cardRect.left + cardRect.width/2}px`;
+                        chip.style.top = `${cardRect.top + cardRect.height/2}px`;
+                        chip.style.opacity = '0';
+                        chip.style.transform = 'scale(0.6)';
+                    });
+
+                    // Remove after animation
+                    setTimeout(() => {
+                        chip.remove();
+                    }, 700);
+                } catch (e) {
+                    console.error('animateChipToCard error', e);
+                }
             }
 
             selectCardForBot(botId, selectedRank, resolve) {
@@ -12112,7 +12938,6 @@
                 this.hideInsuranceModal();
                 this.proceedWithoutInsurance();
             }
-
             skipInsurance() {
                 console.log('🛡️ Skipping insurance phase');
                 
@@ -12186,7 +13011,6 @@
                     }
                 });
             }
-            
             resetHumanInsuranceIcons() {
                 const gameData = this.stateManager.getGameData();
                 gameData.players.forEach(player => {
@@ -12755,7 +13579,8 @@
                 this.gameLogic = new GameLogic(this.stateManager);
                 this.botController = new BotController(this.stateManager, this.gameLogic);
                 this.uiController = new UIController(this.stateManager, this.gameLogic, this.botController);
-                
+                this.stateManager.setUIController(this.uiController);
+
                 // Set UIController reference in GameLogic for jackpot animations
                 this.gameLogic.setUIController(this.uiController);
                 
